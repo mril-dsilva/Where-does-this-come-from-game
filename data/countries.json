@@ -1,0 +1,266 @@
+[
+  {
+    "code": "US",
+    "name": "United States",
+    "aliases": ["USA", "US", "United States of America", "America"]
+  },
+  {
+    "code": "GB",
+    "name": "United Kingdom",
+    "aliases": [
+      "UK",
+      "Britain",
+      "Great Britain",
+      "United Kingdom of Great Britain and Northern Ireland"
+    ]
+  },
+  {
+    "code": "IN",
+    "name": "India",
+    "aliases": ["Republic of India", "Bharat"]
+  },
+  {
+    "code": "CN",
+    "name": "China",
+    "aliases": ["PRC", "People's Republic of China"]
+  },
+  {
+    "code": "KR",
+    "name": "South Korea",
+    "aliases": ["Korea", "Republic of Korea", "ROK"]
+  },
+  {
+    "code": "KP",
+    "name": "North Korea",
+    "aliases": [
+      "DPRK",
+      "Democratic People's Republic of Korea",
+      "Korea, North"
+    ]
+  },
+  {
+    "code": "JP",
+    "name": "Japan",
+    "aliases": ["Nippon", "Nihon"]
+  },
+  {
+    "code": "CA",
+    "name": "Canada",
+    "aliases": ["Canadian"]
+  },
+  {
+    "code": "MX",
+    "name": "Mexico",
+    "aliases": ["United Mexican States"]
+  },
+  {
+    "code": "FR",
+    "name": "France",
+    "aliases": ["French Republic"]
+  },
+  {
+    "code": "DE",
+    "name": "Germany",
+    "aliases": ["Deutschland", "Federal Republic of Germany"]
+  },
+  {
+    "code": "IT",
+    "name": "Italy",
+    "aliases": ["Italian Republic"]
+  },
+  {
+    "code": "ES",
+    "name": "Spain",
+    "aliases": ["Kingdom of Spain"]
+  },
+  {
+    "code": "PT",
+    "name": "Portugal",
+    "aliases": ["Portuguese Republic"]
+  },
+  {
+    "code": "NL",
+    "name": "Netherlands",
+    "aliases": ["Holland", "The Netherlands", "Kingdom of the Netherlands"]
+  },
+  {
+    "code": "BE",
+    "name": "Belgium",
+    "aliases": ["Kingdom of Belgium"]
+  },
+  {
+    "code": "CH",
+    "name": "Switzerland",
+    "aliases": ["Swiss Confederation", "Suisse", "Schweiz"]
+  },
+  {
+    "code": "AT",
+    "name": "Austria",
+    "aliases": ["Republic of Austria"]
+  },
+  {
+    "code": "SE",
+    "name": "Sweden",
+    "aliases": ["Sverige", "Kingdom of Sweden"]
+  },
+  {
+    "code": "NO",
+    "name": "Norway",
+    "aliases": ["Norge", "Kingdom of Norway"]
+  },
+  {
+    "code": "FI",
+    "name": "Finland",
+    "aliases": ["Suomi", "Republic of Finland"]
+  },
+  {
+    "code": "DK",
+    "name": "Denmark",
+    "aliases": ["Danmark", "Kingdom of Denmark"]
+  },
+  {
+    "code": "IE",
+    "name": "Ireland",
+    "aliases": ["Éire", "Republic of Ireland"]
+  },
+  {
+    "code": "PL",
+    "name": "Poland",
+    "aliases": ["Republic of Poland"]
+  },
+  {
+    "code": "CZ",
+    "name": "Czechia",
+    "aliases": ["Czech Republic"]
+  },
+  {
+    "code": "RU",
+    "name": "Russia",
+    "aliases": ["Russian Federation", "Russian Fed."]
+  },
+  {
+    "code": "UA",
+    "name": "Ukraine",
+    "aliases": ["Ukrainian Republic"]
+  },
+  {
+    "code": "TR",
+    "name": "Turkey",
+    "aliases": ["Turkiye", "Türkiye", "Republic of Turkey"]
+  },
+  {
+    "code": "GR",
+    "name": "Greece",
+    "aliases": ["Hellenic Republic"]
+  },
+  {
+    "code": "AE",
+    "name": "United Arab Emirates",
+    "aliases": ["UAE", "Emirates"]
+  },
+  {
+    "code": "SA",
+    "name": "Saudi Arabia",
+    "aliases": ["Kingdom of Saudi Arabia"]
+  },
+  {
+    "code": "IL",
+    "name": "Israel",
+    "aliases": ["State of Israel"]
+  },
+  {
+    "code": "EG",
+    "name": "Egypt",
+    "aliases": ["Arab Republic of Egypt"]
+  },
+  {
+    "code": "ZA",
+    "name": "South Africa",
+    "aliases": ["RSA", "Republic of South Africa"]
+  },
+  {
+    "code": "NG",
+    "name": "Nigeria",
+    "aliases": ["Federal Republic of Nigeria"]
+  },
+  {
+    "code": "KE",
+    "name": "Kenya",
+    "aliases": ["Republic of Kenya"]
+  },
+  {
+    "code": "MA",
+    "name": "Morocco",
+    "aliases": ["Kingdom of Morocco"]
+  },
+  {
+    "code": "CI",
+    "name": "Côte d'Ivoire",
+    "aliases": ["Cote d'Ivoire", "Ivory Coast", "Republic of Côte d'Ivoire"]
+  },
+  {
+    "code": "AU",
+    "name": "Australia",
+    "aliases": ["Commonwealth of Australia"]
+  },
+  {
+    "code": "NZ",
+    "name": "New Zealand",
+    "aliases": ["Aotearoa"]
+  },
+  {
+    "code": "BR",
+    "name": "Brazil",
+    "aliases": ["Federative Republic of Brazil"]
+  },
+  {
+    "code": "AR",
+    "name": "Argentina",
+    "aliases": ["Argentine Republic"]
+  },
+  {
+    "code": "CL",
+    "name": "Chile",
+    "aliases": ["Republic of Chile"]
+  },
+  {
+    "code": "CO",
+    "name": "Colombia",
+    "aliases": ["Republic of Colombia"]
+  },
+  {
+    "code": "PE",
+    "name": "Peru",
+    "aliases": ["Republic of Peru"]
+  },
+  {
+    "code": "TH",
+    "name": "Thailand",
+    "aliases": ["Kingdom of Thailand"]
+  },
+  {
+    "code": "VN",
+    "name": "Vietnam",
+    "aliases": ["Viet Nam", "Socialist Republic of Vietnam"]
+  },
+  {
+    "code": "SG",
+    "name": "Singapore",
+    "aliases": ["Republic of Singapore"]
+  },
+  {
+    "code": "MY",
+    "name": "Malaysia",
+    "aliases": ["Federation of Malaysia"]
+  },
+  {
+    "code": "ID",
+    "name": "Indonesia",
+    "aliases": ["Republic of Indonesia"]
+  },
+  {
+    "code": "PH",
+    "name": "Philippines",
+    "aliases": ["Republic of the Philippines"]
+  }
+]

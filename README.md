@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Where does this come from? by Mrillion
 
-## Getting Started
+Where does this come from? is a clean, one-page geography guessing game. The player sees an item and emoji hint, then guesses the country of origin. Correct answers solve the round, reveal a fact, and light up the globe.
 
-First, run the development server:
+## MVP Features
+- Item-based geography guessing with foods, inventions, and brands
+- Typo-tolerant country input with aliases and suggestions
+- Spinnable, zoomable 3D globe with visible borders
+- Heat-colored guessed countries based on distance from the answer
+- Success state with brief confetti, origin fact, and round reset
+- Minimal, portfolio-friendly presentation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- ESLint
+- `react-globe.gl` for the 3D globe
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Architecture
+The app is organized so the UI can stay thin while the data and rules remain reusable:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `app/` handles the page shell and metadata
+- `components/game/` contains the game UI and round state
+- `components/globe/` contains globe rendering and legend UI only
+- `lib/data/` holds seed access and country matching helpers
+- `lib/game/` holds round logic, guess evaluation, and heat rules
+- `lib/geo/` holds distance and polygon helpers
+- `data/` contains the local MVP seed content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+That split keeps the project easy to maintain now and gives us a clean path to Postgres/Neon later without rewriting the whole app.
 
-## Learn More
+## Local Setup
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+3. Open [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## Testing
+- `npm test`
+- `npm run lint`
+- `npm run build`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment to Vercel
+1. Push the repository to GitHub.
+2. Import the repo into Vercel.
+3. Leave the default build settings in place:
+   - Framework preset: Next.js
+   - Build command: `next build`
+   - Output: managed by Vercel automatically
+4. Deploy.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project does not require environment variables for the current MVP.
 
-## Deploy on Vercel
+## Tradeoffs
+- The data layer uses local JSON for fast iteration and easy review.
+- Country polygons are vendored in `public/geo/` and loaded through a focused geo helper so the globe stays deployment-friendly.
+- The globe prioritizes stability and readability over advanced map effects for the first version.
+- Confetti is intentionally brief and restrained to keep the experience polished rather than noisy.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Future Improvements
+- Swap local JSON for Postgres/Neon-backed content
+- Add daily challenge support
+- Add leaderboards and user accounts
+- Add saved stats and session history
+- Add admin-managed item and country content
+- Improve globe interaction polish once the core game is fully validated
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Goal
+This project is designed to be portfolio-ready: clear structure, reusable logic, and a polished first impression without unnecessary complexity.

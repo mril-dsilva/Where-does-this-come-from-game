@@ -1,0 +1,191 @@
+[
+  {
+    "id": "kimchi",
+    "name": "Kimchi",
+    "emoji": "🥬",
+    "category": "food",
+    "originCountryCode": "KR",
+    "originCountryName": "South Korea",
+    "fact": "Kimchi is a staple fermented side dish with deep regional variation across Korea."
+  },
+  {
+    "id": "sushi",
+    "name": "Sushi",
+    "emoji": "🍣",
+    "category": "food",
+    "originCountryCode": "JP",
+    "originCountryName": "Japan",
+    "fact": "Sushi became a distinct Japanese culinary tradition long before its modern global spread."
+  },
+  {
+    "id": "pizza",
+    "name": "Pizza",
+    "emoji": "🍕",
+    "category": "food",
+    "originCountryCode": "IT",
+    "originCountryName": "Italy",
+    "fact": "Modern pizza is most closely associated with Naples, where it evolved into a signature dish."
+  },
+  {
+    "id": "tacos",
+    "name": "Tacos",
+    "emoji": "🌮",
+    "category": "food",
+    "originCountryCode": "MX",
+    "originCountryName": "Mexico",
+    "fact": "Tacos are a foundational part of Mexican cuisine with countless regional variations."
+  },
+  {
+    "id": "croissant",
+    "name": "Croissant",
+    "emoji": "🥐",
+    "category": "food",
+    "originCountryCode": "FR",
+    "originCountryName": "France",
+    "fact": "The croissant became a French breakfast icon after evolving through European pastry traditions."
+  },
+  {
+    "id": "doner-kebab",
+    "name": "Doner kebab",
+    "emoji": "🥙",
+    "category": "food",
+    "originCountryCode": "TR",
+    "originCountryName": "Turkey",
+    "fact": "Doner kebab traces back to Ottoman-era cooking methods that inspired the vertical spit format."
+  },
+  {
+    "id": "poutine",
+    "name": "Poutine",
+    "emoji": "🍟",
+    "category": "food",
+    "originCountryCode": "CA",
+    "originCountryName": "Canada",
+    "fact": "Poutine originated in Quebec and became one of Canada's most recognizable comfort foods."
+  },
+  {
+    "id": "dynamite",
+    "name": "Dynamite",
+    "emoji": "🧨",
+    "category": "invention",
+    "originCountryCode": "SE",
+    "originCountryName": "Sweden",
+    "fact": "Alfred Nobel developed dynamite in Sweden and used its commercial success to fund the Nobel Prizes."
+  },
+  {
+    "id": "basketball",
+    "name": "Basketball",
+    "emoji": "🏀",
+    "category": "invention",
+    "originCountryCode": "US",
+    "originCountryName": "United States",
+    "fact": "Basketball was invented in Massachusetts as an indoor winter sport."
+  },
+  {
+    "id": "three-point-seat-belt",
+    "name": "Three-point seat belt",
+    "emoji": "🚗",
+    "category": "invention",
+    "originCountryCode": "SE",
+    "originCountryName": "Sweden",
+    "fact": "Volvo engineer Nils Bohlin created the modern three-point seat belt in Sweden."
+  },
+  {
+    "id": "diesel-engine",
+    "name": "Diesel engine",
+    "emoji": "⚙️",
+    "category": "invention",
+    "originCountryCode": "DE",
+    "originCountryName": "Germany",
+    "fact": "Rudolf Diesel developed the diesel engine in Germany to improve thermal efficiency."
+  },
+  {
+    "id": "paper-money",
+    "name": "Paper money",
+    "emoji": "💴",
+    "category": "invention",
+    "originCountryCode": "CN",
+    "originCountryName": "China",
+    "fact": "Paper money first appeared in China centuries before it became common elsewhere."
+  },
+  {
+    "id": "barcode",
+    "name": "Barcode",
+    "emoji": "🏷️",
+    "category": "invention",
+    "originCountryCode": "US",
+    "originCountryName": "United States",
+    "fact": "The barcode was developed in the United States to speed up retail checkout and inventory systems."
+  },
+  {
+    "id": "pacemaker",
+    "name": "Pacemaker",
+    "emoji": "❤️",
+    "category": "invention",
+    "originCountryCode": "SE",
+    "originCountryName": "Sweden",
+    "fact": "Modern implantable pacemaker technology has major roots in Swedish engineering and medical innovation."
+  },
+  {
+    "id": "nokia",
+    "name": "Nokia",
+    "emoji": "📱",
+    "category": "brand",
+    "originCountryCode": "FI",
+    "originCountryName": "Finland",
+    "fact": "Nokia transformed from an industrial company into one of Finland's most famous technology brands."
+  },
+  {
+    "id": "ikea",
+    "name": "IKEA",
+    "emoji": "🪑",
+    "category": "brand",
+    "originCountryCode": "SE",
+    "originCountryName": "Sweden",
+    "fact": "IKEA began in Sweden and built a global identity around flat-pack design."
+  },
+  {
+    "id": "lego",
+    "name": "LEGO",
+    "emoji": "🧱",
+    "category": "brand",
+    "originCountryCode": "DK",
+    "originCountryName": "Denmark",
+    "fact": "LEGO was founded in Denmark and its name comes from the Danish phrase meaning to play well."
+  },
+  {
+    "id": "rolex",
+    "name": "Rolex",
+    "emoji": "⌚",
+    "category": "brand",
+    "originCountryCode": "CH",
+    "originCountryName": "Switzerland",
+    "fact": "Rolex became a hallmark of Swiss watchmaking and precision branding."
+  },
+  {
+    "id": "adidas",
+    "name": "Adidas",
+    "emoji": "👟",
+    "category": "brand",
+    "originCountryCode": "DE",
+    "originCountryName": "Germany",
+    "fact": "Adidas started in Germany and grew into one of the world's best-known sportswear brands."
+  },
+  {
+    "id": "spotify",
+    "name": "Spotify",
+    "emoji": "🎧",
+    "category": "brand",
+    "originCountryCode": "SE",
+    "originCountryName": "Sweden",
+    "fact": "Spotify launched in Sweden and helped define modern streaming music culture."
+  },
+  {
+    "id": "patagonia",
+    "name": "Patagonia",
+    "emoji": "🧥",
+    "category": "brand",
+    "originCountryCode": "US",
+    "originCountryName": "United States",
+    "fact": "Patagonia started in the United States and became known for durable outdoor gear and brand activism."
+  }
+]
