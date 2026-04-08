@@ -18,6 +18,10 @@ type GlobeHighlight = {
   isLatest?: boolean;
 };
 
+type GlobePolygonObject = object & {
+  countryCode?: string;
+};
+
 type WorldGlobeProps = {
   highlights?: GlobeHighlight[];
   focusCountryCode?: string | null;
@@ -161,6 +165,20 @@ export default function WorldGlobe({
     return map;
   }, [highlights]);
 
+  function getPolygonCountryCode(polygon: GlobePolygonObject): string | null {
+    if (!("countryCode" in polygon)) {
+      return null;
+    }
+
+    const countryCode = polygon.countryCode;
+
+    if (typeof countryCode !== "string" || !countryCode.trim()) {
+      return null;
+    }
+
+    return countryCode.trim().toUpperCase();
+  }
+
   const globeProps = {
     globeImageUrl: BASE_GLOBE_IMAGE,
     bumpImageUrl: BASE_BUMP_IMAGE,
@@ -170,12 +188,14 @@ export default function WorldGlobe({
     atmosphereAltitude,
     polygonsData: polygons,
     polygonGeoJsonGeometry: "geometry",
-    polygonCapColor: (polygon: { countryCode: string }) =>
-      highlightByCode.get(polygon.countryCode)?.color ?? TRANSPARENT,
-    polygonSideColor: (polygon: { countryCode: string }) =>
-      highlightByCode.get(polygon.countryCode)?.color ?? TRANSPARENT,
-    polygonStrokeColor: (polygon: { countryCode: string }) => {
-      const highlight = highlightByCode.get(polygon.countryCode);
+    polygonCapColor: (polygon: GlobePolygonObject) =>
+      highlightByCode.get(getPolygonCountryCode(polygon) ?? "")?.color ??
+      TRANSPARENT,
+    polygonSideColor: (polygon: GlobePolygonObject) =>
+      highlightByCode.get(getPolygonCountryCode(polygon) ?? "")?.color ??
+      TRANSPARENT,
+    polygonStrokeColor: (polygon: GlobePolygonObject) => {
+      const highlight = highlightByCode.get(getPolygonCountryCode(polygon) ?? "");
 
       if (!highlight) {
         return "rgba(255, 255, 255, 0.14)";
@@ -183,10 +203,10 @@ export default function WorldGlobe({
 
       return highlight.isLatest
         ? "rgba(255, 255, 255, 0.52)"
-        : "rgba(255, 255, 255, 0.34)";
+      : "rgba(255, 255, 255, 0.34)";
     },
-    polygonAltitude: (polygon: { countryCode: string }) =>
-      highlightByCode.get(polygon.countryCode)?.altitude ?? 0,
+    polygonAltitude: (polygon: GlobePolygonObject) =>
+      highlightByCode.get(getPolygonCountryCode(polygon) ?? "")?.altitude ?? 0,
     polygonLabel: () => "",
     polygonsTransitionDuration: 250,
   };
