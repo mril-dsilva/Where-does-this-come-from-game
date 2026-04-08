@@ -1,39 +1,43 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Where does this come from? | Mrillion",
+  title: "OriginGuessr | MrillionAI",
   description:
-    "A minimal geography guessing game about tracing foods, inventions, and brands back to their country of origin.",
+    "OriginGuessr is a polished geography guessing game about tracing foods, inventions, and cultural items back to their country of origin.",
+  applicationName: "OriginGuessr",
+  creator: "MrillionAI",
   keywords: [
     "geography game",
     "country guessing game",
     "Next.js portfolio project",
     "world globe",
     "country of origin",
+    "OriginGuessr",
   ],
   openGraph: {
-    title: "Where does this come from? | Mrillion",
+    title: "OriginGuessr | MrillionAI",
     description:
-      "A minimal geography guessing game about tracing foods, inventions, and brands back to their country of origin.",
+      "OriginGuessr is a polished geography guessing game about tracing foods, inventions, and cultural items back to their country of origin.",
     type: "website",
+    siteName: "OriginGuessr",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Where does this come from? | Mrillion",
+    title: "OriginGuessr | MrillionAI",
     description:
-      "A minimal geography guessing game about tracing foods, inventions, and brands back to their country of origin.",
+      "OriginGuessr is a polished geography guessing game about tracing foods, inventions, and cultural items back to their country of origin.",
   },
 };
 
@@ -45,9 +49,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
+      <body
+        className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

@@ -1,9 +1,13 @@
 import { getCountryByCode } from "../data/index.ts";
 import { normalizeCountryKey } from "../data/normalize.ts";
 import { resolveCountryMatch } from "../data/country-match.ts";
+import { isNeighboringCountryCode } from "../geo/country-neighbors.ts";
+import { getBorderDistanceKm } from "../geo/border-distance.ts";
 import type { Country, GameItem, GuessRecord } from "../../types/game.ts";
-import { haversineKm } from "../geo/haversine.ts";
-import { getHeatColorForDistance, getNeutralColorToken } from "./heat.ts";
+import {
+  getHeatColorForGuess,
+  getNeutralColorToken,
+} from "./heat.ts";
 import type { GuessHeatLevel } from "./heat.ts";
 
 export type GuessResolution = {
@@ -32,6 +36,8 @@ export function createGuessRecord(params: {
   guess: string;
   country: Country;
   distanceKm: number;
+  heatLevel: GuessHeatLevel;
+  heatColor: string;
   isCorrect: boolean;
   createdAt?: Date;
   guessIndex?: number;
@@ -46,6 +52,8 @@ export function createGuessRecord(params: {
     countryCode: params.country.code,
     countryName: params.country.name,
     distanceKm: params.distanceKm,
+    heatLevel: params.heatLevel,
+    heatColor: params.heatColor,
     isCorrect: params.isCorrect,
     createdAt: createdAt.toISOString(),
   };
@@ -90,8 +98,18 @@ export function resolveGuess(params: {
     };
   }
 
-  const distanceKm = haversineKm(resolvedCountry.centroid, targetCountry.centroid);
-  const heat = getHeatColorForDistance(distanceKm);
+  const distanceKm = getBorderDistanceKm(
+    resolvedCountry.code,
+    targetCountry.code,
+  );
+  const heat = getHeatColorForGuess({
+    distanceKm,
+    isCorrect: resolvedCountry.code === targetCountry.code,
+    isNeighboring: isNeighboringCountryCode(
+      resolvedCountry.code,
+      targetCountry.code,
+    ),
+  });
 
   return {
     normalizedGuess,
@@ -108,6 +126,54 @@ export function resolveGuess(params: {
 
 export function sortGuessesByDistance(guesses: GuessRecord[]): GuessRecord[] {
   return [...guesses].sort((left, right) => {
+    if (left.distanceKm === null && right.distanceKm === null) {
+      return left.createdAt.localeCompare(right.createdAt);
+    }
+
+    if (left.distanceKm === null) {
+      return 1;
+    }
+
+    if (right.distanceKm === null) {
+      return -1;
+    }
+
+    if (left.distanceKm !== right.distanceKm) {
+      return left.distanceKm - right.distanceKm;
+    }
+
+    return left.createdAt.localeCompare(right.createdAt);
+  });
+}
+
+function getDisplayTierRank(heatLevel: GuessHeatLevel): number {
+  switch (heatLevel) {
+    case "correct":
+      return 0;
+    case "neighboring":
+      return 1;
+    case "hot":
+      return 2;
+    case "warm":
+      return 3;
+    case "slightlyWarm":
+      return 4;
+    case "far":
+      return 5;
+    default:
+      return 6;
+  }
+}
+
+export function sortGuessesForDisplay(guesses: GuessRecord[]): GuessRecord[] {
+  return [...guesses].sort((left, right) => {
+    const leftRank = getDisplayTierRank(left.heatLevel);
+    const rightRank = getDisplayTierRank(right.heatLevel);
+
+    if (leftRank !== rightRank) {
+      return leftRank - rightRank;
+    }
+
     if (left.distanceKm === null && right.distanceKm === null) {
       return left.createdAt.localeCompare(right.createdAt);
     }

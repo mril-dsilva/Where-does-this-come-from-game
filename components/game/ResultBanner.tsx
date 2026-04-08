@@ -11,24 +11,24 @@ const TONE_STYLES: Record<
   { border: string; background: string; text: string }
 > = {
   neutral: {
-    border: "border-[color:var(--border)]",
-    background: "bg-white",
-    text: "text-[var(--muted)]",
+    border: "border-white/10",
+    background: "bg-white/[0.04]",
+    text: "text-white",
   },
   positive: {
-    border: "border-[#b4d8bd]",
-    background: "bg-[#f2faf4]",
-    text: "text-[#225f36]",
+    border: "border-emerald-400/20",
+    background: "bg-emerald-400/10",
+    text: "text-emerald-100",
   },
   warning: {
-    border: "border-[#e8d7aa]",
-    background: "bg-[#fbf7ea]",
-    text: "text-[#6f5712]",
+    border: "border-amber-300/20",
+    background: "bg-amber-300/10",
+    text: "text-amber-50",
   },
   error: {
-    border: "border-[#e2b9b5]",
-    background: "bg-[#fbf2f1]",
-    text: "text-[#7c2f2f]",
+    border: "border-rose-300/20",
+    background: "bg-rose-300/10",
+    text: "text-rose-50",
   },
 };
 
@@ -43,32 +43,27 @@ export default function ResultBanner({
 
   return (
     <section
-      className={`rounded-3xl border p-6 shadow-sm ${toneStyle.border} ${toneStyle.background}`}
+      className="flex w-full max-w-3xl flex-col items-center gap-4 text-center"
       aria-live="polite"
       aria-atomic="true"
       role="status"
     >
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-2">
-          <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--muted)]">
-            Status
-          </p>
-          <h2 className={`text-xl font-semibold ${toneStyle.text}`}>{title}</h2>
-          <p className="max-w-2xl text-sm leading-6 text-[var(--muted)]">
-            {detail}
-          </p>
-        </div>
+      <h2 className={`font-display text-xl tracking-[-0.03em] ${toneStyle.text}`}>
+        {title}
+      </h2>
+      <p className="max-w-2xl text-sm leading-6 text-white/66">
+        {detail}
+      </p>
 
-        {onReset ? (
-          <button
-            type="button"
-            onClick={onReset}
-            className="inline-flex h-11 items-center justify-center rounded-full border border-[color:var(--foreground)] bg-[var(--foreground)] px-5 text-sm font-medium text-[var(--background)] transition hover:opacity-90"
-          >
-            {resetLabel}
-          </button>
-        ) : null}
-      </div>
+      {onReset ? (
+        <button
+          type="button"
+          onClick={onReset}
+          className="inline-flex h-11 items-center justify-center rounded-full border border-white/12 bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/88"
+        >
+          {resetLabel}
+        </button>
+      ) : null}
     </section>
   );
 }

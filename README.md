@@ -1,14 +1,15 @@
-# Where does this come from? by Mrillion
+# OriginGuessr by MrillionAI
 
-Where does this come from? is a clean, one-page geography guessing game. The player sees an item and emoji hint, then guesses the country of origin. Correct answers solve the round, reveal a fact, and light up the globe.
+OriginGuessr is a polished geography guessing game with a two-state experience: a cinematic landing page and a focused gameplay page. The player sees an item and emoji hint, then guesses the country of origin. Correct answers solve the round, reveal a fact, and light up the globe.
 
 ## MVP Features
+- Landing page and gameplay page with a shared brand system
 - Item-based geography guessing with foods, inventions, and brands
 - Typo-tolerant country input with aliases and suggestions
 - Spinnable, zoomable 3D globe with visible borders
 - Heat-colored guessed countries based on distance from the answer
 - Success state with brief confetti, origin fact, and round reset
-- Minimal, portfolio-friendly presentation
+- Minimal, portfolio-friendly presentation with a premium dark UI
 
 ## Tech Stack
 - Next.js App Router

@@ -72,6 +72,8 @@ export function submitGuess(params: {
     guess: params.guess,
     country: evaluation.resolvedCountry,
     distanceKm,
+    heatLevel: evaluation.heatLevel,
+    heatColor: evaluation.heatColor,
     isCorrect: evaluation.isCorrect,
     createdAt: params.now,
     guessIndex: params.state.guesses.length + 1,

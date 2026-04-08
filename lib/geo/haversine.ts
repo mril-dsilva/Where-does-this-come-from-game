@@ -6,7 +6,7 @@ function toRadians(value: number): number {
   return (value * Math.PI) / 180;
 }
 
-export function haversineKm(
+export function haversineKmExact(
   from: CountryCentroid,
   to: CountryCentroid,
 ): number {
@@ -21,5 +21,12 @@ export function haversineKm(
     Math.cos(startLat) * Math.cos(endLat) * Math.sin(deltaLongitude / 2) ** 2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  return Math.round(EARTH_RADIUS_KM * c);
+  return EARTH_RADIUS_KM * c;
+}
+
+export function haversineKm(
+  from: CountryCentroid,
+  to: CountryCentroid,
+): number {
+  return Math.round(haversineKmExact(from, to));
 }

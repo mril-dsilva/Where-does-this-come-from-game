@@ -10,26 +10,23 @@ export default function ItemPromptCard({
   isComplete,
 }: ItemPromptCardProps) {
   return (
-    <section className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] p-6 shadow-sm">
-      <div className="flex items-start justify-between gap-6">
-        <div className="space-y-3">
-          <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--muted)]">
-            Current clue
-          </p>
-          <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-            {item.name}
-          </h2>
-          <p className="text-sm uppercase tracking-[0.3em] text-[var(--muted)]">
-            {item.category}
-          </p>
+    <section className="w-full max-w-3xl space-y-4 text-center">
+      <div className="space-y-4">
+        <p className="text-xs font-medium uppercase tracking-[0.35em] text-white/46">
+          Where did this come from?
+        </p>
+        <div className="text-6xl leading-none sm:text-7xl" aria-hidden="true">
+          {item.emoji}
         </div>
-
-        <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-[color:var(--border)] bg-white text-4xl">
-          <span aria-hidden="true">{item.emoji}</span>
-        </div>
+        <h2 className="font-display text-3xl tracking-[-0.04em] text-white sm:text-4xl">
+          {item.name}
+        </h2>
+        <p className="text-sm uppercase tracking-[0.3em] text-white/48">
+          {item.category}
+        </p>
       </div>
 
-      <p className="mt-6 max-w-2xl text-sm leading-7 text-[var(--muted)]">
+      <p className="mx-auto max-w-2xl text-sm leading-7 text-white/62">
         {isComplete
           ? "You found the origin. The country panel stays locked for this round."
           : "Type the country you think this item originally comes from."}

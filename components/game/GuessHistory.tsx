@@ -1,80 +1,62 @@
+import { sortGuessesForDisplay } from "@/lib/game/index.ts";
 import type { GuessRecord } from "@/types/game.ts";
 
 type GuessHistoryProps = {
-  title: string;
   guesses: GuessRecord[];
-  isComplete: boolean;
   latestGuessId: string | null;
-  heatForDistance: (distanceKm: number) => { level: string; color: string };
 };
 
 export default function GuessHistory({
-  title,
   guesses,
-  isComplete,
   latestGuessId,
-  heatForDistance,
 }: GuessHistoryProps) {
   return (
-    <aside
-      className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] p-6 shadow-sm"
-      aria-label="Guess history"
-    >
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--muted)]">
-            Guess history
-          </p>
-          <h2 className="mt-2 text-xl font-semibold text-[var(--foreground)]">
-            {title}
-          </h2>
-        </div>
-        <span className="text-sm text-[var(--muted)]">
-          {guesses.length} total
-        </span>
-      </div>
-
-      <div className="mt-6 space-y-3">
+    <aside className="w-full max-w-3xl text-center" aria-label="Guess history">
+      <div className="mt-6 mb-[22px] rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_14px_40px_var(--shadow)] backdrop-blur-2xl space-y-3 sm:mb-[30px]">
         {guesses.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-[color:var(--border)] px-4 py-5 text-sm leading-6 text-[var(--muted)]">
+          <p className="px-4 py-5 text-sm leading-6 text-white/54">
             Your guesses will appear here, ordered from closest to farthest.
           </p>
         ) : (
-          guesses.map((guess) => {
-            const heat =
-              guess.distanceKm === null
-                ? { level: "neutral", color: "var(--border)" }
-                : heatForDistance(guess.distanceKm);
+          sortGuessesForDisplay(guesses).map((guess, index) => {
             const isLatest = guess.id === latestGuessId;
+            const isClosestGuess = index === 0;
+            const statusLabel =
+              guess.heatLevel === "correct"
+                ? `The mystery country is ${guess.countryName ?? guess.guess}!`
+                : guess.heatLevel === "neighboring"
+                  ? "Neighboring!"
+                  : `${(guess.distanceKm ?? 0).toLocaleString()} km away`;
+            const statusParts =
+              guess.heatLevel !== "correct" && isClosestGuess
+                ? ["Closest Guess!", statusLabel]
+                : [statusLabel];
 
             return (
               <div
                 key={guess.id}
-                className={`flex items-center justify-between gap-4 rounded-2xl border px-4 py-3 transition ${
-                  isLatest
-                    ? "border-[color:var(--foreground)] bg-white"
-                    : "border-[color:var(--border)] bg-white/70"
+                className={`flex flex-col items-center gap-2 px-4 py-2.5 transition ${
+                  isLatest ? "text-white" : "text-white/88"
                 }`}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 whitespace-nowrap text-center text-[0.95rem] leading-none sm:text-base">
                   <span
-                    className="h-3 w-3 rounded-full"
-                    style={{ backgroundColor: heat.color }}
+                    className="text-[1.05em]"
                     aria-hidden="true"
-                  />
-                  <div>
-                    <p className="font-medium text-[var(--foreground)]">
-                      {guess.countryName ?? guess.guess}
-                    </p>
-                    <p className="text-xs text-[var(--muted)]">
-                      {guess.isCorrect ? "Correct country" : heat.level}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="text-right text-sm text-[var(--muted)]">
-                  <p>{guess.distanceKm === null ? "No match" : `${guess.distanceKm.toLocaleString()} km`}</p>
-                  <p>{guess.isCorrect ? "Solved" : isComplete ? "Locked" : "Pending"}</p>
+                  >
+                    {getFlagEmoji(guess.countryCode)}
+                  </span>
+                  <span className="font-medium text-white">
+                    {guess.countryName ?? guess.guess}
+                  </span>
+                  {statusParts.map((part) => (
+                    <span key={`${guess.id}-${part}`} className="inline-flex items-center gap-x-2">
+                      <span className="text-white/44">-</span>
+                      <span className="font-semibold text-white/76">
+                        {part}
+                      </span>
+                    </span>
+                  ))}
                 </div>
               </div>
             );
@@ -82,5 +64,23 @@ export default function GuessHistory({
         )}
       </div>
     </aside>
+  );
+}
+
+function getFlagEmoji(countryCode: string | null): string {
+  if (!countryCode || countryCode.length !== 2) {
+    return "🏳️";
+  }
+
+  const code = countryCode.trim().toUpperCase();
+
+  if (!/^[A-Z]{2}$/.test(code)) {
+    return "🏳️";
+  }
+
+  const baseCodePoint = 127397;
+
+  return String.fromCodePoint(
+    ...Array.from(code, (character) => baseCodePoint + character.charCodeAt(0)),
   );
 }

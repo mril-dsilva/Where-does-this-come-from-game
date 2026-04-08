@@ -68,3 +68,23 @@ test("country polygon matching prefers the main country geometry over territorie
   assert.equal(polygons[0].countryCode, "US");
   assert.equal(polygons[0].countryName, "United States");
 });
+
+test("country polygon matching resolves alpha-3 code fallbacks", () => {
+  const polygons = createCountryPolygons([
+    {
+      type: "Feature",
+      geometry: { type: "Polygon", coordinates: [] },
+      properties: {
+        ADMIN: "France",
+        SOVEREIGNT: "France",
+        ISO_A2: "-99",
+        ADM0_A3: "FRA",
+        ISO_A3: "-99",
+      },
+    },
+  ]);
+
+  assert.equal(polygons.length, 1);
+  assert.equal(polygons[0].countryCode, "FR");
+  assert.equal(polygons[0].countryName, "France");
+});

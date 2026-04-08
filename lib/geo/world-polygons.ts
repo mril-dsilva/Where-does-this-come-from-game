@@ -1,4 +1,5 @@
-import { getCountryByCode, getCountryByName } from "../data/index.ts";
+import { getCountries, getCountryByCode, getCountryByName } from "../data/index.ts";
+import { normalizeCountryKey } from "../data/normalize.ts";
 import type { Country } from "../../types/game.ts";
 
 type GeoJsonPolygonGeometry = {
@@ -40,26 +41,35 @@ function readString(value: unknown): string | null {
 function scoreMatch(
   candidate: string,
   country: Country,
-  source: "code" | "name" | "alias" | "sovereign" | "fallback",
+  source: "alpha2" | "alpha3" | "name" | "alias" | "sovereign" | "fallback",
 ): number {
-  const normalized = candidate.toLowerCase();
-  const countryName = country.name.toLowerCase();
-  const aliases = country.aliases.map((alias) => alias.toLowerCase());
+  const normalized = normalizeCountryKey(candidate);
+  const countryName = normalizeCountryKey(country.name);
+  const alpha3 = normalizeCountryKey(country.alpha3);
+  const aliases = country.aliases.map((alias) => normalizeCountryKey(alias));
 
-  if (source === "code") {
+  if (source === "alpha2") {
     return 400;
   }
 
+  if (source === "alpha3") {
+    return 380;
+  }
+
   if (normalized === countryName) {
-    return source === "name" ? 300 : 250;
+    return source === "name" ? 320 : 260;
   }
 
   if (aliases.includes(normalized)) {
-    return source === "alias" ? 260 : 220;
+    return source === "alias" ? 290 : 240;
+  }
+
+  if (normalized === alpha3) {
+    return 360;
   }
 
   if (source === "sovereign") {
-    return 120;
+    return 180;
   }
 
   return 10;
@@ -71,17 +81,23 @@ function resolveCountryFromFeature(
   const properties = feature.properties ?? {};
   let best: ResolvedCountryPolygon | null = null;
 
-  const codeKeys = [
-    "ISO3166-1-Alpha-2",
-    "iso_a2",
-    "ISO_A2",
-    "iso2",
-    "ISO2",
-    "adm0_a3",
-    "ADM0_A3",
+  const codeKeys: Array<[string, "alpha2" | "alpha3"]> = [
+    ["ISO3166-1-Alpha-2", "alpha2"],
+    ["iso_a2", "alpha2"],
+    ["ISO_A2", "alpha2"],
+    ["iso2", "alpha2"],
+    ["ISO2", "alpha2"],
+    ["adm0_a3", "alpha3"],
+    ["ADM0_A3", "alpha3"],
+    ["iso_a3", "alpha3"],
+    ["ISO_A3", "alpha3"],
+    ["sov_a3", "alpha3"],
+    ["SOV_A3", "alpha3"],
+    ["gu_a3", "alpha3"],
+    ["GU_A3", "alpha3"],
   ];
 
-  for (const key of codeKeys) {
+  for (const [key, source] of codeKeys) {
     const candidate = readString(properties[key]);
 
     if (!candidate) {
@@ -96,7 +112,7 @@ function resolveCountryFromFeature(
         countryName: country.name,
         featureName: resolveFeatureName(feature, country),
         geometry: feature.geometry,
-        score: scoreMatch(candidate, country, "code"),
+        score: scoreMatch(candidate, country, source),
       };
 
       if (!best || resolved.score > best.score) {
@@ -105,24 +121,32 @@ function resolveCountryFromFeature(
     }
   }
 
-  const nameKeys = [
-    "name",
-    "NAME",
-    "admin",
-    "ADMIN",
-    "brk_name",
-    "BRK_NAME",
-    "formal_en",
-    "FORMAL_EN",
-    "sovereignt",
-    "SOVEREIGNT",
-    "geounit",
-    "GEUNIT",
-    "subunit",
-    "SUBUNIT",
+  const nameKeys: Array<[string, "name" | "alias" | "sovereign"]> = [
+    ["name", "name"],
+    ["NAME", "name"],
+    ["admin", "name"],
+    ["ADMIN", "name"],
+    ["brk_name", "alias"],
+    ["BRK_NAME", "alias"],
+    ["formal_en", "alias"],
+    ["FORMAL_EN", "alias"],
+    ["name_long", "alias"],
+    ["NAME_LONG", "alias"],
+    ["name_sort", "alias"],
+    ["NAME_SORT", "alias"],
+    ["name_alt", "alias"],
+    ["NAME_ALT", "alias"],
+    ["abbrev", "alias"],
+    ["ABBREV", "alias"],
+    ["sovereignt", "sovereign"],
+    ["SOVEREIGNT", "sovereign"],
+    ["geounit", "alias"],
+    ["GEOUNIT", "alias"],
+    ["subunit", "alias"],
+    ["SUBUNIT", "alias"],
   ];
 
-  for (const key of nameKeys) {
+  for (const [key, source] of nameKeys) {
     const candidate = readString(properties[key]);
 
     if (!candidate) {
@@ -131,8 +155,6 @@ function resolveCountryFromFeature(
 
     const country = getCountryByName(candidate);
     if (country) {
-      const source =
-        key === "sovereignt" || key === "SOVEREIGNT" ? "sovereign" : "name";
       const resolved: ResolvedCountryPolygon = {
         country,
         countryCode: country.code,
@@ -149,15 +171,23 @@ function resolveCountryFromFeature(
   }
 
   if (typeof feature.id === "string") {
-    const country = getCountryByName(feature.id);
-    if (country) {
+    const featureId = feature.id.trim();
+    const countryByCode = getCountryByCode(featureId);
+    const countryByName = countryByCode ?? getCountryByName(featureId);
+    if (countryByName) {
+      const source: "alpha2" | "alpha3" | "fallback" =
+        featureId.length === 2
+          ? "alpha2"
+          : featureId.length === 3
+            ? "alpha3"
+            : "fallback";
       const resolved: ResolvedCountryPolygon = {
-        country,
-        countryCode: country.code,
-        countryName: country.name,
-        featureName: resolveFeatureName(feature, country),
+        country: countryByName,
+        countryCode: countryByName.code,
+        countryName: countryByName.name,
+        featureName: resolveFeatureName(feature, countryByName),
         geometry: feature.geometry,
-        score: scoreMatch(feature.id, country, "fallback"),
+        score: scoreMatch(featureId, countryByName, source),
       };
 
       if (!best || resolved.score > best.score) {
@@ -181,10 +211,18 @@ function resolveFeatureName(feature: GeoJsonFeature, country: Country): string {
     "BRK_NAME",
     "formal_en",
     "FORMAL_EN",
+    "name_long",
+    "NAME_LONG",
+    "name_sort",
+    "NAME_SORT",
+    "name_alt",
+    "NAME_ALT",
+    "abbrev",
+    "ABBREV",
     "sovereignt",
     "SOVEREIGNT",
     "geounit",
-    "GEUNIT",
+    "GEOUNIT",
     "subunit",
     "SUBUNIT",
   ];
@@ -202,6 +240,28 @@ function resolveFeatureName(feature: GeoJsonFeature, country: Country): string {
   }
 
   return country.name;
+}
+
+function createFallbackGeometry(country: Country): GeoJsonPolygonGeometry {
+  const latitudeRadians = (country.centroid.latitude * Math.PI) / 180;
+  const latitudeScale = Math.max(Math.cos(latitudeRadians), 0.45);
+  const latitudeDelta = 0.28;
+  const longitudeDelta = 0.28 / latitudeScale;
+
+  const { latitude, longitude } = country.centroid;
+
+  return {
+    type: "Polygon",
+    coordinates: [
+      [
+        [longitude - longitudeDelta, latitude + latitudeDelta],
+        [longitude + longitudeDelta, latitude + latitudeDelta],
+        [longitude + longitudeDelta, latitude - latitudeDelta],
+        [longitude - longitudeDelta, latitude - latitudeDelta],
+        [longitude - longitudeDelta, latitude + latitudeDelta],
+      ],
+    ],
+  };
 }
 
 export function createCountryPolygons(
@@ -232,8 +292,38 @@ export function createCountryPolygons(
   }
 
   return Array.from(byCode.values())
-    .map(({ score: _score, country: _country, ...polygon }) => polygon)
+    .map(
+      (resolved): CountryPolygon => ({
+        countryCode: resolved.countryCode,
+        countryName: resolved.countryName,
+        featureName: resolved.featureName,
+        geometry: resolved.geometry,
+      }),
+    )
     .sort((left, right) => left.countryName.localeCompare(right.countryName));
+}
+
+function addFallbackCountryPolygons(polygons: CountryPolygon[]): CountryPolygon[] {
+  const byCode = new Map(
+    polygons.map((polygon) => [polygon.countryCode, polygon] as const),
+  );
+
+  for (const country of getCountries()) {
+    if (byCode.has(country.code)) {
+      continue;
+    }
+
+    byCode.set(country.code, {
+      countryCode: country.code,
+      countryName: country.name,
+      featureName: country.name,
+      geometry: createFallbackGeometry(country),
+    });
+  }
+
+  return Array.from(byCode.values()).sort((left, right) =>
+    left.countryName.localeCompare(right.countryName),
+  );
 }
 
 export async function loadCountryPolygons(): Promise<CountryPolygon[]> {
@@ -248,7 +338,9 @@ export async function loadCountryPolygons(): Promise<CountryPolygon[]> {
 
         return response.json() as Promise<{ features: GeoJsonFeature[] }>;
       })
-      .then((data) => createCountryPolygons(data.features ?? []))
+      .then((data) =>
+        addFallbackCountryPolygons(createCountryPolygons(data.features ?? [])),
+      )
       .catch(() => []);
   }
 

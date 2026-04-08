@@ -27,8 +27,7 @@ export type ResolveCountryMatchResult = CountryMatchResult & {
 
 const DEFAULT_LIMIT = 6;
 const SUGGESTION_THRESHOLD = 0.75;
-const APPROXIMATE_THRESHOLD = 0.75;
-
+const APPROXIMATE_RESOLVE_THRESHOLD = 0.8;
 function compactKey(value: string): string {
   return normalizeCountryKey(value).replace(/\s+/g, "");
 }
@@ -111,7 +110,7 @@ function pickCountrySuggestion(
   query: string,
   country: Country,
 ): CountrySuggestion | null {
-  const candidates = [country.code, country.name, ...country.aliases];
+  const candidates = [country.code, country.alpha3, country.name, ...country.aliases];
   let best: CountrySuggestion | null = null;
 
   for (const candidate of candidates) {
@@ -204,13 +203,7 @@ export function resolveCountryMatch(
     };
   }
 
-  if (
-    topSuggestion &&
-    topSuggestion.score >= APPROXIMATE_THRESHOLD &&
-    (topSuggestion.editDistance <= 2 ||
-      topSuggestion.reason === "alias" ||
-      topSuggestion.score >= 0.95)
-  ) {
+  if (topSuggestion && topSuggestion.score >= APPROXIMATE_RESOLVE_THRESHOLD) {
     return {
       ...result,
       country: topSuggestion.country,

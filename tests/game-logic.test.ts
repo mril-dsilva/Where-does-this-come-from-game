@@ -3,9 +3,12 @@ import test from "node:test";
 
 import {
   CORRECT_COLOR,
+  HEAT_COLOR_PALETTE,
   createGameState,
+  getBorderDistanceKm,
   getHeatColorForDistance,
   sortGuessesByDistance,
+  sortGuessesForDisplay,
   submitGuess,
 } from "../lib/game/index.ts";
 import {
@@ -21,7 +24,14 @@ import { haversineKm } from "../lib/geo/haversine.ts";
 
 test("country lookup resolves aliases and codes", () => {
   assert.equal(getCountryByCode("se")?.name, "Sweden");
+  assert.equal(getCountryByCode("USA")?.name, "United States");
+  assert.equal(getCountryByCode("FRA")?.name, "France");
+  assert.equal(getCountryByCode("GBR")?.name, "United Kingdom");
+  assert.equal(getCountryByCode("AD")?.name, "Andorra");
+  assert.equal(getCountryByCode("PS")?.name, "Palestine");
   assert.equal(getCountryByName("United States of America")?.code, "US");
+  assert.equal(getCountryByName("Andorra")?.code, "AD");
+  assert.equal(getCountryByName("State of Palestine")?.code, "PS");
 });
 
 test("expanded country aliases resolve the requested MVP examples", () => {
@@ -91,11 +101,39 @@ test("haversine distance returns kilometers and remains stable", () => {
   assert.equal(haversineKm(paris, paris), 0);
 });
 
-test("heat colors progress from cold to red hot and green on correct guesses", () => {
-  assert.equal(getHeatColorForDistance(12_000).level, "cold");
-  assert.equal(getHeatColorForDistance(2_400).level, "warm");
-  assert.equal(getHeatColorForDistance(120).level, "redHot");
+test("heat colors progress from far to hot and green on correct guesses", () => {
+  assert.equal(getHeatColorForDistance(19_000).level, "far");
+  assert.equal(getHeatColorForDistance(12_000).level, "far");
+  assert.equal(getHeatColorForDistance(4_000).level, "slightlyWarm");
+  assert.equal(getHeatColorForDistance(1_500).level, "warm");
+  assert.equal(getHeatColorForDistance(400).level, "hot");
   assert.equal(getHeatColorForDistance(0).color, CORRECT_COLOR);
+});
+
+test("border distance is based on country borders rather than centroids", () => {
+  const franceSpain = getBorderDistanceKm("FR", "ES");
+  const franceAustralia = getBorderDistanceKm("FR", "AU");
+
+  assert.ok(franceSpain < franceAustralia);
+  assert.ok(franceSpain >= 0);
+});
+
+test("neighboring countries always take the deepest red tier", () => {
+  const item = getItems().find((entry) => entry.id === "nokia");
+
+  if (!item) {
+    throw new Error("Expected Nokia seed item to exist.");
+  }
+
+  const result = submitGuess({
+    state: createGameState(item),
+    guess: "Sweden",
+    now: new Date("2026-04-06T12:15:00.000Z"),
+  });
+
+  assert.equal(result.wasRecorded, true);
+  assert.equal(result.evaluation.heatLevel, "neighboring");
+  assert.equal(result.evaluation.heatColor, HEAT_COLOR_PALETTE.neighboring);
 });
 
 test("submitGuess sorts guesses by proximity and prevents duplicates", () => {
@@ -165,6 +203,8 @@ test("sortGuessesByDistance keeps unknown guesses at the end", () => {
       countryCode: "FR",
       countryName: "France",
       distanceKm: 1000,
+      heatLevel: "warm",
+      heatColor: HEAT_COLOR_PALETTE.warm,
       isCorrect: false,
       createdAt: "2026-04-06T10:00:00.000Z",
     },
@@ -175,6 +215,40 @@ test("sortGuessesByDistance keeps unknown guesses at the end", () => {
       countryCode: null,
       countryName: null,
       distanceKm: null,
+      heatLevel: "neutral",
+      heatColor: "#dad4c8",
+      isCorrect: false,
+      createdAt: "2026-04-06T10:01:00.000Z",
+    },
+  ]);
+
+  assert.equal(sorted[0].id, "1");
+  assert.equal(sorted[1].id, "2");
+});
+
+test("sortGuessesForDisplay keeps neighboring guesses above distance-only guesses", () => {
+  const sorted = sortGuessesForDisplay([
+    {
+      id: "1",
+      guess: "Sweden",
+      normalizedGuess: "sweden",
+      countryCode: "SE",
+      countryName: "Sweden",
+      distanceKm: 431,
+      heatLevel: "neighboring",
+      heatColor: HEAT_COLOR_PALETTE.neighboring,
+      isCorrect: false,
+      createdAt: "2026-04-06T10:00:00.000Z",
+    },
+    {
+      id: "2",
+      guess: "Spain",
+      normalizedGuess: "spain",
+      countryCode: "ES",
+      countryName: "Spain",
+      distanceKm: 1_800,
+      heatLevel: "warm",
+      heatColor: HEAT_COLOR_PALETTE.warm,
       isCorrect: false,
       createdAt: "2026-04-06T10:01:00.000Z",
     },

@@ -4,14 +4,17 @@ import { normalizeCountryKey } from "./normalize.ts";
 
 type CountryLookup = {
   byCode: Map<string, Country>;
+  byAlpha3: Map<string, Country>;
   byName: Map<string, Country>;
 };
 
+const countryCentroidLookup = new Map(
+  countryCentroidSeeds.map((entry) => [entry.code, entry] as const),
+);
+
 function buildCountryLookup(): CountryLookup {
   const mergedCountries = countrySeeds.map((country) => {
-    const centroid = countryCentroidSeeds.find(
-      (entry) => entry.code === country.code,
-    );
+    const centroid = countryCentroidLookup.get(country.code);
 
     if (!centroid) {
       throw new Error(`Missing centroid data for country code: ${country.code}`);
@@ -19,6 +22,7 @@ function buildCountryLookup(): CountryLookup {
 
     return {
       code: country.code,
+      alpha3: country.alpha3,
       name: country.name,
       aliases: [...country.aliases],
       centroid: {
@@ -29,18 +33,20 @@ function buildCountryLookup(): CountryLookup {
   });
 
   const byCode = new Map<string, Country>();
+  const byAlpha3 = new Map<string, Country>();
   const byName = new Map<string, Country>();
 
   for (const country of mergedCountries) {
     byCode.set(country.code, country);
+    byAlpha3.set(country.alpha3.trim().toUpperCase(), country);
 
-    const namesToIndex = [country.name, ...country.aliases];
+    const namesToIndex = [country.name, country.code, country.alpha3, ...country.aliases];
     for (const name of namesToIndex) {
       byName.set(normalizeCountryKey(name), country);
     }
   }
 
-  return { byCode, byName };
+  return { byCode, byAlpha3, byName };
 }
 
 const countryLookup = buildCountryLookup();
@@ -62,5 +68,7 @@ export function getCountryByName(name: string): Country | undefined {
 }
 
 export function getCountryByCode(code: string): Country | undefined {
-  return countryLookup.byCode.get(code.trim().toUpperCase());
+  const normalized = code.trim().toUpperCase();
+
+  return countryLookup.byCode.get(normalized) ?? countryLookup.byAlpha3.get(normalized);
 }

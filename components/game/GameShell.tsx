@@ -4,35 +4,67 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getItems } from "@/lib/data/index.ts";
 import { getCountrySuggestions } from "@/lib/data/country-match.ts";
 import {
-  CORRECT_COLOR,
   createGameState,
-  getHeatColorForDistance,
   hasGuessBeenRecorded,
   submitGuess,
 } from "@/lib/game/index.ts";
 import type { GameItem, GameState } from "@/types/game.ts";
+import HowToPlayCard from "@/components/site/HowToPlayCard";
+import OriginGuessrMark from "@/components/site/OriginGuessrMark";
 import ConfettiBurst from "./ConfettiBurst";
-import GlobeLegend from "../globe/GlobeLegend";
+import GameClueStrip from "./GameClueStrip";
 import WorldGlobe from "../globe/WorldGlobe";
 import GuessHistory from "./GuessHistory";
 import GuessInput from "./GuessInput";
-import ItemPromptCard from "./ItemPromptCard";
-import ResultBanner from "./ResultBanner";
 
 type GameShellProps = {
   initialItem: GameItem;
+  onExitLanding: () => void;
+  onPlayAgain: () => void;
 };
 
-function pickRandomItem(items: GameItem[]): GameItem {
-  const index = Math.floor(Math.random() * items.length);
-  return items[index] ?? items[0];
-}
+const CONFETTI_DURATION_MS = 1800;
+const REEL_SIDE_COUNT = 20;
+const REEL_TOTAL_COUNT = REEL_SIDE_COUNT * 2 + 1;
 
 function createInitialState(item: GameItem): GameState {
   return createGameState(item);
 }
 
-export default function GameShell({ initialItem }: GameShellProps) {
+function hashString(value: string): number {
+  let hash = 2166136261;
+
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return hash >>> 0;
+}
+
+function getFlagEmoji(countryCode: string | null): string {
+  if (!countryCode || countryCode.length !== 2) {
+    return "🏳️";
+  }
+
+  const code = countryCode.trim().toUpperCase();
+
+  if (!/^[A-Z]{2}$/.test(code)) {
+    return "🏳️";
+  }
+
+  const baseCodePoint = 127397;
+
+  return String.fromCodePoint(
+    ...Array.from(code, (character) => baseCodePoint + character.charCodeAt(0)),
+  );
+}
+
+export default function GameShell({
+  initialItem,
+  onExitLanding,
+  onPlayAgain,
+}: GameShellProps) {
   const [state, setState] = useState<GameState>(() =>
     createInitialState(initialItem),
   );
@@ -42,17 +74,14 @@ export default function GameShell({ initialItem }: GameShellProps) {
   const [latestSubmittedCountryCode, setLatestSubmittedCountryCode] = useState<
     string | null
   >(null);
-  const [feedback, setFeedback] = useState<string>(
-    "Enter a country name or code to begin.",
-  );
-  const [feedbackTone, setFeedbackTone] = useState<
-    "neutral" | "positive" | "warning" | "error"
-  >("neutral");
+  const [showGameplay, setShowGameplay] = useState(false);
+  const [showSolvedPopup, setShowSolvedPopup] = useState(false);
 
   const guesses = state.guesses;
   const isComplete = state.isComplete;
   const activeItem = state.activeItem ?? initialItem;
   const confettiTimerRef = useRef<number | null>(null);
+  const revealTimerRef = useRef<number | null>(null);
   const latestGuess = useMemo(
     () =>
       [...guesses].sort((left, right) =>
@@ -73,9 +102,7 @@ export default function GameShell({ initialItem }: GameShellProps) {
     () =>
       guesses.map((guess) => ({
         countryCode: guess.countryCode ?? "",
-        color: guess.isCorrect
-          ? CORRECT_COLOR
-          : getHeatColorForDistance(guess.distanceKm ?? 0).color,
+        color: guess.heatColor,
         altitude: guess.isCorrect
           ? 0.034
           : guess.countryCode === latestSubmittedCountryCode
@@ -85,34 +112,67 @@ export default function GameShell({ initialItem }: GameShellProps) {
       })),
     [guesses, latestSubmittedCountryCode],
   );
+  const reelEmojis = useMemo(() => {
+    const pool = getItems()
+      .filter((item) => item.id !== activeItem.id)
+      .map((item) => item.emoji)
+      .sort((left, right) => left.localeCompare(right));
+
+    if (pool.length === 0) {
+      return Array.from({ length: REEL_TOTAL_COUNT }, () => "◌");
+    }
+
+    const offset = hashString(`${activeItem.id}-${state.createdAt}`) % pool.length;
+    const rotated = Array.from(
+      { length: REEL_SIDE_COUNT * 2 },
+      (_, index) => pool[(offset + index) % pool.length] ?? "◌",
+    );
+
+    return [
+      ...rotated.slice(0, REEL_SIDE_COUNT),
+      activeItem.emoji,
+      ...rotated.slice(REEL_SIDE_COUNT, REEL_SIDE_COUNT * 2),
+    ];
+  }, [activeItem.id, activeItem.emoji, state.createdAt]);
+  const solvedCountryFlag = useMemo(
+    () => getFlagEmoji(activeItem.originCountryCode),
+    [activeItem.originCountryCode],
+  );
 
   useEffect(
     () => () => {
       if (confettiTimerRef.current) {
         window.clearTimeout(confettiTimerRef.current);
       }
+      if (revealTimerRef.current) {
+        window.clearTimeout(revealTimerRef.current);
+      }
     },
     [],
   );
+
+  function handleClueRevealComplete() {
+    if (revealTimerRef.current) {
+      window.clearTimeout(revealTimerRef.current);
+    }
+
+    revealTimerRef.current = window.setTimeout(() => {
+      setShowGameplay(true);
+    }, 1400);
+  }
 
   function handleSubmit(guess: string) {
     const trimmedGuess = guess.trim();
 
     if (!trimmedGuess) {
-      setFeedback("Please enter a country name.");
-      setFeedbackTone("warning");
       return;
     }
 
     if (state.isComplete) {
-      setFeedback("This round is complete. Refresh the page to try another item.");
-      setFeedbackTone("neutral");
       return;
     }
 
     if (hasGuessBeenRecorded(state.guesses, trimmedGuess)) {
-      setFeedback("That guess was already used. Try a different country.");
-      setFeedbackTone("warning");
       return;
     }
 
@@ -123,37 +183,12 @@ export default function GameShell({ initialItem }: GameShellProps) {
     });
 
     if (!result.wasRecorded) {
-      if (!result.evaluation.resolvedCountry) {
-        if (result.evaluation.didYouMeanCountry) {
-          setFeedback(
-            `Did you mean ${result.evaluation.didYouMeanCountry.name}?`,
-          );
-          setFeedbackTone("warning");
-        } else {
-          setFeedback(
-            "We could not match that to a country. Try a common country name or code.",
-          );
-          setFeedbackTone("error");
-        }
-      } else if (result.evaluation.isDuplicate) {
-        setFeedback("That guess was already used. Try a different country.");
-        setFeedbackTone("warning");
-      }
-
       return;
     }
 
     setState(result.state);
     setInputValue("");
     setLatestSubmittedCountryCode(result.evaluation.resolvedCountry?.code ?? null);
-
-    if (result.evaluation.matchType === "approximate") {
-      setFeedback(
-        `Close enough. We matched that to ${result.evaluation.resolvedCountry?.name}.`,
-      );
-      setFeedbackTone("neutral");
-      return;
-    }
 
     if (result.evaluation.isCorrect) {
       if (confettiTimerRef.current) {
@@ -163,90 +198,154 @@ export default function GameShell({ initialItem }: GameShellProps) {
       const token = result.state.completedAt ?? new Date().toISOString();
       setConfettiToken(token);
       setShowConfetti(true);
+      setShowSolvedPopup(true);
       confettiTimerRef.current = window.setTimeout(() => {
         setShowConfetti(false);
-      }, 1500);
-      setFeedback(`Solved. ${activeItem.originCountryName} is the right answer.`);
-      setFeedbackTone("positive");
+      }, CONFETTI_DURATION_MS);
       return;
     }
-
-    const distanceText =
-      result.evaluation.distanceKm !== null
-        ? `${result.evaluation.distanceKm.toLocaleString()} km away`
-        : "distance unavailable";
-
-    setFeedback(
-      `${result.evaluation.resolvedCountry?.name ?? trimmedGuess} is ${distanceText}.`,
-    );
-    setFeedbackTone("neutral");
   }
 
-  function handleReset() {
-    if (confettiTimerRef.current) {
-      window.clearTimeout(confettiTimerRef.current);
-      confettiTimerRef.current = null;
-    }
-
-    const nextItem = pickRandomItem(getItems());
-    setState(createInitialState(nextItem));
-    setInputValue("");
-    setShowConfetti(false);
-    setConfettiToken(null);
-    setLatestSubmittedCountryCode(null);
-    setFeedback("Enter a country name or code to begin.");
-    setFeedbackTone("neutral");
+  function handleDismissSolvedPopup() {
+    setShowSolvedPopup(false);
   }
-
-  const historyTitle = isComplete
-    ? "Solved guesses"
-    : "Guesses so far";
 
   return (
-    <section className="relative grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
+    <main className="relative min-h-screen overflow-x-clip px-5 pt-4 pb-8 text-center sm:px-6 sm:pt-5 lg:px-8 lg:pt-6">
       <ConfettiBurst
         key={confettiToken ?? "idle"}
         active={showConfetti}
         triggerKey={confettiToken}
       />
-      <div className="grid gap-6">
-        <ResultBanner
-          tone={feedbackTone}
-          title={feedback}
-          detail={
-            isComplete
-              ? `${activeItem.fact}`
-              : "Past guesses stay sorted from closest to farthest."
-          }
-          onReset={isComplete ? handleReset : undefined}
-          resetLabel="Play again"
+      <div
+        className={`mx-auto flex w-full flex-col items-stretch gap-0 transition-[margin-top] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          showGameplay ? "mt-0" : "mt-[calc(50svh-10rem)]"
+        }`.trim()}
+      >
+        <div
+          className={`relative mx-auto flex w-full max-w-4xl flex-col items-center gap-0 transition-[padding-top] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            showGameplay ? "pt-0 sm:pt-1" : "pt-0"
+          }`.trim()}
+        >
+          <OriginGuessrMark
+            size="compact"
+            onClick={onExitLanding}
+            className="mt-0 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 shadow-[0_12px_40px_var(--shadow)] backdrop-blur-xl"
+          />
+
+          <h1 className="mt-1.5 font-sans text-[1.34rem] font-bold tracking-[-0.045em] text-white/96 sm:mt-2 sm:text-[1.72rem] lg:text-[2.25rem]">
+            Guess the country of the day.
+          </h1>
+        </div>
+
+        <GameClueStrip
+          key={`${activeItem.id}-${state.createdAt}`}
+          emojis={reelEmojis}
+          centerIndex={REEL_SIDE_COUNT}
+          itemName={activeItem.name}
+          animate
+          onRevealComplete={handleClueRevealComplete}
+          className="-mt-17 -mb-7 py-0 sm:-mt-19 sm:-mb-9"
         />
+      </div>
 
-        <section className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] p-4 shadow-sm">
-          <WorldGlobe highlights={globeHighlights} />
-          <GlobeLegend className="mt-4" />
-        </section>
-
-        <ItemPromptCard item={activeItem} isComplete={isComplete} />
+      <div
+        className={`mx-auto flex w-full max-w-4xl flex-col items-center gap-0 py-0 pt-[30px] transition-[opacity,transform] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] delay-[160ms] ${
+          showGameplay
+            ? "translate-y-0 opacity-100"
+            : "translate-y-6 opacity-0 pointer-events-none"
+        }`.trim()}
+      >
+        <WorldGlobe
+          highlights={globeHighlights}
+          focusCountryCode={latestSubmittedCountryCode}
+          framed={false}
+          contentScale={1.47}
+          className="mx-auto mt-0 mb-[14px] aspect-square h-[clamp(24.5rem,49vw,35.8rem)] w-[clamp(24.5rem,49vw,35.8rem)] max-w-none sm:mb-[20px]"
+        />
 
         <GuessInput
           value={inputValue}
           disabled={isComplete}
-          suggestions={suggestionBundle.suggestions}
           didYouMean={suggestionBundle.didYouMean}
           onChange={setInputValue}
           onSubmit={handleSubmit}
-          onSuggestionSelect={handleSubmit}
+        />
+
+        <GuessHistory
+          guesses={guesses}
+          latestGuessId={latestGuess?.id ?? null}
+        />
+
+        <HowToPlayCard
+          collapsible
+          answerLabel={activeItem.originCountryName}
+          showLegend
         />
       </div>
 
-      <GuessHistory
-        title={historyTitle}
-        guesses={guesses}
-        isComplete={isComplete}
-        latestGuessId={latestGuess?.id ?? null}
-        heatForDistance={getHeatColorForDistance}
-      />
-    </section>
+      {isComplete && showSolvedPopup ? (
+        <div
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/35 p-4 backdrop-blur-sm"
+          onClick={handleDismissSolvedPopup}
+        >
+          <div
+            className="relative w-full max-w-[46rem] overflow-hidden rounded-[2.2rem] border border-white/12 bg-white/[0.08] px-7 py-8 text-center shadow-[0_30px_120px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:px-10 sm:py-10"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mx-auto flex max-w-[37rem] flex-col items-center gap-5">
+              <div className="flex h-[5.2rem] w-[5.2rem] items-center justify-center rounded-full border border-white/10 bg-white/[0.08] text-[2.55rem] shadow-[0_12px_40px_var(--shadow)]">
+                <span aria-hidden="true">{solvedCountryFlag}</span>
+              </div>
+
+              <div className="space-y-2">
+                <p className="font-display text-[1.48rem] font-semibold tracking-[-0.04em] text-white sm:text-[1.86rem]">
+                  The mystery country is {activeItem.originCountryName}!
+                </p>
+                <p className="text-[1.08rem] leading-7 text-white/78 sm:text-[1.15rem]">
+                  {activeItem.fact}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+                <button
+                  type="button"
+                  onClick={onPlayAgain}
+                  className="inline-flex h-[3.15rem] items-center justify-center rounded-full bg-white px-6 text-[1.02rem] font-semibold text-black transition hover:scale-[1.02] hover:bg-white/95 active:scale-[0.98]"
+                >
+                  Play again
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDismissSolvedPopup}
+                  className="inline-flex h-[3.15rem] items-center justify-center rounded-full border border-white/14 bg-white/[0.04] px-6 text-[1.02rem] font-semibold text-white transition hover:border-white/24 hover:bg-white/[0.07]"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <div
+        className={`mx-auto mt-[17px] flex w-full max-w-4xl flex-col items-center gap-0 py-0 transition-[opacity,transform] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] delay-[220ms] sm:mt-[21px] ${
+          showGameplay
+            ? "translate-y-0 opacity-100"
+            : "translate-y-4 opacity-0 pointer-events-none"
+        }`.trim()}
+      >
+        <footer className="flex flex-col items-center gap-3 pt-2 text-center text-sm text-white/52">
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-lg text-white/62 transition hover:border-white/20 hover:text-white"
+            aria-label="Back to top"
+          >
+            ↑
+          </button>
+        </footer>
+      </div>
+    </main>
   );
 }

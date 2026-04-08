@@ -21,7 +21,7 @@ type ConfettiPiece = {
 };
 
 const COLORS = ["#f3b48b", "#f0d38f", "#9ec2d9", "#9fc3ab", "#d9d1c7"];
-const PIECE_COUNT = 24;
+const PIECE_COUNT = 20;
 
 function createPieces(seed: string): ConfettiPiece[] {
   const base = seed.length || 1;
@@ -33,11 +33,11 @@ function createPieces(seed: string): ConfettiPiece[] {
     return {
       id: `${seed}-${index}`,
       left: `${50 + spread}%`,
-      top: `${10 + (index % 4) * 3}%`,
-      delay: `${(index % 6) * 40}ms`,
-      duration: `${950 + (index % 5) * 90}ms`,
-      drift: `${direction * (28 + (index % 5) * 8)}px`,
-      spin: `${direction * (180 + (index % 7) * 30)}deg`,
+      top: `${-12 + (index % 4) * 2}%`,
+      delay: `${(index % 5) * 35}ms`,
+      duration: `${1200 + (index % 4) * 100}ms`,
+      drift: `${direction * (30 + (index % 5) * 8)}px`,
+      spin: `${direction * (180 + (index % 7) * 25)}deg`,
       size: `${6 + (index % 4)}px`,
       color: COLORS[index % COLORS.length],
     };
@@ -60,7 +60,7 @@ export default function ConfettiBurst({
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 top-0 z-20 h-48 overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-50 overflow-hidden"
     >
       {pieces.map((piece) => (
         <span

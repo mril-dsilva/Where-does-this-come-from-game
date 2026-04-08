@@ -1,3 +1,5 @@
+import type { GuessHeatLevel } from "@/lib/game/heat.ts";
+
 export type GameCategory = "food" | "invention" | "brand";
 
 export type GameItem = {
@@ -17,6 +19,7 @@ export type CountryCentroid = {
 
 export type Country = {
   code: string;
+  alpha3: string;
   name: string;
   aliases: string[];
   centroid: CountryCentroid;
@@ -29,6 +32,8 @@ export type GuessRecord = {
   countryCode: string | null;
   countryName: string | null;
   distanceKm: number | null;
+  heatLevel: GuessHeatLevel;
+  heatColor: string;
   isCorrect: boolean;
   createdAt: string;
 };
