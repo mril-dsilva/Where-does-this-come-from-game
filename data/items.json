@@ -1,191 +1,398 @@
 [
   {
-    "id": "kimchi",
-    "name": "Kimchi",
-    "emoji": "🥬",
-    "category": "food",
-    "originCountryCode": "KR",
-    "originCountryName": "South Korea",
-    "fact": "Kimchi is a staple fermented side dish with deep regional variation across Korea."
-  },
-  {
-    "id": "sushi",
-    "name": "Sushi",
-    "emoji": "🍣",
-    "category": "food",
-    "originCountryCode": "JP",
-    "originCountryName": "Japan",
-    "fact": "Sushi became a distinct Japanese culinary tradition long before its modern global spread."
-  },
-  {
-    "id": "pizza",
-    "name": "Pizza",
-    "emoji": "🍕",
-    "category": "food",
-    "originCountryCode": "IT",
-    "originCountryName": "Italy",
-    "fact": "Modern pizza is most closely associated with Naples, where it evolved into a signature dish."
-  },
-  {
-    "id": "tacos",
-    "name": "Tacos",
-    "emoji": "🌮",
-    "category": "food",
-    "originCountryCode": "MX",
-    "originCountryName": "Mexico",
-    "fact": "Tacos are a foundational part of Mexican cuisine with countless regional variations."
-  },
-  {
-    "id": "croissant",
-    "name": "Croissant",
-    "emoji": "🥐",
-    "category": "food",
-    "originCountryCode": "FR",
-    "originCountryName": "France",
-    "fact": "The croissant became a French breakfast icon after evolving through European pastry traditions."
-  },
-  {
-    "id": "doner-kebab",
-    "name": "Doner kebab",
-    "emoji": "🥙",
-    "category": "food",
-    "originCountryCode": "TR",
-    "originCountryName": "Turkey",
-    "fact": "Doner kebab traces back to Ottoman-era cooking methods that inspired the vertical spit format."
-  },
-  {
-    "id": "poutine",
-    "name": "Poutine",
-    "emoji": "🍟",
-    "category": "food",
-    "originCountryCode": "CA",
-    "originCountryName": "Canada",
-    "fact": "Poutine originated in Quebec and became one of Canada's most recognizable comfort foods."
-  },
-  {
-    "id": "dynamite",
-    "name": "Dynamite",
-    "emoji": "🧨",
-    "category": "invention",
-    "originCountryCode": "SE",
-    "originCountryName": "Sweden",
-    "fact": "Alfred Nobel developed dynamite in Sweden and used its commercial success to fund the Nobel Prizes."
-  },
-  {
-    "id": "basketball",
-    "name": "Basketball",
-    "emoji": "🏀",
-    "category": "invention",
-    "originCountryCode": "US",
-    "originCountryName": "United States",
-    "fact": "Basketball was invented in Massachusetts as an indoor winter sport."
-  },
-  {
-    "id": "three-point-seat-belt",
-    "name": "Three-point seat belt",
-    "emoji": "🚗",
-    "category": "invention",
-    "originCountryCode": "SE",
-    "originCountryName": "Sweden",
-    "fact": "Volvo engineer Nils Bohlin created the modern three-point seat belt in Sweden."
-  },
-  {
-    "id": "diesel-engine",
-    "name": "Diesel engine",
-    "emoji": "⚙️",
-    "category": "invention",
-    "originCountryCode": "DE",
-    "originCountryName": "Germany",
-    "fact": "Rudolf Diesel developed the diesel engine in Germany to improve thermal efficiency."
-  },
-  {
-    "id": "paper-money",
-    "name": "Paper money",
-    "emoji": "💴",
-    "category": "invention",
-    "originCountryCode": "CN",
-    "originCountryName": "China",
-    "fact": "Paper money first appeared in China centuries before it became common elsewhere."
-  },
-  {
-    "id": "barcode",
-    "name": "Barcode",
-    "emoji": "🏷️",
-    "category": "invention",
-    "originCountryCode": "US",
-    "originCountryName": "United States",
-    "fact": "The barcode was developed in the United States to speed up retail checkout and inventory systems."
-  },
-  {
-    "id": "pacemaker",
-    "name": "Pacemaker",
-    "emoji": "❤️",
-    "category": "invention",
-    "originCountryCode": "SE",
-    "originCountryName": "Sweden",
-    "fact": "Modern implantable pacemaker technology has major roots in Swedish engineering and medical innovation."
-  },
-  {
-    "id": "nokia",
-    "name": "Nokia",
-    "emoji": "📱",
-    "category": "brand",
-    "originCountryCode": "FI",
-    "originCountryName": "Finland",
-    "fact": "Nokia transformed from an industrial company into one of Finland's most famous technology brands."
-  },
-  {
-    "id": "ikea",
-    "name": "IKEA",
-    "emoji": "🪑",
-    "category": "brand",
-    "originCountryCode": "SE",
-    "originCountryName": "Sweden",
-    "fact": "IKEA began in Sweden and built a global identity around flat-pack design."
-  },
-  {
-    "id": "lego",
     "name": "LEGO",
     "emoji": "🧱",
     "category": "brand",
     "originCountryCode": "DK",
     "originCountryName": "Denmark",
-    "fact": "LEGO was founded in Denmark and its name comes from the Danish phrase meaning to play well."
+    "fact": "The name comes from Danish 'leg godt' meaning 'play well', reflecting its focus on creative building.",
+    "id": "lego"
   },
   {
-    "id": "rolex",
-    "name": "Rolex",
-    "emoji": "⌚",
+    "name": "IKEA",
+    "emoji": "🪑",
     "category": "brand",
-    "originCountryCode": "CH",
-    "originCountryName": "Switzerland",
-    "fact": "Rolex became a hallmark of Swiss watchmaking and precision branding."
+    "originCountryCode": "SE",
+    "originCountryName": "Sweden",
+    "fact": "Its name combines the founder’s initials with his farm and village, grounding the global brand in rural Sweden.",
+    "id": "ikea"
   },
   {
-    "id": "adidas",
+    "name": "Nokia",
+    "emoji": "📱",
+    "category": "brand",
+    "originCountryCode": "FI",
+    "originCountryName": "Finland",
+    "fact": "It began as a paper mill in the 1800s before evolving into one of the world’s most influential mobile phone companies.",
+    "id": "nokia"
+  },
+  {
+    "name": "Pho",
+    "emoji": "🍜",
+    "category": "food",
+    "originCountryCode": "VN",
+    "originCountryName": "Vietnam",
+    "fact": "This noodle soup emerged in northern Vietnam in the late 1800s, blending local traditions with French colonial influence.",
+    "id": "pho"
+  },
+  {
+    "name": "Boomerang",
+    "emoji": "🪃",
+    "category": "cultural_object",
+    "originCountryCode": "AU",
+    "originCountryName": "Australia",
+    "fact": "Used by Aboriginal Australians for thousands of years, not all boomerangs were designed to return.",
+    "id": "boomerang"
+  },
+  {
+    "name": "Flamenco",
+    "emoji": "💃",
+    "category": "art",
+    "originCountryCode": "ES",
+    "originCountryName": "Spain",
+    "fact": "Originating in Andalusia, flamenco blends Romani, Moorish, and Spanish influences into music, dance, and song.",
+    "id": "flamenco"
+  },
+  {
+    "name": "World Wide Web",
+    "emoji": "🌐",
+    "category": "invention",
+    "originCountryCode": "GB",
+    "originCountryName": "United Kingdom",
+    "fact": "Invented in 1989 by Tim Berners-Lee to help scientists share information across computers.",
+    "id": "world-wide-web"
+  },
+  {
+    "name": "Matryoshka Dolls",
+    "emoji": "🪆",
+    "category": "cultural_object",
+    "originCountryCode": "RU",
+    "originCountryName": "Russia",
+    "fact": "First made in 1890, these nesting dolls symbolize layers of family and generations.",
+    "id": "matryoshka-dolls"
+  },
+  {
+    "name": "Playing Cards",
+    "emoji": "🃏",
+    "category": "game",
+    "originCountryCode": "CN",
+    "originCountryName": "China",
+    "fact": "Early forms appeared in China over 1,000 years ago, possibly evolving from paper money and games of chance.",
+    "id": "playing-cards"
+  },
+  {
+    "name": "WiFi",
+    "emoji": "📶",
+    "category": "invention",
+    "originCountryCode": "NL",
+    "originCountryName": "Netherlands",
+    "fact": "Key wireless communication breakthroughs by Dutch engineers helped make modern WiFi possible.",
+    "id": "wifi"
+  },
+  {
+    "name": "Lock and Key",
+    "emoji": "🔐",
+    "category": "invention",
+    "originCountryCode": "EG",
+    "originCountryName": "Egypt",
+    "fact": "Ancient Egyptians created early wooden pin-tumbler locks, the basis for many modern designs.",
+    "id": "lock-and-key"
+  },
+  {
+    "name": "Newspaper",
+    "emoji": "📰",
+    "category": "media",
+    "originCountryCode": "DE",
+    "originCountryName": "Germany",
+    "fact": "The first printed newspapers appeared in 17th-century Germany as printing technology spread across Europe.",
+    "id": "newspaper"
+  },
+  {
+    "name": "Blue Jeans",
+    "emoji": "👖",
+    "category": "fashion",
+    "originCountryCode": "US",
+    "originCountryName": "United States",
+    "fact": "Invented in 1873 as durable workwear for miners, they later became a global fashion staple.",
+    "id": "blue-jeans"
+  },
+  {
+    "name": "Shampoo",
+    "emoji": "🧴",
+    "category": "daily_object",
+    "originCountryCode": "IN",
+    "originCountryName": "India",
+    "fact": "The word comes from Hindi 'chāmpo' meaning 'to massage', referring to traditional hair cleansing practices.",
+    "id": "shampoo"
+  },
+  {
+    "name": "Havaianas",
+    "emoji": "🩴",
+    "category": "brand",
+    "originCountryCode": "BR",
+    "originCountryName": "Brazil",
+    "fact": "Inspired by Japanese sandals, they became a global symbol of casual summer footwear.",
+    "id": "havaianas"
+  },
+  {
+    "name": "Injera",
+    "emoji": "🫓",
+    "category": "food",
+    "originCountryCode": "ET",
+    "originCountryName": "Ethiopia",
+    "fact": "Made from teff, this sour fermented flatbread also acts as a utensil for scooping food.",
+    "id": "injera"
+  },
+  {
     "name": "Adidas",
     "emoji": "👟",
     "category": "brand",
     "originCountryCode": "DE",
     "originCountryName": "Germany",
-    "fact": "Adidas started in Germany and grew into one of the world's best-known sportswear brands."
+    "fact": "Founded in 1949, its three-stripe design became one of the most recognizable symbols in sportswear.",
+    "id": "adidas"
   },
   {
-    "id": "spotify",
-    "name": "Spotify",
-    "emoji": "🎧",
-    "category": "brand",
-    "originCountryCode": "SE",
-    "originCountryName": "Sweden",
-    "fact": "Spotify launched in Sweden and helped define modern streaming music culture."
+    "name": "Cinema",
+    "emoji": "🎥",
+    "category": "invention",
+    "originCountryCode": "FR",
+    "originCountryName": "France",
+    "fact": "The Lumière brothers’ Cinématographe could record, project, and display moving images, launching modern film.",
+    "id": "cinema"
   },
   {
-    "id": "patagonia",
-    "name": "Patagonia",
-    "emoji": "🧥",
-    "category": "brand",
+    "name": "Nutella",
+    "emoji": "🍫",
+    "category": "food",
+    "originCountryCode": "IT",
+    "originCountryName": "Italy",
+    "fact": "Created after WWII using hazelnuts to stretch limited cocoa supplies, it became a global spread.",
+    "id": "nutella"
+  },
+  {
+    "name": "Bluetooth",
+    "emoji": "📶",
+    "category": "invention",
+    "originCountryCode": "NL",
+    "originCountryName": "Netherlands",
+    "fact": "Named after a Viking king, it was developed to connect devices wirelessly over short distances.",
+    "id": "bluetooth"
+  },
+  {
+    "name": "Saxophone",
+    "emoji": "🎷",
+    "category": "instrument",
+    "originCountryCode": "BE",
+    "originCountryName": "Belgium",
+    "fact": "Invented in the 1840s, it was designed to bridge brass and woodwind sounds.",
+    "id": "saxophone"
+  },
+  {
+    "name": "Rubik’s Cube",
+    "emoji": "🧩",
+    "category": "game",
+    "originCountryCode": "HU",
+    "originCountryName": "Hungary",
+    "fact": "Originally a teaching tool, it became one of the best-selling puzzles in history.",
+    "id": "rubik-s-cube"
+  },
+  {
+    "name": "Ballpoint Pen",
+    "emoji": "🖊️",
+    "category": "invention",
+    "originCountryCode": "AR",
+    "originCountryName": "Argentina",
+    "fact": "Designed for smoother writing, it replaced fountain pens by using quick-drying ink.",
+    "id": "ballpoint-pen"
+  },
+  {
+    "name": "Alarm Clock",
+    "emoji": "⏰",
+    "category": "daily_object",
+    "originCountryCode": "GR",
+    "originCountryName": "Greece",
+    "fact": "Early versions used water clocks to trigger sounds at specific times.",
+    "id": "alarm-clock"
+  },
+  {
+    "name": "Buttons",
+    "emoji": "🔘",
+    "category": "daily_object",
+    "originCountryCode": "IN",
+    "originCountryName": "India",
+    "fact": "Used in the Indus Valley over 4,000 years ago, initially for decoration rather than fastening.",
+    "id": "buttons"
+  },
+  {
+    "name": "Fez Hat",
+    "emoji": "🎩",
+    "category": "cultural_object",
+    "originCountryCode": "MA",
+    "originCountryName": "Morocco",
+    "fact": "Named after the city of Fez, it became widely worn across the Ottoman world.",
+    "id": "fez-hat"
+  },
+  {
+    "name": "Nazar Amulet",
+    "emoji": "🧿",
+    "category": "cultural_object",
+    "originCountryCode": "TR",
+    "originCountryName": "Turkey",
+    "fact": "Common across the region, it is believed to protect against harmful envy known as the 'evil eye'.",
+    "id": "nazar-amulet"
+  },
+  {
+    "name": "Coffee",
+    "emoji": "☕",
+    "category": "food",
+    "originCountryCode": "ET",
+    "originCountryName": "Ethiopia",
+    "fact": "Legend says a goat herder noticed energized goats after eating coffee berries, leading to its discovery.",
+    "id": "coffee"
+  },
+  {
+    "name": "Sriracha",
+    "emoji": "🌶️",
+    "category": "food",
+    "originCountryCode": "TH",
+    "originCountryName": "Thailand",
+    "fact": "Named after the coastal city of Si Racha, it later became globally popular in different variations.",
+    "id": "sriracha"
+  },
+  {
+    "name": "Quinoa",
+    "emoji": "🌾",
+    "category": "food",
+    "originCountryCode": "PE",
+    "originCountryName": "Peru",
+    "fact": "Cultivated in the Andes for thousands of years, it was a staple crop of the Inca civilization.",
+    "id": "quinoa"
+  },
+  {
+    "name": "Kites",
+    "emoji": "🪁",
+    "category": "cultural_object",
+    "originCountryCode": "CN",
+    "originCountryName": "China",
+    "fact": "Originally used for military signaling and measuring distances before becoming recreational.",
+    "id": "kites"
+  },
+  {
+    "name": "Ukulele (Not the Guitar)",
+    "emoji": "🎸",
+    "category": "instrument",
     "originCountryCode": "US",
     "originCountryName": "United States",
-    "fact": "Patagonia started in the United States and became known for durable outdoor gear and brand activism."
+    "fact": "Developed in Hawaii from Portuguese instruments brought by immigrants in the 19th century.",
+    "id": "ukulele-not-the-guitar"
+  },
+  {
+    "name": "Cigarette",
+    "emoji": "🚬",
+    "category": "daily_object",
+    "originCountryCode": "MX",
+    "originCountryName": "Mexico",
+    "fact": "Tobacco use spread globally after Europeans encountered Indigenous smoking traditions in the Americas.",
+    "id": "cigarette"
+  },
+  {
+    "name": "Safari",
+    "emoji": "🦒",
+    "category": "cultural_object",
+    "originCountryCode": "KE",
+    "originCountryName": "Kenya",
+    "fact": "From the Swahili word for 'journey', it later came to mean wildlife expeditions in East Africa.",
+    "id": "safari"
+  },
+  {
+    "name": "Tempura",
+    "emoji": "🍤",
+    "category": "food",
+    "originCountryCode": "PT",
+    "originCountryName": "Portugal",
+    "fact": "Portuguese missionaries introduced frying techniques to Japan, where tempura evolved into its modern form.",
+    "id": "tempura"
+  },
+  {
+    "name": "Contraceptive Pill",
+    "emoji": "💊",
+    "category": "invention",
+    "originCountryCode": "MX",
+    "originCountryName": "Mexico",
+    "fact": "Key hormones were first synthesized from compounds found in Mexican yams.",
+    "id": "contraceptive-pill"
+  },
+  {
+    "name": "Wine",
+    "emoji": "🍷",
+    "category": "food",
+    "originCountryCode": "GE",
+    "originCountryName": "Georgia",
+    "fact": "Archaeological evidence shows winemaking here dates back over 8,000 years.",
+    "id": "wine"
+  },
+  {
+    "name": "Necktie",
+    "emoji": "👔",
+    "category": "fashion",
+    "originCountryCode": "HR",
+    "originCountryName": "Croatia",
+    "fact": "Inspired by scarves worn by Croatian soldiers, later adopted in French fashion.",
+    "id": "necktie"
+  },
+  {
+    "name": "Red Bull",
+    "emoji": "🥤",
+    "category": "brand",
+    "originCountryCode": "TH",
+    "originCountryName": "Thailand",
+    "fact": "Based on the Thai drink Krating Daeng, originally popular among laborers and drivers.",
+    "id": "red-bull"
+  },
+  {
+    "name": "Kerosene Lamp",
+    "emoji": "🪔",
+    "category": "invention",
+    "originCountryCode": "PL",
+    "originCountryName": "Poland",
+    "fact": "The first practical kerosene lamp made safe indoor lighting widely accessible in the 19th century.",
+    "id": "kerosene-lamp"
+  },
+  {
+    "name": "Velcro",
+    "emoji": "🧷",
+    "category": "invention",
+    "originCountryCode": "CH",
+    "originCountryName": "Switzerland",
+    "fact": "Invented after observing burrs sticking to clothing, mimicking their hook-and-loop structure.",
+    "id": "velcro"
+  },
+  {
+    "name": "MP3 Player",
+    "emoji": "🎧",
+    "category": "invention",
+    "originCountryCode": "KR",
+    "originCountryName": "South Korea",
+    "fact": "Early portable MP3 players helped transform how people carried and listened to music.",
+    "id": "mp3-player"
+  },
+  {
+    "name": "QR Code",
+    "emoji": "🔳",
+    "category": "invention",
+    "originCountryCode": "JP",
+    "originCountryName": "Japan",
+    "fact": "Created in 1994 to track car parts, it can store far more data than traditional barcodes.",
+    "id": "qr-code"
+  },
+  {
+    "name": "Fountain Pen",
+    "emoji": "🖋️",
+    "category": "invention",
+    "originCountryCode": "RO",
+    "originCountryName": "Romania",
+    "fact": "An early modern version was patented by Petrache Poenaru to provide a continuous ink flow.",
+    "id": "fountain-pen"
   }
 ]

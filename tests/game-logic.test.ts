@@ -74,21 +74,21 @@ test("small misspellings can resolve without overriding unclear guesses", () => 
 });
 
 test("submitGuess accepts a very close typo when the match is obvious", () => {
-  const item = getItems().find((entry) => entry.id === "nokia");
+  const item = getItems().find((entry) => entry.id === "ikea");
 
   if (!item) {
-    throw new Error("Expected Nokia seed item to exist.");
+    throw new Error("Expected IKEA seed item to exist.");
   }
 
   const result = submitGuess({
     state: createGameState(item),
-    guess: "Finlnd",
+    guess: "Swedn",
     now: new Date("2026-04-06T14:00:00.000Z"),
   });
 
   assert.equal(result.wasRecorded, true);
   assert.equal(result.evaluation.matchType, "approximate");
-  assert.equal(result.evaluation.resolvedCountry?.code, "FI");
+  assert.equal(result.evaluation.resolvedCountry?.code, "SE");
 });
 
 test("haversine distance returns kilometers and remains stable", () => {
@@ -119,15 +119,15 @@ test("border distance is based on country borders rather than centroids", () => 
 });
 
 test("neighboring countries always take the deepest red tier", () => {
-  const item = getItems().find((entry) => entry.id === "nokia");
+  const item = getItems().find((entry) => entry.id === "lego");
 
   if (!item) {
-    throw new Error("Expected Nokia seed item to exist.");
+    throw new Error("Expected LEGO seed item to exist.");
   }
 
   const result = submitGuess({
     state: createGameState(item),
-    guess: "Sweden",
+    guess: "Germany",
     now: new Date("2026-04-06T12:15:00.000Z"),
   });
 
@@ -137,10 +137,10 @@ test("neighboring countries always take the deepest red tier", () => {
 });
 
 test("submitGuess sorts guesses by proximity and prevents duplicates", () => {
-  const item = getItems().find((entry) => entry.id === "pizza");
+  const item = getItems().find((entry) => entry.id === "lego");
 
   if (!item) {
-    throw new Error("Expected pizza seed item to exist.");
+    throw new Error("Expected LEGO seed item to exist.");
   }
 
   const initialState = createGameState(item);
@@ -175,15 +175,15 @@ test("submitGuess sorts guesses by proximity and prevents duplicates", () => {
 });
 
 test("submitGuess marks the game complete and keeps the correct country green", () => {
-  const item = getItems().find((entry) => entry.id === "nokia");
+  const item = getItems().find((entry) => entry.id === "lego");
 
   if (!item) {
-    throw new Error("Expected Nokia seed item to exist.");
+    throw new Error("Expected LEGO seed item to exist.");
   }
 
   const result = submitGuess({
     state: createGameState(item),
-    guess: "Finland",
+    guess: "Denmark",
     now: new Date("2026-04-06T13:00:00.000Z"),
   });
 

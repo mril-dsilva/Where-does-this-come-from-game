@@ -151,6 +151,34 @@ export default function GameShell({
     [],
   );
 
+  useEffect(() => {
+    if (showGameplay) {
+      return undefined;
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+    const { body, documentElement } = document;
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyOverscrollBehavior = body.style.overscrollBehavior;
+    const previousRootOverflow = documentElement.style.overflow;
+    const previousRootOverscrollBehavior =
+      documentElement.style.overscrollBehavior;
+
+    body.style.overflow = "hidden";
+    body.style.overscrollBehavior = "none";
+    documentElement.style.overflow = "hidden";
+    documentElement.style.overscrollBehavior = "none";
+
+    return () => {
+      body.style.overflow = previousBodyOverflow;
+      body.style.overscrollBehavior = previousBodyOverscrollBehavior;
+      documentElement.style.overflow = previousRootOverflow;
+      documentElement.style.overscrollBehavior =
+        previousRootOverscrollBehavior;
+    };
+  }, [showGameplay]);
+
   function handleClueRevealComplete() {
     if (revealTimerRef.current) {
       window.clearTimeout(revealTimerRef.current);

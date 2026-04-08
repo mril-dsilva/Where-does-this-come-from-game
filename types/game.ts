@@ -1,6 +1,16 @@
 import type { GuessHeatLevel } from "@/lib/game/heat.ts";
 
-export type GameCategory = "food" | "invention" | "brand";
+export type GameCategory =
+  | "food"
+  | "invention"
+  | "brand"
+  | "cultural_object"
+  | "art"
+  | "game"
+  | "media"
+  | "fashion"
+  | "daily_object"
+  | "instrument";
 
 export type GameItem = {
   id: string;
