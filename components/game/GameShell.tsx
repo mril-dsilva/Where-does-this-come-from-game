@@ -262,7 +262,7 @@ export default function GameShell({
           />
 
           <h1 className="mt-1.5 font-sans text-[1.34rem] font-bold tracking-[-0.045em] text-white/96 sm:mt-2 sm:text-[1.72rem] lg:text-[2.25rem]">
-            Guess the country of the day.
+            Guess the Origin Country of the Day.
           </h1>
         </div>
 
