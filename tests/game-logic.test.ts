@@ -29,9 +29,23 @@ test("country lookup resolves aliases and codes", () => {
   assert.equal(getCountryByCode("GBR")?.name, "United Kingdom");
   assert.equal(getCountryByCode("AD")?.name, "Andorra");
   assert.equal(getCountryByCode("PS")?.name, "Palestine");
+  assert.equal(getCountryByCode("MV")?.name, "Maldives");
+  assert.equal(getCountryByCode("EH")?.name, "Western Sahara");
+  assert.equal(getCountryByCode("TO")?.name, "Tonga");
+  assert.equal(getCountryByCode("TV")?.name, "Tuvalu");
+  assert.equal(getCountryByCode("VA")?.name, "Vatican City");
+  assert.equal(getCountryByCode("MC")?.name, "Monaco");
+  assert.equal(getCountryByCode("SG")?.name, "Singapore");
   assert.equal(getCountryByName("United States of America")?.code, "US");
   assert.equal(getCountryByName("Andorra")?.code, "AD");
   assert.equal(getCountryByName("State of Palestine")?.code, "PS");
+  assert.equal(getCountryByName("Maldives")?.code, "MV");
+  assert.equal(getCountryByName("Western Sahara")?.code, "EH");
+  assert.equal(getCountryByName("Tonga")?.code, "TO");
+  assert.equal(getCountryByName("Tuvalu")?.code, "TV");
+  assert.equal(getCountryByName("Vatican City")?.code, "VA");
+  assert.equal(getCountryByName("Monaco")?.code, "MC");
+  assert.equal(getCountryByName("Singapore")?.code, "SG");
 });
 
 test("expanded country aliases resolve the requested MVP examples", () => {
@@ -104,8 +118,10 @@ test("haversine distance returns kilometers and remains stable", () => {
 test("heat colors progress from far to hot and green on correct guesses", () => {
   assert.equal(getHeatColorForDistance(19_000).level, "far");
   assert.equal(getHeatColorForDistance(12_000).level, "far");
-  assert.equal(getHeatColorForDistance(4_000).level, "slightlyWarm");
+  assert.equal(getHeatColorForDistance(4_000).level, "faintWarm");
+  assert.equal(getHeatColorForDistance(2_500).level, "mediumWarm");
   assert.equal(getHeatColorForDistance(1_500).level, "warm");
+  assert.equal(getHeatColorForDistance(800).level, "strongWarm");
   assert.equal(getHeatColorForDistance(400).level, "hot");
   assert.equal(getHeatColorForDistance(0).color, CORRECT_COLOR);
 });
@@ -113,9 +129,11 @@ test("heat colors progress from far to hot and green on correct guesses", () => 
 test("border distance is based on country borders rather than centroids", () => {
   const franceSpain = getBorderDistanceKm("FR", "ES");
   const franceAustralia = getBorderDistanceKm("FR", "AU");
+  const russiaIndia = getBorderDistanceKm("RU", "IN");
 
   assert.ok(franceSpain < franceAustralia);
   assert.ok(franceSpain >= 0);
+  assert.ok(russiaIndia > 1_000);
 });
 
 test("neighboring countries always take the deepest red tier", () => {

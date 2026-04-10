@@ -154,14 +154,20 @@ function getDisplayTierRank(heatLevel: GuessHeatLevel): number {
       return 1;
     case "hot":
       return 2;
-    case "warm":
+    case "strongWarm":
       return 3;
-    case "slightlyWarm":
+    case "warm":
       return 4;
-    case "far":
+    case "mediumWarm":
       return 5;
-    default:
+    case "slightlyWarm":
       return 6;
+    case "faintWarm":
+      return 7;
+    case "far":
+      return 8;
+    default:
+      return 9;
   }
 }
 
