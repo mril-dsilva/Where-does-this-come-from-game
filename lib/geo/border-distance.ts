@@ -82,13 +82,13 @@ export function getBorderDistanceKm(
 
   let minimumDistance = Number.POSITIVE_INFINITY;
 
-  for (const [leftLatitude, leftLongitude] of leftSample.points) {
+  for (const [leftLongitude, leftLatitude] of leftSample.points) {
     const leftPoint: CountryCentroid = {
       latitude: leftLatitude,
       longitude: leftLongitude,
     };
 
-    for (const [rightLatitude, rightLongitude] of rightSample.points) {
+    for (const [rightLongitude, rightLatitude] of rightSample.points) {
       const rightPoint: CountryCentroid = {
         latitude: rightLatitude,
         longitude: rightLongitude,

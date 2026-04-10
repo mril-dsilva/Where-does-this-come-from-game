@@ -30,6 +30,14 @@
     ]
   },
   {
+    "code": "AG",
+    "alpha3": "ATG",
+    "name": "Antigua and Barbuda",
+    "aliases": [
+      "Antigua & Barbuda"
+    ]
+  },
+  {
     "code": "AL",
     "alpha3": "ALB",
     "name": "Albania",
@@ -108,6 +116,12 @@
     ]
   },
   {
+    "code": "BB",
+    "alpha3": "BRB",
+    "name": "Barbados",
+    "aliases": []
+  },
+  {
     "code": "BD",
     "alpha3": "BGD",
     "name": "Bangladesh",
@@ -142,6 +156,14 @@
       "Republic of Bulgaria",
       "Bulg.",
       "BG"
+    ]
+  },
+  {
+    "code": "BH",
+    "alpha3": "BHR",
+    "name": "Bahrain",
+    "aliases": [
+      "Kingdom of Bahrain"
     ]
   },
   {
@@ -364,6 +386,14 @@
     ]
   },
   {
+    "code": "CV",
+    "alpha3": "CPV",
+    "name": "Cabo Verde",
+    "aliases": [
+      "Cape Verde"
+    ]
+  },
+  {
     "code": "CY",
     "alpha3": "CYP",
     "name": "Cyprus",
@@ -415,6 +445,14 @@
     ]
   },
   {
+    "code": "DM",
+    "alpha3": "DMA",
+    "name": "Dominica",
+    "aliases": [
+      "Commonwealth of Dominica"
+    ]
+  },
+  {
     "code": "DO",
     "alpha3": "DOM",
     "name": "Dominican Republic",
@@ -461,6 +499,16 @@
       "Arab Republic of Egypt",
       "Egypt, Arab Rep.",
       "EG"
+    ]
+  },
+  {
+    "code": "EH",
+    "alpha3": "ESH",
+    "name": "Western Sahara",
+    "aliases": [
+      "Sahrawi Arab Democratic Republic",
+      "SADR",
+      "Republic of Western Sahara"
     ]
   },
   {
@@ -540,6 +588,12 @@
       "United Kingdom of Great Britain and Northern Ireland",
       "GB"
     ]
+  },
+  {
+    "code": "GD",
+    "alpha3": "GRD",
+    "name": "Grenada",
+    "aliases": []
   },
   {
     "code": "GE",
@@ -802,6 +856,20 @@
     ]
   },
   {
+    "code": "KI",
+    "alpha3": "KIR",
+    "name": "Kiribati",
+    "aliases": []
+  },
+  {
+    "code": "KN",
+    "alpha3": "KNA",
+    "name": "Saint Kitts and Nevis",
+    "aliases": [
+      "St. Kitts and Nevis"
+    ]
+  },
+  {
     "code": "KP",
     "alpha3": "PRK",
     "name": "North Korea",
@@ -867,6 +935,18 @@
       "Leb.",
       "LB"
     ]
+  },
+  {
+    "code": "LC",
+    "alpha3": "LCA",
+    "name": "Saint Lucia",
+    "aliases": []
+  },
+  {
+    "code": "LI",
+    "alpha3": "LIE",
+    "name": "Liechtenstein",
+    "aliases": []
   },
   {
     "code": "LK",
@@ -945,6 +1025,14 @@
     ]
   },
   {
+    "code": "MC",
+    "alpha3": "MCO",
+    "name": "Monaco",
+    "aliases": [
+      "Principality of Monaco"
+    ]
+  },
+  {
     "code": "MD",
     "alpha3": "MDA",
     "name": "Moldova",
@@ -971,6 +1059,14 @@
       "Republic of Madagascar",
       "Mad.",
       "MG"
+    ]
+  },
+  {
+    "code": "MH",
+    "alpha3": "MHL",
+    "name": "Marshall Islands",
+    "aliases": [
+      "Republic of the Marshall Islands"
     ]
   },
   {
@@ -1020,6 +1116,26 @@
       "Islamic Republic of Mauritania",
       "Mrt.",
       "MR"
+    ]
+  },
+  {
+    "code": "MT",
+    "alpha3": "MLT",
+    "name": "Malta",
+    "aliases": []
+  },
+  {
+    "code": "MU",
+    "alpha3": "MUS",
+    "name": "Mauritius",
+    "aliases": []
+  },
+  {
+    "code": "MV",
+    "alpha3": "MDV",
+    "name": "Maldives",
+    "aliases": [
+      "Republic of Maldives"
     ]
   },
   {
@@ -1131,6 +1247,14 @@
     ]
   },
   {
+    "code": "NR",
+    "alpha3": "NRU",
+    "name": "Nauru",
+    "aliases": [
+      "Republic of Nauru"
+    ]
+  },
+  {
     "code": "NZ",
     "alpha3": "NZL",
     "name": "New Zealand",
@@ -1229,6 +1353,14 @@
     ]
   },
   {
+    "code": "PW",
+    "alpha3": "PLW",
+    "name": "Palau",
+    "aliases": [
+      "Republic of Palau"
+    ]
+  },
+  {
     "code": "PY",
     "alpha3": "PRY",
     "name": "Paraguay",
@@ -1307,6 +1439,14 @@
     ]
   },
   {
+    "code": "SC",
+    "alpha3": "SYC",
+    "name": "Seychelles",
+    "aliases": [
+      "Republic of Seychelles"
+    ]
+  },
+  {
     "code": "SD",
     "alpha3": "SDN",
     "name": "Sudan",
@@ -1323,6 +1463,14 @@
       "Sverige",
       "Kingdom of Sweden",
       "Swe."
+    ]
+  },
+  {
+    "code": "SG",
+    "alpha3": "SGP",
+    "name": "Singapore",
+    "aliases": [
+      "Republic of Singapore"
     ]
   },
   {
@@ -1351,6 +1499,14 @@
     "aliases": [
       "Republic of Sierra Leone",
       "S.L."
+    ]
+  },
+  {
+    "code": "SM",
+    "alpha3": "SMR",
+    "name": "San Marino",
+    "aliases": [
+      "Republic of San Marino"
     ]
   },
   {
@@ -1392,6 +1548,15 @@
       "Republic of South Sudan",
       "S. Sud.",
       "SS"
+    ]
+  },
+  {
+    "code": "ST",
+    "alpha3": "STP",
+    "name": "São Tomé and Príncipe",
+    "aliases": [
+      "Sao Tome and Principe",
+      "Sao Tome & Principe"
     ]
   },
   {
@@ -1491,6 +1656,14 @@
     ]
   },
   {
+    "code": "TO",
+    "alpha3": "TON",
+    "name": "Tonga",
+    "aliases": [
+      "Kingdom of Tonga"
+    ]
+  },
+  {
     "code": "TR",
     "alpha3": "TUR",
     "name": "Turkey",
@@ -1509,6 +1682,14 @@
       "Republic of Trinidad and Tobago",
       "Tr.T.",
       "TT"
+    ]
+  },
+  {
+    "code": "TV",
+    "alpha3": "TUV",
+    "name": "Tuvalu",
+    "aliases": [
+      "Tuvaluan Islands"
     ]
   },
   {
@@ -1581,6 +1762,15 @@
     ]
   },
   {
+    "code": "VA",
+    "alpha3": "VAT",
+    "name": "Vatican City",
+    "aliases": [
+      "Holy See",
+      "Vatican City State"
+    ]
+  },
+  {
     "code": "VE",
     "alpha3": "VEN",
     "name": "Venezuela",
@@ -1610,6 +1800,14 @@
       "Republic of Vanuatu",
       "Van.",
       "VU"
+    ]
+  },
+  {
+    "code": "WS",
+    "alpha3": "WSM",
+    "name": "Samoa",
+    "aliases": [
+      "Independent State of Samoa"
     ]
   },
   {

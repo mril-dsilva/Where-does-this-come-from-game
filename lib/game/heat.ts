@@ -1,8 +1,11 @@
 export type GuessHeatLevel =
   | "neutral"
   | "far"
+  | "faintWarm"
   | "slightlyWarm"
+  | "mediumWarm"
   | "warm"
+  | "strongWarm"
   | "hot"
   | "neighboring"
   | "correct";
@@ -17,15 +20,66 @@ export const CORRECT_COLOR = "#2f9e57";
 export const HEAT_COLOR_PALETTE = {
   neighboring: "#8f1f18",
   hot: "#c93f32",
+  strongWarm: "#d94f43",
   warm: "#e56d5d",
+  mediumWarm: "#e78a79",
   slightlyWarm: "#f0ad9f",
+  faintWarm: "#f6cfc5",
   far: "#f8eae6",
 } as const;
 
 const HEAT_DECAY_KM = 2_200;
-const HOT_THRESHOLD = 0.7;
-const WARM_THRESHOLD = 0.38;
-const SLIGHTLY_WARM_THRESHOLD = 0.16;
+const HEAT_BANDS = [
+  {
+    level: "far" as const,
+    lowerScore: 0,
+    upperScore: 0.1,
+    lowerColor: HEAT_COLOR_PALETTE.far,
+    upperColor: HEAT_COLOR_PALETTE.faintWarm,
+  },
+  {
+    level: "faintWarm" as const,
+    lowerScore: 0.1,
+    upperScore: 0.2,
+    lowerColor: HEAT_COLOR_PALETTE.faintWarm,
+    upperColor: HEAT_COLOR_PALETTE.slightlyWarm,
+  },
+  {
+    level: "slightlyWarm" as const,
+    lowerScore: 0.2,
+    upperScore: 0.32,
+    lowerColor: HEAT_COLOR_PALETTE.slightlyWarm,
+    upperColor: HEAT_COLOR_PALETTE.mediumWarm,
+  },
+  {
+    level: "mediumWarm" as const,
+    lowerScore: 0.32,
+    upperScore: 0.46,
+    lowerColor: HEAT_COLOR_PALETTE.mediumWarm,
+    upperColor: HEAT_COLOR_PALETTE.warm,
+  },
+  {
+    level: "warm" as const,
+    lowerScore: 0.46,
+    upperScore: 0.62,
+    lowerColor: HEAT_COLOR_PALETTE.warm,
+    upperColor: HEAT_COLOR_PALETTE.strongWarm,
+  },
+  {
+    level: "strongWarm" as const,
+    lowerScore: 0.62,
+    upperScore: 0.78,
+    lowerColor: HEAT_COLOR_PALETTE.strongWarm,
+    upperColor: HEAT_COLOR_PALETTE.hot,
+  },
+  {
+    level: "hot" as const,
+    lowerScore: 0.78,
+    upperScore: 1,
+    lowerColor: HEAT_COLOR_PALETTE.strongWarm,
+    upperColor: HEAT_COLOR_PALETTE.hot,
+  },
+] as const;
 
 export function getHeatColorForDistance(distanceKm: number): HeatColorToken {
   if (distanceKm <= 0) {
@@ -41,40 +95,20 @@ export function getHeatColorForDistance(distanceKm: number): HeatColorToken {
 
   const score = Math.exp(-distanceKm / HEAT_DECAY_KM);
 
-  if (score >= HOT_THRESHOLD) {
-    return {
-      level: "hot",
-      color: blendHexColors(
-        HEAT_COLOR_PALETTE.hot,
-        HEAT_COLOR_PALETTE.warm,
-        clamp01((1 - score) / (1 - HOT_THRESHOLD)),
-      ),
-    };
-  }
+  for (let index = HEAT_BANDS.length - 1; index >= 0; index -= 1) {
+    const band = HEAT_BANDS[index];
 
-  if (score >= WARM_THRESHOLD) {
-    return {
-      level: "warm",
-      color: blendHexColors(
-        HEAT_COLOR_PALETTE.warm,
-        HEAT_COLOR_PALETTE.slightlyWarm,
-        clamp01(
-          (WARM_THRESHOLD - score) / (WARM_THRESHOLD - SLIGHTLY_WARM_THRESHOLD),
-        ),
-      ),
-    };
-  }
+    if (score < band.lowerScore) {
+      continue;
+    }
 
-  if (score >= SLIGHTLY_WARM_THRESHOLD) {
+    const amount = clamp01(
+      (score - band.lowerScore) / (band.upperScore - band.lowerScore),
+    );
+
     return {
-      level: "slightlyWarm",
-      color: blendHexColors(
-        HEAT_COLOR_PALETTE.slightlyWarm,
-        HEAT_COLOR_PALETTE.far,
-        clamp01(
-          (SLIGHTLY_WARM_THRESHOLD - score) / SLIGHTLY_WARM_THRESHOLD,
-        ),
-      ),
+      level: band.level,
+      color: blendHexColors(band.lowerColor, band.upperColor, amount),
     };
   }
 
@@ -163,10 +197,16 @@ export function getHeatLabel(level: GuessHeatLevel): string {
       return "Neutral";
     case "far":
       return "Far";
+    case "faintWarm":
+      return "Barely warm";
     case "slightlyWarm":
       return "Slightly warm";
+    case "mediumWarm":
+      return "Medium warm";
     case "warm":
       return "Warm";
+    case "strongWarm":
+      return "Strong warm";
     case "hot":
       return "Hot";
     case "neighboring":

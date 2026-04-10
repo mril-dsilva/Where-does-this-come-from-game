@@ -157,6 +157,10 @@ export const COUNTRY_NEIGHBOR_CODES: Readonly<Record<string, readonly string[]>>
 
 const MANUAL_NEIGHBOR_OVERRIDES: Readonly<Record<string, readonly string[]>> = {
   AD: ["ES", "FR"],
+  LI: ["AT", "CH"],
+  MC: ["FR"],
+  SM: ["IT"],
+  VA: ["IT"],
   PS: ["EG", "IL", "JO"],
 } as const;
 
