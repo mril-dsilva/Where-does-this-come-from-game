@@ -2,28 +2,45 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getItems } from "@/lib/data/index.ts";
-import { getCountrySuggestions } from "@/lib/data/country-match.ts";
+import {
+  getAssistCountryOptions,
+  resolveCountryMatch,
+} from "@/lib/data/country-match.ts";
 import {
   createGameState,
+  getDuplicateGuessFeedback,
+  getRoundFeedback,
+  getSolvedAttemptsLabel,
   hasGuessBeenRecorded,
   submitGuess,
 } from "@/lib/game/index.ts";
-import type { GameItem, GameState } from "@/types/game.ts";
+import type {
+  GameSettings,
+  GuessInputAssistAttributes,
+} from "@/lib/settings/game-settings.ts";
+import { getGuessInputAssistAttributes } from "@/lib/settings/game-settings.ts";
+import type { Country, GameItem, GameState } from "@/types/game.ts";
+import AssistModeToggle from "@/components/site/AssistModeToggle";
 import HowToPlayCard from "@/components/site/HowToPlayCard";
 import OriginGuessrMark from "@/components/site/OriginGuessrMark";
+import ThemeToggleButton from "@/components/site/ThemeToggleButton";
 import ConfettiBurst from "./ConfettiBurst";
 import GameClueStrip from "./GameClueStrip";
+import RoundFeedback from "./RoundFeedback";
 import WorldGlobe from "../globe/WorldGlobe";
 import GuessHistory from "./GuessHistory";
 import GuessInput from "./GuessInput";
 
 type GameShellProps = {
   initialItem: GameItem;
+  settings: GameSettings;
+  onToggleAssistInput: () => void;
+  onToggleLightMode: () => void;
   onExitLanding: () => void;
   onPlayAgain: () => void;
 };
 
-const CONFETTI_DURATION_MS = 1800;
+const CONFETTI_DURATION_MS = 3200;
 const REEL_SIDE_COUNT = 20;
 const REEL_TOTAL_COUNT = REEL_SIDE_COUNT * 2 + 1;
 
@@ -62,6 +79,9 @@ function getFlagEmoji(countryCode: string | null): string {
 
 export default function GameShell({
   initialItem,
+  settings,
+  onToggleAssistInput,
+  onToggleLightMode,
   onExitLanding,
   onPlayAgain,
 }: GameShellProps) {
@@ -74,6 +94,11 @@ export default function GameShell({
   const [latestSubmittedCountryCode, setLatestSubmittedCountryCode] = useState<
     string | null
   >(null);
+  const [focusedCountryCode, setFocusedCountryCode] = useState<string | null>(
+    null,
+  );
+  const [duplicateFeedbackCountry, setDuplicateFeedbackCountry] =
+    useState<Country | null>(null);
   const [showGameplay, setShowGameplay] = useState(false);
   const [showSolvedPopup, setShowSolvedPopup] = useState(false);
 
@@ -89,14 +114,16 @@ export default function GameShell({
       )[0] ?? null,
     [guesses],
   );
-  const suggestionBundle = useMemo(
+  const assistSuggestions = useMemo(
     () =>
-      getCountrySuggestions(inputValue, {
-        excludeCodes: guesses
-          .map((guess) => guess.countryCode)
-          .filter((code): code is string => Boolean(code)),
-      }),
-    [guesses, inputValue],
+      settings.assistInput
+        ? getAssistCountryOptions(inputValue, {
+            excludeCodes: guesses
+              .map((guess) => guess.countryCode)
+              .filter((code): code is string => Boolean(code)),
+          })
+        : [],
+    [guesses, inputValue, settings.assistInput],
   );
   const globeHighlights = useMemo(
     () =>
@@ -138,6 +165,45 @@ export default function GameShell({
     () => getFlagEmoji(activeItem.originCountryCode),
     [activeItem.originCountryCode],
   );
+  const guessInputAssistAttributes = useMemo<GuessInputAssistAttributes>(
+    () => getGuessInputAssistAttributes(settings.assistInput),
+    [settings.assistInput],
+  );
+  const roundFeedback = useMemo(
+    () =>
+      duplicateFeedbackCountry
+        ? getDuplicateGuessFeedback(duplicateFeedbackCountry)
+        : getRoundFeedback(guesses),
+    [duplicateFeedbackCountry, guesses],
+  );
+  const globeFocusCountryCode =
+    focusedCountryCode ?? latestSubmittedCountryCode;
+  const solvedPopupBackdropClass = settings.lightMode
+    ? "bg-black/15 backdrop-blur-[2px]"
+    : "bg-black/35 backdrop-blur-sm";
+  const solvedPopupPanelClass = settings.lightMode
+    ? "border-[color:rgba(25,22,19,0.12)] bg-[rgba(250,246,240,0.97)] text-[var(--foreground)] shadow-[0_28px_95px_rgba(25,22,19,0.18)] backdrop-blur-xl"
+    : "border-white/12 bg-white/[0.08] text-white shadow-[0_30px_120px_rgba(0,0,0,0.45)] backdrop-blur-2xl";
+  const solvedPopupBadgeClass = settings.lightMode
+    ? "border-[color:rgba(25,22,19,0.08)] bg-[rgba(255,255,255,0.82)] text-[var(--foreground)] shadow-[0_10px_30px_rgba(25,22,19,0.08)]"
+    : "border-white/10 bg-white/[0.08] text-white shadow-[0_12px_40px_var(--shadow)]";
+  const solvedPopupEyebrowClass = settings.lightMode
+    ? "text-[var(--muted)]"
+    : "text-white/56";
+  const solvedPopupBodyClass = settings.lightMode
+    ? "text-[color:rgba(25,22,19,0.78)]"
+    : "text-white/78";
+  const solvedPopupPrimaryButtonClass = settings.lightMode
+    ? "bg-[var(--foreground)] text-[var(--background)] shadow-[0_10px_30px_rgba(25,22,19,0.12)] hover:bg-[var(--foreground)]/92"
+    : "bg-white text-black hover:bg-white/95";
+  const solvedPopupSecondaryButtonClass = settings.lightMode
+    ? "border-[color:rgba(25,22,19,0.12)] bg-[rgba(255,255,255,0.72)] text-[var(--foreground)] hover:border-[color:rgba(25,22,19,0.18)] hover:bg-[rgba(255,255,255,0.9)]"
+    : "border-white/14 bg-white/[0.04] text-white hover:border-white/24 hover:bg-white/[0.07]";
+
+  function handleInputChange(value: string) {
+    setInputValue(value);
+    setDuplicateFeedbackCountry(null);
+  }
 
   useEffect(
     () => () => {
@@ -196,11 +262,19 @@ export default function GameShell({
       return;
     }
 
+    setDuplicateFeedbackCountry(null);
+
     if (state.isComplete) {
       return;
     }
 
     if (hasGuessBeenRecorded(state.guesses, trimmedGuess)) {
+      const resolvedCountry = resolveCountryMatch(trimmedGuess).country;
+
+      if (resolvedCountry) {
+        setDuplicateFeedbackCountry(resolvedCountry);
+      }
+
       return;
     }
 
@@ -217,6 +291,7 @@ export default function GameShell({
     setState(result.state);
     setInputValue("");
     setLatestSubmittedCountryCode(result.evaluation.resolvedCountry?.code ?? null);
+    setFocusedCountryCode(result.evaluation.resolvedCountry?.code ?? null);
 
     if (result.evaluation.isCorrect) {
       if (confettiTimerRef.current) {
@@ -238,43 +313,59 @@ export default function GameShell({
     setShowSolvedPopup(false);
   }
 
+  function handleFocusCountry(countryCode: string) {
+    if (!countryCode) {
+      return;
+    }
+
+    setFocusedCountryCode(countryCode);
+  }
+
   return (
     <main className="relative min-h-screen overflow-x-clip px-5 pt-4 pb-8 text-center sm:px-6 sm:pt-5 lg:px-8 lg:pt-6">
+      <ThemeToggleButton
+        enabled={settings.lightMode}
+        onToggle={onToggleLightMode}
+        className="absolute right-4 top-4 z-30 sm:right-6 sm:top-6"
+      />
+
       <ConfettiBurst
         key={confettiToken ?? "idle"}
         active={showConfetti}
         triggerKey={confettiToken}
       />
-      <div
-        className={`mx-auto flex w-full flex-col items-stretch gap-0 transition-[margin-top] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          showGameplay ? "mt-0" : "mt-[calc(50svh-10rem)]"
-        }`.trim()}
-      >
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-4 sm:gap-5">
         <div
-          className={`relative mx-auto flex w-full max-w-4xl flex-col items-center gap-0 transition-[padding-top] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            showGameplay ? "pt-0 sm:pt-1" : "pt-0"
+          className={`mx-auto flex w-full flex-col items-stretch gap-0 transition-[margin-top] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            showGameplay ? "mt-0" : "mt-[calc(50svh-10rem)]"
           }`.trim()}
         >
-          <OriginGuessrMark
-            size="compact"
-            onClick={onExitLanding}
-            className="mt-0 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 shadow-[0_12px_40px_var(--shadow)] backdrop-blur-xl"
+          <header
+            className={`relative mx-auto flex w-full max-w-4xl flex-col items-center gap-0 text-center transition-[padding-top] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              showGameplay ? "pt-0 sm:pt-1" : "pt-0"
+            }`.trim()}
+          >
+            <OriginGuessrMark
+              size="compact"
+              onClick={onExitLanding}
+              className="mt-0 w-fit rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1.5 shadow-[0_12px_40px_var(--shadow)] backdrop-blur-xl sm:px-3 sm:py-1.5"
+            />
+
+            <h1 className="mt-1.5 font-sans text-[1.34rem] font-bold tracking-[-0.045em] text-white/96 sm:mt-2 sm:text-[1.72rem] lg:text-[2.25rem]">
+              Guess the Origin Country of the Day.
+            </h1>
+          </header>
+
+          <GameClueStrip
+            key={`${activeItem.id}-${state.createdAt}`}
+            emojis={reelEmojis}
+            centerIndex={REEL_SIDE_COUNT}
+            itemName={activeItem.name}
+            animate
+            onRevealComplete={handleClueRevealComplete}
+            className="-mt-17 -mb-7 py-0 sm:-mt-19 sm:-mb-9"
           />
-
-          <h1 className="mt-1.5 font-sans text-[1.34rem] font-bold tracking-[-0.045em] text-white/96 sm:mt-2 sm:text-[1.72rem] lg:text-[2.25rem]">
-            Guess the Origin Country of the Day.
-          </h1>
         </div>
-
-        <GameClueStrip
-          key={`${activeItem.id}-${state.createdAt}`}
-          emojis={reelEmojis}
-          centerIndex={REEL_SIDE_COUNT}
-          itemName={activeItem.name}
-          animate
-          onRevealComplete={handleClueRevealComplete}
-          className="-mt-17 -mb-7 py-0 sm:-mt-19 sm:-mb-9"
-        />
       </div>
 
       <div
@@ -284,9 +375,15 @@ export default function GameShell({
             : "translate-y-6 opacity-0 pointer-events-none"
         }`.trim()}
       >
+        <RoundFeedback
+          feedback={roundFeedback}
+          onCountryClick={handleFocusCountry}
+        />
+
         <WorldGlobe
           highlights={globeHighlights}
-          focusCountryCode={latestSubmittedCountryCode}
+          focusCountryCode={globeFocusCountryCode}
+          lightMode={settings.lightMode}
           framed={false}
           contentScale={1.47}
           className="mx-auto mt-0 mb-[14px] aspect-square h-[clamp(24.5rem,49vw,35.8rem)] w-[clamp(24.5rem,49vw,35.8rem)] max-w-none sm:mb-[20px]"
@@ -295,14 +392,22 @@ export default function GameShell({
         <GuessInput
           value={inputValue}
           disabled={isComplete}
-          didYouMean={suggestionBundle.didYouMean}
-          onChange={setInputValue}
+          suggestions={assistSuggestions}
+          assistAttributes={guessInputAssistAttributes}
+          onChange={handleInputChange}
           onSubmit={handleSubmit}
         />
 
         <GuessHistory
           guesses={guesses}
           latestGuessId={latestGuess?.id ?? null}
+          onCountryClick={handleFocusCountry}
+        />
+
+        <AssistModeToggle
+          enabled={settings.assistInput}
+          onToggle={onToggleAssistInput}
+          className="mb-4"
         />
 
         <HowToPlayCard
@@ -314,23 +419,32 @@ export default function GameShell({
 
       {isComplete && showSolvedPopup ? (
         <div
-          className="fixed inset-0 z-40 flex items-center justify-center bg-black/35 p-4 backdrop-blur-sm"
+          className={`fixed inset-0 z-40 flex items-center justify-center p-4 ${solvedPopupBackdropClass}`}
           onClick={handleDismissSolvedPopup}
         >
           <div
-            className="relative w-full max-w-[46rem] overflow-hidden rounded-[2.2rem] border border-white/12 bg-white/[0.08] px-7 py-8 text-center shadow-[0_30px_120px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:px-10 sm:py-10"
+            className={`relative w-full max-w-[46rem] overflow-hidden rounded-[2.2rem] border px-7 py-8 text-center sm:px-10 sm:py-10 ${solvedPopupPanelClass}`}
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mx-auto flex max-w-[37rem] flex-col items-center gap-5">
-              <div className="flex h-[5.2rem] w-[5.2rem] items-center justify-center rounded-full border border-white/10 bg-white/[0.08] text-[2.55rem] shadow-[0_12px_40px_var(--shadow)]">
+              <div
+                className={`flex h-[5.2rem] w-[5.2rem] items-center justify-center rounded-full border text-[2.55rem] ${solvedPopupBadgeClass}`}
+              >
                 <span aria-hidden="true">{solvedCountryFlag}</span>
               </div>
 
               <div className="space-y-2">
-                <p className="font-display text-[1.48rem] font-semibold tracking-[-0.04em] text-white sm:text-[1.86rem]">
+                <p className="font-display text-[1.48rem] font-semibold tracking-[-0.04em] text-[var(--foreground)] sm:text-[1.86rem]">
                   The mystery country is {activeItem.originCountryName}!
                 </p>
-                <p className="text-[1.08rem] leading-7 text-white/78 sm:text-[1.15rem]">
+                <p
+                  className={`text-sm font-semibold uppercase tracking-[0.28em] ${solvedPopupEyebrowClass}`}
+                >
+                  {getSolvedAttemptsLabel(guesses.length)}
+                </p>
+                <p
+                  className={`text-[1.08rem] leading-7 sm:text-[1.15rem] ${solvedPopupBodyClass}`}
+                >
                   {activeItem.fact}
                 </p>
               </div>
@@ -339,14 +453,14 @@ export default function GameShell({
                 <button
                   type="button"
                   onClick={onPlayAgain}
-                  className="inline-flex h-[3.15rem] items-center justify-center rounded-full bg-white px-6 text-[1.02rem] font-semibold text-black transition hover:scale-[1.02] hover:bg-white/95 active:scale-[0.98]"
+                  className={`inline-flex h-[3.15rem] items-center justify-center rounded-full px-6 text-[1.02rem] font-semibold transition hover:scale-[1.02] active:scale-[0.98] ${solvedPopupPrimaryButtonClass}`}
                 >
                   Play again
                 </button>
                 <button
                   type="button"
                   onClick={handleDismissSolvedPopup}
-                  className="inline-flex h-[3.15rem] items-center justify-center rounded-full border border-white/14 bg-white/[0.04] px-6 text-[1.02rem] font-semibold text-white transition hover:border-white/24 hover:bg-white/[0.07]"
+                  className={`inline-flex h-[3.15rem] items-center justify-center rounded-full border px-6 text-[1.02rem] font-semibold transition ${solvedPopupSecondaryButtonClass}`}
                 >
                   Back
                 </button>

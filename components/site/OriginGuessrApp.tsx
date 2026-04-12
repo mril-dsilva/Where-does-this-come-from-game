@@ -5,6 +5,7 @@ import { getItems } from "@/lib/data/index.ts";
 import type { GameItem } from "@/types/game.ts";
 import GameShell from "@/components/game/GameShell";
 import LandingScreen from "./LandingScreen";
+import { useGameSettings } from "./useGameSettings";
 
 type ScreenMode = "landing" | "game";
 
@@ -18,6 +19,11 @@ export default function OriginGuessrApp() {
   const [mode, setMode] = useState<ScreenMode>("landing");
   const [activeItem, setActiveItem] = useState<GameItem | null>(null);
   const [sessionId, setSessionId] = useState(0);
+  const {
+    settings,
+    toggleAssistInput,
+    toggleLightMode,
+  } = useGameSettings();
 
   function startGame() {
     setActiveItem(pickRandomItem(items));
@@ -40,11 +46,21 @@ export default function OriginGuessrApp() {
       <GameShell
         key={sessionId}
         initialItem={activeItem}
+        settings={settings}
+        onToggleAssistInput={toggleAssistInput}
+        onToggleLightMode={toggleLightMode}
         onExitLanding={returnToLanding}
         onPlayAgain={restartGame}
       />
     );
   }
 
-  return <LandingScreen onPlay={startGame} />;
+  return (
+    <LandingScreen
+      onPlay={startGame}
+      settings={settings}
+      onToggleAssistInput={toggleAssistInput}
+      onToggleLightMode={toggleLightMode}
+    />
+  );
 }

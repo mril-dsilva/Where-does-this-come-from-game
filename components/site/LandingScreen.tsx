@@ -1,18 +1,35 @@
 "use client";
 
 import LandingHeroReel from "./LandingHeroReel";
+import AssistModeToggle from "./AssistModeToggle";
 import HowToPlayCard from "./HowToPlayCard";
 import OriginGuessrMark from "./OriginGuessrMark";
+import ThemeToggleButton from "./ThemeToggleButton";
+import type { GameSettings } from "@/lib/settings/game-settings.ts";
 
 type LandingScreenProps = {
   onPlay: () => void;
+  settings: GameSettings;
+  onToggleAssistInput: () => void;
+  onToggleLightMode: () => void;
 };
 
-export default function LandingScreen({ onPlay }: LandingScreenProps) {
+export default function LandingScreen({
+  onPlay,
+  settings,
+  onToggleAssistInput,
+  onToggleLightMode,
+}: LandingScreenProps) {
   return (
     <main id="top" className="min-h-screen overflow-x-clip px-5 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-10 py-4 text-center">
-        <header className="space-y-5">
+      <ThemeToggleButton
+        enabled={settings.lightMode}
+        onToggle={onToggleLightMode}
+        className="fixed right-4 top-4 z-30 sm:right-6 sm:top-6"
+      />
+
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 py-1 sm:pt-2">
+        <header className="space-y-5 text-center pt-1 sm:pt-2">
           <OriginGuessrMark size="hero" />
           <div className="space-y-5 pt-1">
             <p className="text-base font-medium uppercase tracking-[0.38em] text-white/54 sm:text-sm">
@@ -24,10 +41,11 @@ export default function LandingScreen({ onPlay }: LandingScreenProps) {
             </h1>
           </div>
         </header>
+
       </div>
 
       <section className="w-full overflow-x-clip py-1 sm:py-2">
-        <LandingHeroReel onPlay={onPlay} />
+        <LandingHeroReel onPlay={onPlay} lightMode={settings.lightMode} />
 
         <div className="mx-auto w-full max-w-7xl px-5 pt-2 text-center sm:px-6 sm:pt-3 lg:px-8">
           <p className="text-base font-medium uppercase tracking-[0.34em] text-white/52 sm:text-lg">
@@ -37,6 +55,12 @@ export default function LandingScreen({ onPlay }: LandingScreenProps) {
       </section>
 
       <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-8 py-12 text-center sm:gap-10 sm:py-14">
+        <AssistModeToggle
+          enabled={settings.assistInput}
+          onToggle={onToggleAssistInput}
+          className="justify-center"
+        />
+
         <section className="w-full max-w-4xl">
           <HowToPlayCard />
         </section>

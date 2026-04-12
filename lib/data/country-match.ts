@@ -217,3 +217,40 @@ export function resolveCountryMatch(
     matchType: topSuggestion ? "suggestion" : "unmatched",
   };
 }
+
+export function getAssistCountryOptions(
+  query: string,
+  options?: {
+    excludeCodes?: string[];
+  },
+): Country[] {
+  const normalizedQuery = normalizeCountryKey(query);
+  const excludedCodes = new Set(
+    (options?.excludeCodes ?? []).map((code) => code.trim().toUpperCase()),
+  );
+
+  const candidates = getCountries().filter(
+    (country) => !excludedCodes.has(country.code),
+  );
+
+  if (!normalizedQuery) {
+    return candidates.sort((left, right) =>
+      left.name.localeCompare(right.name),
+    );
+  }
+
+  return candidates
+    .filter((country) => {
+      const searchableValues = [
+        country.name,
+        country.code,
+        country.alpha3,
+        ...country.aliases,
+      ];
+
+      return searchableValues.some((value) =>
+        normalizeCountryKey(value).startsWith(normalizedQuery),
+      );
+    })
+    .sort((left, right) => left.name.localeCompare(right.name));
+}

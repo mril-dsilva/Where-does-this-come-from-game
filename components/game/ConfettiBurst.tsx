@@ -16,12 +16,13 @@ type ConfettiPiece = {
   drift: string;
   spin: string;
   size: string;
+  scale: string;
   color: string;
   top: string;
 };
 
 const COLORS = ["#f3b48b", "#f0d38f", "#9ec2d9", "#9fc3ab", "#d9d1c7"];
-const PIECE_COUNT = 20;
+const PIECE_COUNT = 34;
 
 function createPieces(seed: string): ConfettiPiece[] {
   const base = seed.length || 1;
@@ -33,12 +34,13 @@ function createPieces(seed: string): ConfettiPiece[] {
     return {
       id: `${seed}-${index}`,
       left: `${50 + spread}%`,
-      top: `${-12 + (index % 4) * 2}%`,
-      delay: `${(index % 5) * 35}ms`,
-      duration: `${1200 + (index % 4) * 100}ms`,
-      drift: `${direction * (30 + (index % 5) * 8)}px`,
-      spin: `${direction * (180 + (index % 7) * 25)}deg`,
-      size: `${6 + (index % 4)}px`,
+      top: `${-16 + (index % 5) * 3}%`,
+      delay: `${(index % 7) * 55}ms`,
+      duration: `${1900 + (index % 5) * 180}ms`,
+      drift: `${direction * (40 + (index % 6) * 12)}px`,
+      spin: `${direction * (260 + (index % 7) * 36)}deg`,
+      size: `${7 + (index % 5)}px`,
+      scale: `${0.92 + (index % 4) * 0.04}`,
       color: COLORS[index % COLORS.length],
     };
   });
@@ -76,7 +78,12 @@ export default function ConfettiBurst({
             animationDelay: piece.delay,
             ["--drift"]: piece.drift,
             ["--spin"]: piece.spin,
-          } as CSSProperties & { ["--drift"]: string; ["--spin"]: string }}
+            ["--confetti-scale"]: piece.scale,
+          } as CSSProperties & {
+            ["--drift"]: string;
+            ["--spin"]: string;
+            ["--confetti-scale"]: string;
+          }}
         />
       ))}
     </div>

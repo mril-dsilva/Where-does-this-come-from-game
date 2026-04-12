@@ -1,14 +1,17 @@
 import { sortGuessesForDisplay } from "@/lib/game/index.ts";
 import type { GuessRecord } from "@/types/game.ts";
+import CountryLink from "./CountryLink";
 
 type GuessHistoryProps = {
   guesses: GuessRecord[];
   latestGuessId: string | null;
+  onCountryClick: (countryCode: string) => void;
 };
 
 export default function GuessHistory({
   guesses,
   latestGuessId,
+  onCountryClick,
 }: GuessHistoryProps) {
   return (
     <aside className="w-full max-w-3xl text-center" aria-label="Guess history">
@@ -46,11 +49,22 @@ export default function GuessHistory({
                   >
                     {getFlagEmoji(guess.countryCode)}
                   </span>
-                  <span className="font-medium text-white">
-                    {guess.countryName ?? guess.guess}
-                  </span>
+                  {guess.countryCode && guess.countryName ? (
+                    <CountryLink
+                      label={guess.countryName}
+                      onClick={() => onCountryClick(guess.countryCode ?? "")}
+                      className="font-medium tracking-[0.01em] text-white/96"
+                    />
+                  ) : (
+                    <span className="font-medium tracking-[0.01em] text-white/96">
+                      {guess.countryName ?? guess.guess}
+                    </span>
+                  )}
                   {statusParts.map((part) => (
-                    <span key={`${guess.id}-${part}`} className="inline-flex items-center gap-x-2">
+                    <span
+                      key={`${guess.id}-${part}`}
+                      className="inline-flex items-center gap-x-2"
+                    >
                       <span className="text-white/44">-</span>
                       <span className="font-semibold text-white/76">
                         {part}

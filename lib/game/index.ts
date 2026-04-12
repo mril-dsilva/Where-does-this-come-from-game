@@ -14,5 +14,10 @@ export {
   sortGuessesByDistance,
   sortGuessesForDisplay,
 } from "./guess.ts";
+export {
+  getDuplicateGuessFeedback,
+  getRoundFeedback,
+  getSolvedAttemptsLabel,
+} from "./feedback.ts";
 export { createGameState, hasGuessBeenRecorded, submitGuess } from "./state.ts";
 export { getBorderDistanceKm } from "../geo/border-distance.ts";

@@ -17,9 +17,15 @@ import {
   getItems,
 } from "../lib/data/index.ts";
 import {
+  getAssistCountryOptions,
   getCountrySuggestions,
   resolveCountryMatch,
 } from "../lib/data/country-match.ts";
+import {
+  getDuplicateGuessFeedback,
+  getRoundFeedback,
+  getSolvedAttemptsLabel,
+} from "../lib/game/feedback.ts";
 import { haversineKm } from "../lib/geo/haversine.ts";
 
 test("country lookup resolves aliases and codes", () => {
@@ -80,6 +86,96 @@ test("autocomplete suggestions surface typo tolerant country matches", () => {
   assert.equal(bundle.suggestions[0]?.country.code, "GB");
   assert.equal(resolveCountryMatch("Unted Kingdom").country?.code, "GB");
   assert.equal(getCountrySuggestions("IN").exactMatch?.country.code, "IN");
+});
+
+test("assist suggestions stay alphabetical and exclude guessed countries", () => {
+  const options = getAssistCountryOptions("a", {
+    excludeCodes: ["US"],
+  });
+
+  assert.ok(options.length > 0);
+  assert.equal(options.some((country) => country.code === "US"), false);
+  assert.equal(options[0].name.startsWith("A"), true);
+});
+
+test("round feedback stays empty until there is a previous guess to compare", () => {
+  const item = getItems().find((entry) => entry.id === "lego");
+
+  if (!item) {
+    throw new Error("Expected LEGO seed item to exist.");
+  }
+
+  const firstGuess = submitGuess({
+    state: createGameState(item),
+    guess: "France",
+    now: new Date("2026-04-06T12:00:00.000Z"),
+  });
+
+  assert.equal(getRoundFeedback(firstGuess.state.guesses), null);
+});
+
+test("round feedback reports warmer or cooler and the closest guess", () => {
+  const item = getItems().find((entry) => entry.id === "lego");
+
+  if (!item) {
+    throw new Error("Expected LEGO seed item to exist.");
+  }
+
+  const firstGuess = submitGuess({
+    state: createGameState(item),
+    guess: "Australia",
+    now: new Date("2026-04-06T12:00:00.000Z"),
+  });
+  const warmerGuess = submitGuess({
+    state: firstGuess.state,
+    guess: "France",
+    now: new Date("2026-04-06T12:01:00.000Z"),
+  });
+  const coolerGuess = submitGuess({
+    state: createGameState(item),
+    guess: "Germany",
+    now: new Date("2026-04-06T12:02:00.000Z"),
+  });
+
+  const warmerFeedback = getRoundFeedback(warmerGuess.state.guesses);
+  const coolerFeedback = getRoundFeedback(
+    submitGuess({
+      state: coolerGuess.state,
+      guess: "France",
+      now: new Date("2026-04-06T12:03:00.000Z"),
+      }).state.guesses,
+  );
+
+  assert.equal(warmerFeedback?.kind, "comparison");
+  assert.equal(warmerFeedback?.relationship, "warmer");
+  assert.equal(warmerFeedback?.isNeighboring, false);
+  assert.equal(warmerFeedback?.latestGuess.countryName, "France");
+  assert.equal(warmerFeedback?.closestGuess.countryName, "France");
+
+  assert.equal(coolerFeedback?.kind, "comparison");
+  assert.equal(coolerFeedback?.relationship, "cooler");
+  assert.equal(coolerFeedback?.isNeighboring, false);
+  assert.equal(coolerFeedback?.latestGuess.countryName, "France");
+  assert.equal(coolerFeedback?.closestGuess.countryName, "Germany");
+});
+
+test("duplicate guess feedback returns the country object", () => {
+  const country = getCountryByCode("FR");
+
+  if (!country) {
+    throw new Error("Expected France country data to exist.");
+  }
+
+  const feedback = getDuplicateGuessFeedback(country);
+
+  assert.equal(feedback.kind, "duplicate");
+  assert.equal(feedback.country.code, "FR");
+  assert.equal(feedback.country.name, "France");
+});
+
+test("solved attempts label uses singular and plural forms", () => {
+  assert.equal(getSolvedAttemptsLabel(1), "Solved in 1 attempt");
+  assert.equal(getSolvedAttemptsLabel(3), "Solved in 3 attempts");
 });
 
 test("small misspellings can resolve without overriding unclear guesses", () => {

@@ -25,6 +25,10 @@ type GlobePolygonObject = object & {
 type WorldGlobeProps = {
   highlights?: GlobeHighlight[];
   focusCountryCode?: string | null;
+  lightMode?: boolean;
+  lightGlow?: "none" | "narrow" | "soft";
+  lightHalo?: "none" | "tight" | "soft";
+  shellMode?: "auto" | "flat";
   autoRotate?: boolean;
   autoRotateSpeed?: number;
   enableZoom?: boolean;
@@ -53,13 +57,20 @@ const Globe = dynamic(
 
 const BASE_GLOBE_IMAGE =
   "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg";
+const LIGHT_GLOBE_IMAGE =
+  "https://unpkg.com/three-globe/example/img/earth-day.jpg";
 const BASE_BUMP_IMAGE =
   "https://unpkg.com/three-globe/example/img/earth-topology.png";
 const BASE_BACKGROUND = "#071018";
+const LIGHT_BACKGROUND = "#eef4fb";
 const TRANSPARENT = "rgba(0, 0, 0, 0)";
 export default function WorldGlobe({
   highlights = [],
   focusCountryCode,
+  lightMode = false,
+  lightGlow = "soft",
+  lightHalo = "soft",
+  shellMode = "auto",
   autoRotate = false,
   autoRotateSpeed = 0.4,
   enableZoom = true,
@@ -179,12 +190,28 @@ export default function WorldGlobe({
     return countryCode.trim().toUpperCase();
   }
 
+  const globeImageUrl = lightMode ? LIGHT_GLOBE_IMAGE : BASE_GLOBE_IMAGE;
+  const atmosphereTint = lightMode ? "#d5e6f4" : atmosphereColor;
+  const globeShellBackground = lightMode
+    ? lightGlow === "none"
+      ? "transparent"
+      : lightGlow === "narrow"
+        ? "radial-gradient(circle at center, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.035) 8%, rgba(255, 255, 255, 0.01) 12%, transparent 16%)"
+        : "radial-gradient(circle at center, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 38%, rgba(255, 255, 255, 0.01) 48%, transparent 56%)"
+    : shellMode === "flat"
+      ? "transparent"
+      : BASE_BACKGROUND;
+
   const globeProps = {
-    globeImageUrl: BASE_GLOBE_IMAGE,
+    globeImageUrl,
     bumpImageUrl: BASE_BUMP_IMAGE,
-    backgroundColor: framed ? BASE_BACKGROUND : TRANSPARENT,
+    backgroundColor: framed
+      ? lightMode
+        ? LIGHT_BACKGROUND
+        : BASE_BACKGROUND
+      : TRANSPARENT,
     showAtmosphere,
-    atmosphereColor,
+    atmosphereColor: atmosphereTint,
     atmosphereAltitude,
     polygonsData: polygons,
     polygonGeoJsonGeometry: "geometry",
@@ -198,12 +225,18 @@ export default function WorldGlobe({
       const highlight = highlightByCode.get(getPolygonCountryCode(polygon) ?? "");
 
       if (!highlight) {
-        return "rgba(255, 255, 255, 0.14)";
+        return lightMode
+          ? "rgba(25, 22, 19, 0.12)"
+          : "rgba(255, 255, 255, 0.14)";
       }
 
       return highlight.isLatest
-        ? "rgba(255, 255, 255, 0.52)"
-      : "rgba(255, 255, 255, 0.34)";
+        ? lightMode
+          ? "rgba(25, 22, 19, 0.38)"
+          : "rgba(255, 255, 255, 0.52)"
+        : lightMode
+          ? "rgba(25, 22, 19, 0.26)"
+          : "rgba(255, 255, 255, 0.34)";
     },
     polygonAltitude: (polygon: GlobePolygonObject) =>
       highlightByCode.get(getPolygonCountryCode(polygon) ?? "")?.altitude ?? 0,
@@ -212,7 +245,13 @@ export default function WorldGlobe({
   };
 
   const globeStyle: CSSProperties = {
-    background: framed ? BASE_BACKGROUND : "transparent",
+    background: framed ? (lightMode ? LIGHT_BACKGROUND : BASE_BACKGROUND) : globeShellBackground,
+    boxShadow:
+      lightMode && lightHalo !== "none"
+        ? lightHalo === "tight"
+          ? "0 0 0 1px rgba(25, 22, 19, 0.08), 0 0 8px rgba(25, 22, 19, 0.05)"
+          : "0 0 0 1px rgba(25, 22, 19, 0.08), 0 22px 70px rgba(25, 22, 19, 0.08)"
+        : undefined,
   };
 
   return (
@@ -220,7 +259,9 @@ export default function WorldGlobe({
       ref={containerRef}
       className={`relative ${
         framed
-          ? "aspect-square w-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#071018]"
+          ? lightMode
+            ? "aspect-square w-full overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-[#eef4fb]"
+            : "aspect-square w-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#071018]"
           : "inline-flex overflow-hidden rounded-full bg-transparent"
       } ${className ?? ""}`.trim()}
       style={globeStyle}

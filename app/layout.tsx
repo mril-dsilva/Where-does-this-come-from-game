@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import Script from "next/script";
+import { buildThemeBootstrapScript } from "@/lib/settings/game-settings.ts";
 import "./globals.css";
 
 const inter = Inter({
@@ -56,6 +58,11 @@ export default function RootLayout({
         className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]"
         suppressHydrationWarning
       >
+        <Script
+          id="theme-bootstrap"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: buildThemeBootstrapScript() }}
+        />
         {children}
       </body>
     </html>

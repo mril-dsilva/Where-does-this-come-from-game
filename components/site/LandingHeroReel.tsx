@@ -6,6 +6,7 @@ import WorldGlobe from "@/components/globe/WorldGlobe";
 
 type LandingHeroReelProps = {
   onPlay: () => void;
+  lightMode?: boolean;
 };
 
 const SIDE_COUNT = 14;
@@ -52,7 +53,10 @@ function buildReelItems(): string[] {
   );
 }
 
-export default function LandingHeroReel({ onPlay }: LandingHeroReelProps) {
+export default function LandingHeroReel({
+  onPlay,
+  lightMode = false,
+}: LandingHeroReelProps) {
   const [isGlobeHovered, setIsGlobeHovered] = useState(false);
   const [rotateSpeed, setRotateSpeed] = useState(BASE_ROTATE_SPEED);
   const rotateSpeedRef = useRef(BASE_ROTATE_SPEED);
@@ -132,6 +136,10 @@ export default function LandingHeroReel({ onPlay }: LandingHeroReelProps) {
             autoRotate
             autoRotateSpeed={rotateSpeed}
             enableZoom={false}
+            lightMode={lightMode}
+            lightGlow="none"
+            lightHalo="none"
+            shellMode="flat"
             showAtmosphere={false}
             atmosphereAltitude={0}
             framed={false}
