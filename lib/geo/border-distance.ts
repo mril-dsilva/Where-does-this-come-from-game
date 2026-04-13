@@ -4,6 +4,7 @@ import countryBorderSamples from "../../data/country-border-samples.json" with {
 import { getCountryByCode } from "../data/index.ts";
 import type { CountryCentroid } from "../../types/game.ts";
 import { haversineKmExact } from "./haversine.ts";
+import { filterMainlandBorderSamplePoints } from "./country-mainland.ts";
 
 type CountryBorderSample = {
   code: string;
@@ -36,6 +37,23 @@ function getFallbackDistance(
   return Math.round(haversineKmExact(left, right));
 }
 
+function getBorderSamplePoints(
+  countryCode: string,
+): Array<[number, number]> | null {
+  const sample = sampleByCode.get(normalizeCode(countryCode));
+
+  if (!sample || sample.points.length === 0) {
+    return null;
+  }
+
+  const mainlandPoints = filterMainlandBorderSamplePoints(
+    sample.code,
+    sample.points,
+  );
+
+  return mainlandPoints.length > 0 ? mainlandPoints : null;
+}
+
 export function getBorderDistanceKm(
   leftCountryCode: string,
   rightCountryCode: string,
@@ -60,10 +78,10 @@ export function getBorderDistanceKm(
     return cached;
   }
 
-  const leftSample = sampleByCode.get(leftCode);
-  const rightSample = sampleByCode.get(rightCode);
+  const leftSamplePoints = getBorderSamplePoints(leftCode);
+  const rightSamplePoints = getBorderSamplePoints(rightCode);
 
-  if (!leftSample || !rightSample || leftSample.points.length === 0 || rightSample.points.length === 0) {
+  if (!leftSamplePoints || !rightSamplePoints) {
     const leftCountry = getCountryByCode(leftCode);
     const rightCountry = getCountryByCode(rightCode);
 
@@ -82,13 +100,13 @@ export function getBorderDistanceKm(
 
   let minimumDistance = Number.POSITIVE_INFINITY;
 
-  for (const [leftLongitude, leftLatitude] of leftSample.points) {
+  for (const [leftLongitude, leftLatitude] of leftSamplePoints) {
     const leftPoint: CountryCentroid = {
       latitude: leftLatitude,
       longitude: leftLongitude,
     };
 
-    for (const [rightLongitude, rightLatitude] of rightSample.points) {
+    for (const [rightLongitude, rightLatitude] of rightSamplePoints) {
       const rightPoint: CountryCentroid = {
         latitude: rightLatitude,
         longitude: rightLongitude,

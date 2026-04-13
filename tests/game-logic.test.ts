@@ -11,6 +11,7 @@ import {
   sortGuessesForDisplay,
   submitGuess,
 } from "../lib/game/index.ts";
+import { isNeighboringCountryCode } from "../lib/geo/country-neighbors.ts";
 import {
   getCountryByCode,
   getCountryByName,
@@ -27,6 +28,8 @@ import {
   getSolvedAttemptsLabel,
 } from "../lib/game/feedback.ts";
 import { haversineKm } from "../lib/geo/haversine.ts";
+import { resolveGuess } from "../lib/game/guess.ts";
+import type { GameItem } from "../types/game.ts";
 
 test("country lookup resolves aliases and codes", () => {
   assert.equal(getCountryByCode("se")?.name, "Sweden");
@@ -230,6 +233,50 @@ test("border distance is based on country borders rather than centroids", () => 
   assert.ok(franceSpain < franceAustralia);
   assert.ok(franceSpain >= 0);
   assert.ok(russiaIndia > 1_000);
+});
+
+test("mainland-aware scoring ignores overseas territories for heat and neighbors", () => {
+  const franceBrazilDistance = getBorderDistanceKm("FR", "BR");
+  const denmarkCanadaDistance = getBorderDistanceKm("DK", "CA");
+  const norwayCanadaDistance = getBorderDistanceKm("NO", "CA");
+  const australiaNewZealandDistance = getBorderDistanceKm("AU", "NZ");
+
+  assert.equal(isNeighboringCountryCode("FR", "BR"), false);
+  assert.ok(franceBrazilDistance > 1_000);
+  assert.equal(getHeatColorForDistance(franceBrazilDistance).level, "far");
+  assert.ok(denmarkCanadaDistance > 1_000);
+  assert.notEqual(
+    getHeatColorForDistance(denmarkCanadaDistance).level,
+    "neighboring",
+  );
+  assert.ok(norwayCanadaDistance > 2_000);
+  assert.ok(australiaNewZealandDistance > 1_000);
+  assert.equal(isNeighboringCountryCode("NO", "CA"), false);
+  assert.equal(isNeighboringCountryCode("AU", "NZ"), false);
+
+  const brazilItem: GameItem = {
+    id: "brazil-check",
+    name: "Brazil check",
+    emoji: "🌎",
+    category: "daily_object",
+    originCountryCode: "BR",
+    originCountryName: "Brazil",
+    fact: "Regression guard for mainland-aware heat.",
+  };
+
+  const evaluation = resolveGuess({
+    guess: "France",
+    item: brazilItem,
+  });
+
+  assert.equal(evaluation.resolvedCountry?.code, "FR");
+  assert.equal(evaluation.isCorrect, false);
+  assert.equal(evaluation.heatLevel, "far");
+});
+
+test("mainland neighbor detection still works for genuine adjacent borders", () => {
+  assert.equal(isNeighboringCountryCode("FR", "ES"), true);
+  assert.equal(getBorderDistanceKm("FR", "ES"), 0);
 });
 
 test("neighboring countries always take the deepest red tier", () => {
