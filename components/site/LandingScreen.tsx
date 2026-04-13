@@ -41,13 +41,42 @@ export default function LandingScreen({ onPlay }: LandingScreenProps) {
           <HowToPlayCard />
         </section>
 
-        <footer className="flex w-full max-w-4xl flex-col items-center gap-4 border-t border-white/8 pt-6 text-sm text-white/55 sm:flex-row sm:justify-between">
-          <a href="#top" className="transition hover:text-white">
-            Back to top
+        <footer className="grid w-full max-w-4xl gap-3 border-t border-white/8 pt-6 text-sm text-white/55 sm:grid-cols-3 sm:items-center">
+          <p className="justify-self-center sm:text-center">Developed by Mril</p>
+
+          <a
+            href="#top"
+            aria-label="Back to top"
+            className="group justify-self-center rounded-full p-2 transition duration-200 hover:text-white hover:opacity-90 active:scale-95 sm:justify-self-center sm:p-3"
+          >
+            <span className="flex h-8 w-8 items-center justify-center sm:h-9 sm:w-9" aria-hidden="true">
+              <UpArrowIcon className="h-5 w-5 transition duration-200 group-hover:-translate-y-0.5 sm:h-5.5 sm:w-5.5" />
+            </span>
           </a>
-          <p>Developed by MrillionAI</p>
+
+          <p className="justify-self-center text-center sm:justify-self-end sm:text-right">
+            This app is still in Beta
+          </p>
         </footer>
       </div>
     </main>
+  );
+}
+
+function UpArrowIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M12 19V5" />
+      <path d="M6.5 10.5L12 5l5.5 5.5" />
+    </svg>
   );
 }
