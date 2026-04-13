@@ -27,7 +27,7 @@ export default function AssistModeToggle({
         className={`relative inline-flex h-8 w-14 flex-none items-center rounded-full border transition duration-200 ${
           enabled
             ? "border-[var(--foreground)] bg-[var(--foreground)]"
-            : "border-[var(--border)] bg-[var(--surface-strong)]"
+            : "border-[var(--border)] bg-[var(--assist-toggle-off)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
         }`.trim()}
       >
         <span

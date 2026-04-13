@@ -8,6 +8,7 @@
   --border: rgba(255, 255, 255, 0.12);
   --surface: rgba(255, 255, 255, 0.05);
   --surface-strong: rgba(255, 255, 255, 0.08);
+  --assist-toggle-off: rgba(255, 255, 255, 0.18);
   --shadow: rgba(0, 0, 0, 0.42);
   --feedback-warmer: #f59e7a;
   --feedback-cooler: #86b8ff;
@@ -16,13 +17,14 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --background: #f4efe7;
-  --foreground: #191613;
-  --muted: #62584f;
-  --border: rgba(25, 22, 19, 0.12);
-  --surface: rgba(25, 22, 19, 0.05);
-  --surface-strong: rgba(25, 22, 19, 0.08);
-  --shadow: rgba(25, 22, 19, 0.12);
+  --background: #f1e9dd;
+  --foreground: #343434;
+  --muted: #5f5a53;
+  --border: rgba(52, 52, 52, 0.12);
+  --surface: rgba(52, 52, 52, 0.05);
+  --surface-strong: rgba(52, 52, 52, 0.08);
+  --assist-toggle-off: rgba(52, 52, 52, 0.1);
+  --shadow: rgba(52, 52, 52, 0.14);
   --feedback-warmer: #b45309;
   --feedback-cooler: #2563eb;
   --feedback-neighbor: #c24141;
