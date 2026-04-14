@@ -470,24 +470,6 @@ export default function GameShell({
         </div>
       ) : null}
 
-      <div
-        className={`mx-auto mt-[17px] flex w-full max-w-4xl flex-col items-center gap-0 py-0 transition-[opacity,transform] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] delay-[220ms] sm:mt-[21px] ${
-          showGameplay
-            ? "translate-y-0 opacity-100"
-            : "translate-y-4 opacity-0 pointer-events-none"
-        }`.trim()}
-      >
-        <footer className="flex flex-col items-center gap-3 pt-2 text-center text-sm text-white/52">
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-lg text-white/62 transition hover:border-white/20 hover:text-white"
-            aria-label="Back to top"
-          >
-            ↑
-          </button>
-        </footer>
-      </div>
     </main>
   );
 }
