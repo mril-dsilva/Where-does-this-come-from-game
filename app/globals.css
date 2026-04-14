@@ -21,9 +21,9 @@
   --foreground: #343434;
   --muted: #5f5a53;
   --border: rgba(52, 52, 52, 0.12);
-  --surface: rgba(255, 255, 255, 0.42);
-  --surface-strong: rgba(255, 255, 255, 0.58);
-  --assist-toggle-off: rgba(255, 255, 255, 0.46);
+  --surface: rgba(52, 52, 52, 0.05);
+  --surface-strong: rgba(52, 52, 52, 0.08);
+  --assist-toggle-off: rgba(52, 52, 52, 0.1);
   --shadow: rgba(52, 52, 52, 0.14);
   --feedback-warmer: #b45309;
   --feedback-cooler: #2563eb;
@@ -73,7 +73,7 @@ body {
 }
 
 :root[data-theme="light"] [class*="bg-black/"] {
-  background-color: rgba(52, 52, 52, 0.08) !important;
+  background-color: rgba(52, 52, 52, 0.04) !important;
 }
 
 :root[data-theme="light"] [class*="text-black"] {
