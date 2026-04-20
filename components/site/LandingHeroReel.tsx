@@ -130,7 +130,7 @@ export default function LandingHeroReel({
           }}
           onPointerLeave={() => setIsGlobeHovered(false)}
           aria-label="Play OriginGuessr"
-          className="group absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 border-0 bg-transparent p-0 outline-none transition hover:scale-[1.02] focus-visible:outline-none"
+          className="group absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 border-0 bg-transparent p-0 outline-none transition hover:scale-[1.02] focus-visible:outline-none [clip-path:circle(50%)]"
         >
           <WorldGlobe
             autoRotate
@@ -143,7 +143,7 @@ export default function LandingHeroReel({
             showAtmosphere={false}
             atmosphereAltitude={0}
             framed={false}
-            className="h-[15rem] w-[15rem] sm:h-[18rem] sm:w-[18rem] md:h-[20rem] md:w-[20rem] lg:h-[23rem] lg:w-[23rem]"
+            className="pointer-events-none h-[15rem] w-[15rem] sm:h-[18rem] sm:w-[18rem] md:h-[20rem] md:w-[20rem] lg:h-[23rem] lg:w-[23rem]"
           />
           <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black/42 shadow-[0_12px_32px_var(--shadow)] backdrop-blur-xl transition duration-300 ease-out group-hover:scale-110 group-hover:bg-black/55 group-active:scale-95 sm:h-18 sm:w-18">

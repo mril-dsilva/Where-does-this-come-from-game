@@ -194,8 +194,8 @@ export default function GameShell({
     ? "text-[color:rgba(25,22,19,0.78)]"
     : "text-white/78";
   const solvedPopupPrimaryButtonClass = settings.lightMode
-    ? "bg-[var(--foreground)] text-[var(--background)] shadow-[0_10px_30px_rgba(25,22,19,0.12)] hover:bg-[var(--foreground)]/92"
-    : "bg-white text-black hover:bg-white/95";
+    ? "bg-[var(--foreground)] text-[var(--background)] shadow-[0_10px_30px_rgba(25,22,19,0.12)]"
+    : "bg-white text-black";
   const solvedPopupSecondaryButtonClass = settings.lightMode
     ? "border-[color:rgba(25,22,19,0.12)] bg-[rgba(255,255,255,0.72)] text-[var(--foreground)] hover:border-[color:rgba(25,22,19,0.18)] hover:bg-[rgba(255,255,255,0.9)]"
     : "border-white/14 bg-white/[0.04] text-white hover:border-white/24 hover:bg-white/[0.07]";
@@ -453,14 +453,14 @@ export default function GameShell({
                 <button
                   type="button"
                   onClick={onPlayAgain}
-                  className={`inline-flex h-[3.15rem] items-center justify-center rounded-full px-6 text-[1.02rem] font-semibold transition hover:scale-[1.02] active:scale-[0.98] ${solvedPopupPrimaryButtonClass}`}
+                  className={`inline-flex h-[3.15rem] cursor-pointer items-center justify-center rounded-full px-6 text-[1.02rem] font-semibold transition hover:scale-[1.02] active:scale-[0.98] ${solvedPopupPrimaryButtonClass}`}
                 >
                   Play again
                 </button>
                 <button
                   type="button"
                   onClick={handleDismissSolvedPopup}
-                  className={`inline-flex h-[3.15rem] items-center justify-center rounded-full border px-6 text-[1.02rem] font-semibold transition ${solvedPopupSecondaryButtonClass}`}
+                  className={`inline-flex h-[3.15rem] cursor-pointer items-center justify-center rounded-full border px-6 text-[1.02rem] font-semibold transition ${solvedPopupSecondaryButtonClass}`}
                 >
                   Back
                 </button>

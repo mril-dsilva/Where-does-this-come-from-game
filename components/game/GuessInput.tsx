@@ -83,7 +83,7 @@ export default function GuessInput({
                     type="button"
                     onMouseDown={(event) => event.preventDefault()}
                     onClick={() => onChange(suggestion.name)}
-                    className="flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left text-sm text-white/76 transition hover:bg-white/[0.06] hover:text-white"
+                    className="flex w-full cursor-pointer items-center justify-between gap-3 px-3 py-2.5 text-left text-sm text-white/76 transition hover:bg-white/[0.06] hover:text-white"
                   >
                     <span className="flex items-center gap-2">
                       <span className="text-base leading-none">
@@ -104,7 +104,7 @@ export default function GuessInput({
         <button
           type="submit"
           disabled={disabled}
-          className="inline-flex h-[72px] items-center justify-center rounded-2xl border border-white/12 bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40 sm:self-start"
+          className="inline-flex h-[72px] cursor-pointer items-center justify-center rounded-2xl border border-white/12 bg-white px-5 text-sm font-semibold text-black transition hover:scale-[1.03] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100 sm:self-start"
         >
           Submit guess
         </button>

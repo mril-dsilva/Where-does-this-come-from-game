@@ -41,7 +41,7 @@ export default function HowToPlayCard({
           <button
             type="button"
             onClick={() => setShowAnswer((current) => !current)}
-            className="inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.95rem] font-semibold text-white/76 underline decoration-white/20 underline-offset-4 transition hover:text-white"
+            className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full px-5 text-[0.95rem] font-semibold text-white/76 underline decoration-white/20 underline-offset-4 transition hover:text-white"
           >
             Stuck? Reveal the answer
           </button>

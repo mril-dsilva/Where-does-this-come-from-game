@@ -17,7 +17,7 @@ export default function ThemeToggleButton({
       aria-label={enabled ? "Switch to dark mode" : "Switch to light mode"}
       aria-pressed={enabled}
       onClick={onToggle}
-      className={`inline-flex h-16 w-16 items-center justify-center rounded-full bg-transparent text-[var(--foreground)] transition duration-200 hover:opacity-70 active:scale-95 ${className ?? ""}`.trim()}
+      className={`inline-flex cursor-pointer items-center justify-center rounded-full bg-transparent p-2 text-[var(--foreground)] transition duration-200 hover:scale-[1.12] active:scale-95 ${className ?? ""}`.trim()}
     >
       {enabled ? (
         <SunIcon className="h-7 w-7" />

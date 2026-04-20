@@ -59,7 +59,7 @@ export default function ResultBanner({
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex h-11 items-center justify-center rounded-full border border-white/12 bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/88"
+          className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full border border-white/12 bg-white px-5 text-sm font-semibold text-black transition hover:scale-[1.03] active:scale-[0.97]"
         >
           {resetLabel}
         </button>
