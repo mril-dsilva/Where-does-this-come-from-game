@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import LandingHeroReel from "./LandingHeroReel";
 import AssistModeToggle from "./AssistModeToggle";
 import HowToPlayCard from "./HowToPlayCard";
@@ -65,8 +66,14 @@ export default function LandingScreen({
           <HowToPlayCard />
         </section>
 
-        <footer className="flex w-full max-w-4xl flex-col gap-1 border-t border-white/8 pt-6 text-center text-sm text-white/55 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <footer className="flex w-full max-w-4xl flex-col gap-3 border-t border-white/8 pt-6 text-center text-sm text-white/55 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <p className="sm:text-left">Designed by Mril.</p>
+          <Link
+            href="/suggest"
+            className="cursor-pointer font-medium text-white/48 underline decoration-white/20 underline-offset-4 transition hover:text-white/80 hover:decoration-white/40"
+          >
+            Suggest a clue →
+          </Link>
           <p className="sm:text-right">This app is still in Beta.</p>
         </footer>
       </div>
