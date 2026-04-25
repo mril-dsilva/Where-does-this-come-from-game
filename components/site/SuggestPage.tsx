@@ -98,8 +98,10 @@ export default function SuggestPage() {
             Suggest a Clue
           </h1>
           <p className="pt-1 text-[0.95rem] leading-relaxed text-white/58">
-            Know something fascinating that traces back to a specific country?
-            Share it — the best suggestions get added to the game.
+            Know something fascinating that traces back to a specific country? Share it!
+          </p>
+          <p className="text-[0.95rem] leading-relaxed text-white/58">
+            The best suggestions get added to the game.
           </p>
         </header>
 
@@ -116,7 +118,7 @@ export default function SuggestPage() {
                 onChange={(e) => setItemName(e.target.value)}
                 placeholder="e.g. Pizza, Bluetooth, LEGO"
                 required
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/28 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
               />
             </Field>
 
@@ -127,7 +129,8 @@ export default function SuggestPage() {
                   <PillButton
                     key={cat}
                     active={category === cat}
-                    onClick={() => setCategory(cat)}
+                    onClick={() => setCategory(category === cat ? "" : cat)}
+                    activeColor="green"
                   >
                     {cat}
                   </PillButton>
@@ -143,7 +146,7 @@ export default function SuggestPage() {
                 onChange={(e) => setCountry(e.target.value)}
                 placeholder="e.g. Italy, Denmark, Japan"
                 required
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/28 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
               />
             </Field>
 
@@ -157,7 +160,7 @@ export default function SuggestPage() {
                 onChange={(e) => setFunFact(e.target.value)}
                 placeholder="e.g. Pizza originated in Naples in the 18th century and was brought to the US by Italian immigrants."
                 rows={3}
-                className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/28 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
+                className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
               />
             </Field>
 
@@ -168,7 +171,8 @@ export default function SuggestPage() {
                   <PillButton
                     key={opt.value}
                     active={confidence === opt.value}
-                    onClick={() => setConfidence(opt.value)}
+                    onClick={() => setConfidence(confidence === opt.value ? "" : opt.value)}
+                    activeColor="green"
                   >
                     {opt.label}
                   </PillButton>
@@ -280,19 +284,26 @@ function PillGroup({ children }: { children: React.ReactNode }) {
 function PillButton({
   active,
   onClick,
+  activeColor = "white",
   children,
 }: {
   active: boolean;
   onClick: () => void;
+  activeColor?: "white" | "green";
   children: React.ReactNode;
 }) {
+  const activeClass =
+    activeColor === "green"
+      ? "border-emerald-600/70 bg-emerald-600/[0.13] text-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.12)]"
+      : "border-white/55 bg-white/10 text-white";
+
   return (
     <button
       type="button"
       onClick={onClick}
       className={`cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition hover:scale-[1.03] active:scale-[0.97] ${
         active
-          ? "border-white/55 bg-white/10 text-white"
+          ? activeClass
           : "border-white/14 bg-transparent text-white/48 hover:border-white/30 hover:text-white/80"
       }`}
     >
