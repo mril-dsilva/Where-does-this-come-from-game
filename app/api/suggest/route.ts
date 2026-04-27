@@ -40,31 +40,41 @@ export async function POST(request: Request) {
 
   const airtableUrl = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`;
 
-  const response = await fetch(airtableUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      fields: {
-        item_name: String(item_name).trim(),
-        category: String(category).trim(),
-        country: String(country).trim(),
-        fun_fact: String(fun_fact ?? "").trim() || "(none provided)",
-        confidence: String(confidence ?? "").trim() || "(not specified)",
-        source: "user",
-        submitted_at: new Date().toISOString(),
-        status: "Pending",
+  let response: Response;
+
+  try {
+    response = await fetch(airtableUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+        "Content-Type": "application/json",
       },
-    }),
-  });
+      body: JSON.stringify({
+        fields: {
+          item_name: String(item_name).trim(),
+          category: String(category).trim(),
+          country: String(country).trim(),
+          fun_fact: String(fun_fact ?? "").trim() || "(none provided)",
+          confidence: String(confidence ?? "").trim() || "(not specified)",
+          source: "user",
+          submitted_at: new Date().toISOString(),
+          status: "Pending",
+        },
+      }),
+    });
+  } catch (err) {
+    console.error("Airtable fetch failed:", err);
+    return NextResponse.json(
+      { error: "Could not reach Airtable." },
+      { status: 502 },
+    );
+  }
 
   if (!response.ok) {
-    const error = await response.text();
-    console.error("Airtable error:", error);
+    const errorText = await response.text();
+    console.error("Airtable rejected request:", response.status, errorText);
     return NextResponse.json(
-      { error: "Failed to save suggestion." },
+      { error: "Airtable rejected the submission.", detail: errorText },
       { status: 502 },
     );
   }
