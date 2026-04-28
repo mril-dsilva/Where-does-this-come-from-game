@@ -14,7 +14,7 @@ export default function OriginGuessrMark({
   onClick,
   className,
 }: OriginGuessrMarkProps) {
-  const classNameValue = `inline-flex items-center justify-center font-display font-semibold text-white transition ${
+  const classNameValue = `flex w-fit items-center justify-center font-display font-semibold text-white transition ${
     onClick ? "cursor-pointer hover:scale-[1.02] active:scale-[0.98]" : ""
   } ${SIZE_STYLES[size]} ${className ?? ""}`.trim();
 
