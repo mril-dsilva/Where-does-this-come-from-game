@@ -105,11 +105,8 @@ export default function SuggestPage() {
           </p>
         </header>
 
-        {/* Form or success state */}
-        {status === "success" ? (
-          <SuccessState onReset={handleReset} />
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-7" noValidate>
+        {/* Form — always rendered; success overlay sits on top */}
+        <form onSubmit={handleSubmit} className="space-y-7" noValidate>
             {/* Item name */}
             <Field label="What is it?">
               <input
@@ -196,15 +193,16 @@ export default function SuggestPage() {
               {status === "submitting" ? "Sending…" : "Submit suggestion →"}
             </button>
           </form>
-        )}
 
-        {/* Footer note */}
-        {status !== "success" && (
-          <p className="mt-8 text-center text-xs text-white/30">
-            Suggestions are reviewed manually before being added to the game.
-          </p>
-        )}
+        <p className="mt-8 text-center text-xs text-white/30">
+          Suggestions are reviewed manually before being added to the game.
+        </p>
       </div>
+
+      {/* Success overlay — matches solved popup style */}
+      {status === "success" && (
+        <SuccessState lightMode={settings.lightMode} onReset={handleReset} />
+      )}
     </main>
   );
 }
@@ -213,35 +211,83 @@ export default function SuggestPage() {
 // Success state
 // ---------------------------------------------------------------------------
 
-function SuccessState({ onReset }: { onReset: () => void }) {
+function SuccessState({
+  lightMode,
+  onReset,
+}: {
+  lightMode: boolean;
+  onReset: () => void;
+}) {
+  const backdropClass = lightMode
+    ? "bg-black/15 backdrop-blur-[2px]"
+    : "bg-black/35 backdrop-blur-sm";
+
+  const panelClass = lightMode
+    ? "border-[color:rgba(25,22,19,0.12)] bg-[rgba(250,246,240,0.97)] text-[var(--foreground)] shadow-[0_28px_95px_rgba(25,22,19,0.18)] backdrop-blur-xl"
+    : "border-white/12 bg-white/[0.08] text-white shadow-[0_30px_120px_rgba(0,0,0,0.45)] backdrop-blur-2xl";
+
+  const badgeClass = lightMode
+    ? "border-[color:rgba(25,22,19,0.08)] bg-[rgba(255,255,255,0.82)] shadow-[0_10px_30px_rgba(25,22,19,0.08)]"
+    : "border-white/10 bg-white/[0.08] shadow-[0_12px_40px_var(--shadow)]";
+
+  const bodyClass = lightMode
+    ? "text-[color:rgba(25,22,19,0.72)]"
+    : "text-white/72";
+
+  const primaryClass = lightMode
+    ? "bg-[var(--foreground)] text-[var(--background)] shadow-[0_10px_30px_rgba(25,22,19,0.12)]"
+    : "bg-white text-black";
+
+  const secondaryClass = lightMode
+    ? "border-[color:rgba(25,22,19,0.12)] bg-[rgba(255,255,255,0.72)] text-[var(--foreground)] hover:border-[color:rgba(25,22,19,0.18)] hover:bg-[rgba(255,255,255,0.9)]"
+    : "border-white/14 bg-white/[0.04] text-white hover:border-white/24 hover:bg-white/[0.07]";
+
   return (
-    <div className="space-y-5 py-8 text-center">
-      <p className="text-5xl" aria-hidden="true">
-        🎉
-      </p>
-      <div className="space-y-2">
-        <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-white">
-          Thanks for the suggestion!
-        </h2>
-        <p className="text-[0.95rem] leading-relaxed text-white/58">
-          We&apos;ll take a look. If it makes the cut, you&apos;ll see it in a
-          future update.
-        </p>
-      </div>
-      <div className="flex flex-col items-center gap-3 pt-3 sm:flex-row sm:justify-center">
-        <button
-          type="button"
-          onClick={onReset}
-          className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full border border-white/14 bg-white/[0.04] px-6 text-sm font-semibold text-white transition hover:scale-[1.02] active:scale-[0.98]"
-        >
-          Suggest another
-        </button>
-        <Link
-          href="/"
-          className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-black transition hover:scale-[1.02] active:scale-[0.98]"
-        >
-          Back to game
-        </Link>
+    <div
+      className={`fixed inset-0 z-40 flex items-center justify-center p-4 ${backdropClass}`}
+      onClick={onReset}
+    >
+      <div
+        className={`relative w-full max-w-[42rem] overflow-hidden rounded-[2.2rem] border px-7 py-10 text-center sm:px-10 sm:py-12 ${panelClass}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mx-auto flex max-w-[34rem] flex-col items-center gap-6">
+          {/* Badge */}
+          <div
+            className={`flex h-[5.2rem] w-[5.2rem] items-center justify-center rounded-full border text-[2.55rem] ${badgeClass}`}
+            aria-hidden="true"
+          >
+            🎉
+          </div>
+
+          {/* Text */}
+          <div className="space-y-2">
+            <h2 className="font-display text-[1.48rem] font-semibold tracking-[-0.04em] text-[var(--foreground)] sm:text-[1.76rem]">
+              Thanks for the suggestion!
+            </h2>
+            <p className={`text-[1.05rem] leading-7 ${bodyClass}`}>
+              We&apos;ll take a look. If it makes the cut, you&apos;ll see it
+              in a future update.
+            </p>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-1">
+            <button
+              type="button"
+              onClick={onReset}
+              className={`inline-flex h-[3.15rem] cursor-pointer items-center justify-center rounded-full border px-6 text-[1.02rem] font-semibold transition hover:scale-[1.02] active:scale-[0.98] ${secondaryClass}`}
+            >
+              Suggest another
+            </button>
+            <Link
+              href="/"
+              className={`inline-flex h-[3.15rem] cursor-pointer items-center justify-center rounded-full px-6 text-[1.02rem] font-semibold transition hover:scale-[1.02] active:scale-[0.98] ${primaryClass}`}
+            >
+              Back to game
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
