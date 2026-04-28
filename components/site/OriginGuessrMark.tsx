@@ -14,17 +14,19 @@ export default function OriginGuessrMark({
   onClick,
   className,
 }: OriginGuessrMarkProps) {
-  const classNameValue = `flex w-fit items-center justify-center font-display font-semibold text-white transition ${
-    onClick ? "cursor-pointer hover:scale-[1.02] active:scale-[0.98]" : ""
-  } ${SIZE_STYLES[size]} ${className ?? ""}`.trim();
+  const sharedClass = `items-center justify-center font-display font-semibold text-white transition ${SIZE_STYLES[size]} ${className ?? ""}`.trim();
 
   if (onClick) {
     return (
-      <button type="button" onClick={onClick} className={classNameValue}>
+      <button
+        type="button"
+        onClick={onClick}
+        className={`flex w-fit cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${sharedClass}`}
+      >
         OriginGuessr
       </button>
     );
   }
 
-  return <div className={classNameValue}>OriginGuessr</div>;
+  return <div className={`inline-flex ${sharedClass}`}>OriginGuessr</div>;
 }
