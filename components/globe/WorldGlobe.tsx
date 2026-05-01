@@ -268,17 +268,24 @@ export default function WorldGlobe({
       aria-label="Interactive world globe. Drag to rotate and scroll to zoom. Highlighted countries show guessed answers."
     >
       <div
-        className="absolute inset-0"
-        style={{
-          transform: framed ? "none" : `scale(${contentScale})`,
-          transformOrigin: "center center",
-        }}
+        className="absolute"
+        style={
+          framed
+            ? { inset: 0 }
+            : {
+                width: size.width * contentScale,
+                height: size.height * contentScale,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }
+        }
       >
         {size.width > 0 && size.height > 0 ? (
           <Globe
             ref={globeRef}
-            width={size.width}
-            height={size.height}
+            width={framed ? size.width : size.width * contentScale}
+            height={framed ? size.height : size.height * contentScale}
             onGlobeReady={() => {
               const controls = globeRef.current?.controls();
 
