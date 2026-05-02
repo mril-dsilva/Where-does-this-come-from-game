@@ -31,17 +31,8 @@ export default function LandingScreen({
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 py-1 sm:pt-2">
         <header className="space-y-5 text-center pt-1 sm:pt-2">
-          {/* OG Logo */}
-          <div className="flex flex-col items-center gap-3">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/[0.04] sm:h-20 sm:w-20">
-              <span className="font-display text-2xl font-bold text-white sm:text-3xl">OG</span>
-            </div>
-            <div className="font-display text-sm font-semibold tracking-[0.1em] text-white/72 sm:text-base">
-              ORIGINGUESSR
-            </div>
-          </div>
-
-          <div className="space-y-5 pt-2">
+          <OriginGuessrMark size="hero" />
+          <div className="space-y-5 pt-1">
             <p className="text-base font-medium uppercase tracking-[0.38em] text-white/54 sm:text-sm">
               Guess the origin of everyday things.
             </p>
