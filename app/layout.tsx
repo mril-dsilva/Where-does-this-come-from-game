@@ -15,7 +15,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "OriginGuessr | MrillionAI",
+  title: "OriginGuessr by Mril",
   description:
     "OriginGuessr is a polished geography guessing game about tracing foods, inventions, and cultural items back to their country of origin.",
   applicationName: "OriginGuessr",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     "OriginGuessr",
   ],
   openGraph: {
-    title: "OriginGuessr | MrillionAI",
+    title: "OriginGuessr by Mril",
     description:
       "OriginGuessr is a polished geography guessing game about tracing foods, inventions, and cultural items back to their country of origin.",
     type: "website",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "OriginGuessr | MrillionAI",
+    title: "OriginGuessr by Mril",
     description:
       "OriginGuessr is a polished geography guessing game about tracing foods, inventions, and cultural items back to their country of origin.",
   },
