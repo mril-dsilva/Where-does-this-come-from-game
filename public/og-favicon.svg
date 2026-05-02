@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="64" fill="#0a1428"/>
+
+  <!-- Border circle -->
+  <circle cx="64" cy="64" r="62" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.2"/>
+
+  <!-- OG Text -->
+  <text x="64" y="75" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" text-anchor="middle" fill="#ffffff" letter-spacing="-1">OG</text>
+</svg>

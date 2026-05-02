@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     "OriginGuessr is a polished geography guessing game about tracing foods, inventions, and cultural items back to their country of origin.",
   applicationName: "OriginGuessr",
   creator: "MrillionAI",
+  icons: {
+    icon: "/og-favicon.svg",
+  },
   keywords: [
     "geography game",
     "country guessing game",
