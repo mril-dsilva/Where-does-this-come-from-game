@@ -1,22 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import ThemeToggleButton from "@/components/site/ThemeToggleButton";
-import { useGameSettings } from "@/components/site/useGameSettings";
 
 export const metadata: Metadata = {
   title: "How I Built This — OriginGuessr by Mril",
-  description: "Learn about the technical architecture and design decisions behind OriginGuessr.",
+  description:
+    "Learn about the technical architecture and design decisions behind OriginGuessr.",
 };
 
 export default function HowIBuiltThisPage() {
   return (
     <main className="min-h-screen px-5 py-8 sm:px-6 lg:px-8">
-      <ThemeToggleButton
-        enabled={false}
-        onToggle={() => {}}
-        className="fixed right-4 top-4 z-30 sm:right-6 sm:top-6"
-      />
-
       <div className="mx-auto w-full max-w-3xl pb-20 pt-6 sm:pt-10">
         {/* Back link */}
         <Link
@@ -32,7 +25,8 @@ export default function HowIBuiltThisPage() {
             How I Built This
           </h1>
           <p className="text-lg leading-relaxed text-white/68">
-            Coming soon. Details about the technical architecture, design decisions, and tools used to build OriginGuessr.
+            Coming soon. Details about the technical architecture, design
+            decisions, and tools used to build OriginGuessr.
           </p>
         </header>
 
