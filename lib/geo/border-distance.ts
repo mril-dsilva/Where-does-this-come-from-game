@@ -1,6 +1,4 @@
-import countryBorderSamples from "../../data/country-border-samples.json" with {
-  type: "json",
-};
+import countryBorderSamples from "../../data/country-border-samples.json" with { type: "json" };
 import { getCountryByCode } from "../data/index.ts";
 import type { CountryCentroid } from "../../types/game.ts";
 import { haversineKmExact } from "./haversine.ts";
@@ -18,7 +16,9 @@ type CountryBorderSamplesData = {
 
 const samples = countryBorderSamples as CountryBorderSamplesData;
 const sampleByCode = new Map(
-  samples.countries.map((entry) => [entry.code.trim().toUpperCase(), entry] as const),
+  samples.countries.map(
+    (entry) => [entry.code.trim().toUpperCase(), entry] as const,
+  ),
 );
 const distanceCache = new Map<string, number>();
 

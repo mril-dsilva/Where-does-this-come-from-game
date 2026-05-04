@@ -23,11 +23,11 @@ export default function RoundFeedback({
         aria-live="polite"
       >
         <p className="font-medium text-white/86">
-        <CountryLink
-          label={feedback.country.name}
-          onClick={() => onCountryClick(feedback.country.code)}
-          className="font-medium tracking-[0.01em] text-[var(--foreground)]"
-        />{" "}
+          <CountryLink
+            label={feedback.country.name}
+            onClick={() => onCountryClick(feedback.country.code)}
+            className="font-medium tracking-[0.01em] text-[var(--foreground)]"
+          />{" "}
           has already been guessed.
         </p>
       </div>
@@ -40,7 +40,8 @@ export default function RoundFeedback({
     : feedback.relationship === "warmer"
       ? "text-[var(--feedback-warmer)]"
       : "text-[var(--feedback-cooler)]";
-  const latestLabel = feedback.latestGuess.countryName ?? feedback.latestGuess.guess;
+  const latestLabel =
+    feedback.latestGuess.countryName ?? feedback.latestGuess.guess;
 
   return (
     <div

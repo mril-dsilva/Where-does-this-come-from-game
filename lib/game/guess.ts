@@ -4,10 +4,7 @@ import { resolveCountryMatch } from "../data/country-match.ts";
 import { isNeighboringCountryCode } from "../geo/country-neighbors.ts";
 import { getBorderDistanceKm } from "../geo/border-distance.ts";
 import type { Country, GameItem, GuessRecord } from "../../types/game.ts";
-import {
-  getHeatColorForGuess,
-  getNeutralColorToken,
-} from "./heat.ts";
+import { getHeatColorForGuess, getNeutralColorToken } from "./heat.ts";
 import type { GuessHeatLevel } from "./heat.ts";
 
 export type GuessResolution = {
@@ -22,7 +19,11 @@ export type GuessResolution = {
   matchType: "exact" | "approximate" | "suggestion" | "unmatched";
 };
 
-function isDuplicateGuess(guesses: GuessRecord[], normalizedGuess: string, country: Country | null): boolean {
+function isDuplicateGuess(
+  guesses: GuessRecord[],
+  normalizedGuess: string,
+  country: Country | null,
+): boolean {
   return guesses.some((guess) => {
     if (guess.normalizedGuess === normalizedGuess) {
       return true;

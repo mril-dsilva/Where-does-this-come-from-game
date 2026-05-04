@@ -19,11 +19,7 @@ export default function OriginGuessrApp() {
   const [mode, setMode] = useState<ScreenMode>("landing");
   const [activeItem, setActiveItem] = useState<GameItem | null>(null);
   const [sessionId, setSessionId] = useState(0);
-  const {
-    settings,
-    toggleAssistInput,
-    toggleLightMode,
-  } = useGameSettings();
+  const { settings, toggleAssistInput, toggleLightMode } = useGameSettings();
 
   function startGame() {
     setActiveItem(pickRandomItem(items));

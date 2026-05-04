@@ -48,12 +48,12 @@ export default function ResultBanner({
       aria-atomic="true"
       role="status"
     >
-      <h2 className={`font-display text-xl tracking-[-0.03em] ${toneStyle.text}`}>
+      <h2
+        className={`font-display text-xl tracking-[-0.03em] ${toneStyle.text}`}
+      >
         {title}
       </h2>
-      <p className="max-w-2xl text-sm leading-6 text-white/66">
-        {detail}
-      </p>
+      <p className="max-w-2xl text-sm leading-6 text-white/66">{detail}</p>
 
       {onReset ? (
         <button

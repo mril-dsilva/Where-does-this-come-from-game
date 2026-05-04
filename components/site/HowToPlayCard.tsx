@@ -48,7 +48,8 @@ export default function HowToPlayCard({
 
           {showAnswer ? (
             <p className="text-[0.95rem] leading-6 text-white/84">
-              Answer: <span className="font-medium text-white">{answerLabel}</span>
+              Answer:{" "}
+              <span className="font-medium text-white">{answerLabel}</span>
             </p>
           ) : null}
         </div>

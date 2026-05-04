@@ -1,29 +1,32 @@
 # AGENTS.md
 
 ## Project Identity
+
 OriginGuessr is a globe-based geography game about tracing everyday things back to their country of origin. It is built for a single-player, round-based experience where local seed data, country matching, and geo distance logic produce immediate feedback as the player guesses.
 
 The app is intentionally self-contained: there is no backend API, no database, and no authentication layer. The current product is a polished frontend portfolio game with local content, local persistence for settings, and client-side globe rendering.
 
 ## Tech Stack
-| Layer | Technology | Version | Notes |
-|---|---|---:|---|
-| Runtime | Node.js | Not pinned in repo | Used through `npm` scripts and Next.js tooling. |
-| Package manager | npm | Not pinned in repo | `package-lock.json` is committed. |
-| Framework | Next.js | 16.2.2 | App Router in `app/`; `next dev`, `next build`, `next start`. |
-| UI library | React | 19.2.4 | Client components drive gameplay and settings. |
-| Language | TypeScript | 5.x | `strict: true`, `allowImportingTsExtensions: true`. |
-| Database | None | N/A | All content is local JSON and in-memory module state. |
-| ORM | None | N/A | No ORM, migrations, or SQL layer exist. |
-| State management | React state + localStorage | N/A | `useState`, `useEffect`, `useMemo`, module caches, and `localStorage`. |
-| Auth | None | N/A | No login, sessions, or server auth flow. |
-| Hosting/deploy target | Vercel | Not encoded in repo | README says the app is ready for Vercel; no workflow file exists. |
-| Testing framework | `node:test` | Built into Node | Run with `npm test`. |
-| Linting | ESLint | 9.x | Uses `eslint-config-next`. |
-| CSS approach | Tailwind CSS 4 + CSS variables | 4.x | `app/globals.css` defines the theme tokens and animations. |
-| 3D globe | `react-globe.gl` + `three` | 2.36.0 / 0.180.0 | Globe is client-only and loads country polygons at runtime. |
+
+| Layer                 | Technology                     |             Version | Notes                                                                  |
+| --------------------- | ------------------------------ | ------------------: | ---------------------------------------------------------------------- |
+| Runtime               | Node.js                        |  Not pinned in repo | Used through `npm` scripts and Next.js tooling.                        |
+| Package manager       | npm                            |  Not pinned in repo | `package-lock.json` is committed.                                      |
+| Framework             | Next.js                        |              16.2.2 | App Router in `app/`; `next dev`, `next build`, `next start`.          |
+| UI library            | React                          |              19.2.4 | Client components drive gameplay and settings.                         |
+| Language              | TypeScript                     |                 5.x | `strict: true`, `allowImportingTsExtensions: true`.                    |
+| Database              | None                           |                 N/A | All content is local JSON and in-memory module state.                  |
+| ORM                   | None                           |                 N/A | No ORM, migrations, or SQL layer exist.                                |
+| State management      | React state + localStorage     |                 N/A | `useState`, `useEffect`, `useMemo`, module caches, and `localStorage`. |
+| Auth                  | None                           |                 N/A | No login, sessions, or server auth flow.                               |
+| Hosting/deploy target | Vercel                         | Not encoded in repo | README says the app is ready for Vercel; no workflow file exists.      |
+| Testing framework     | `node:test`                    |     Built into Node | Run with `npm test`.                                                   |
+| Linting               | ESLint                         |                 9.x | Uses `eslint-config-next`.                                             |
+| CSS approach          | Tailwind CSS 4 + CSS variables |                 4.x | `app/globals.css` defines the theme tokens and animations.             |
+| 3D globe              | `react-globe.gl` + `three`     |    2.36.0 / 0.180.0 | Globe is client-only and loads country polygons at runtime.            |
 
 ## Repository Structure
+
 - `app/` is the Next.js App Router shell. `app/layout.tsx` sets metadata, fonts, and the theme bootstrap script; `app/page.tsx` is the homepage entrypoint; `app/globals.css` owns global tokens, dark/light theme variables, and animation keyframes. Almost never modify `app/globals.css` casually because multiple UI classes assume those CSS variables exist.
 - `components/` owns presentation. `components/site/` contains the landing screen, settings toggles, and the app wrapper; `components/game/` owns round flow, guesses, feedback, and solved-state UI; `components/globe/` owns the globe rendering and legend. Treat `components/game/GameShell.tsx` and `components/globe/WorldGlobe.tsx` as load-bearing.
 - `lib/` owns all non-UI logic. `lib/data/` handles seed loading, normalization, and country matching; `lib/game/` handles guess resolution, heat levels, and round state; `lib/geo/` handles distance, borders, and polygon loading; `lib/settings/` handles persisted UI settings and theme bootstrapping.
@@ -34,6 +37,7 @@ The app is intentionally self-contained: there is no backend API, no database, a
 - Top-level config files such as `package.json`, `next.config.ts`, `eslint.config.mjs`, and `tsconfig.json` are standard project config and should only change when the toolchain changes.
 
 ## Critical Commands
+
 - Install dependencies: `npm install`
 - Start dev server: `npm run dev`
 - Build production bundle: `npm run build`
@@ -44,13 +48,16 @@ The app is intentionally self-contained: there is no backend API, no database, a
 - Deploy: none in-repo; the project is intended for external deployment on Vercel, and the repo does not define a deploy script.
 
 Order that matters:
+
 - Run `npm install` before anything else.
 - Use `npm run build` before `npm start` if you want to verify production output locally.
 
 Destructive commands:
+
 - None of the documented commands are destructive.
 
 ## Build & Deploy Pipeline — DEEP MAP
+
 - Local dev startup sequence:
   - `npm install` restores dependencies from `package-lock.json`.
   - `npm run dev` runs `next dev`.
@@ -89,6 +96,7 @@ Destructive commands:
   - `WorldGlobe` depends on remote textures from `unpkg.com`; CSP or network restrictions affect visuals.
 
 ## Database & Models — DEEP MAP
+
 - Database engine and connection approach
   - None. There is no database connection, ORM client, migration tool, or server API in this repo.
   - All canonical content comes from local JSON files imported by `lib/data/raw.ts`.
@@ -122,6 +130,7 @@ Destructive commands:
   - `loadCountryPolygons()` silently falls back to `[]` on fetch failure, which can hide asset/path problems.
 
 ## State Management & Data Flow — DEEP MAP
+
 - Where global state lives and what it contains
   - `components/site/OriginGuessrApp.tsx` owns the top-level screen mode, selected item, and replay session key.
   - `components/game/GameShell.tsx` owns per-round UI state such as guess input, confetti, focus, solved popup visibility, and duplicate feedback.
@@ -155,48 +164,62 @@ Destructive commands:
   - Guess history sorting is intentionally separate from feedback sorting; do not assume one order serves both.
 
 ## Environment Variables
-| Variable name | Purpose | Required? | Default | Where it's used |
-|---|---|---:|---|---|
-| None | No runtime environment variables are read by the current codebase. | No | N/A | N/A |
+
+| Variable name | Purpose                                                            | Required? | Default | Where it's used |
+| ------------- | ------------------------------------------------------------------ | --------: | ------- | --------------- |
+| None          | No runtime environment variables are read by the current codebase. |        No | N/A     | N/A             |
 
 ## Patterns Claude Code Must Follow
+
 - File naming
   - UI components live in `components/<area>/Name.tsx`.
   - Pure helpers live in `lib/<domain>/name.ts`.
+
 ```ts
-components/game/GuessInput.tsx
-lib/geo/border-distance.ts
+components / game / GuessInput.tsx;
+lib / geo / border - distance.ts;
 ```
+
 - Component/module structure
   - Keep presentation in `components/` and keep logic in `lib/`.
   - Use `lib/data` as the only entry point for seed access from UI.
+
 ```ts
 import { getItems } from "@/lib/data/index.ts";
-export default function OriginGuessrApp() { /* ... */ }
+export default function OriginGuessrApp() {
+  /* ... */
+}
 ```
+
 - Error handling pattern
   - Throw early when an invariant is violated in pure logic.
   - Swallow non-critical browser persistence failures so the session stays usable.
+
 ```ts
 throw new Error(`Missing centroid data for country code: ${country.code}`);
 catch { /* Ignore storage failures and keep the session usable. */ }
 ```
+
 - API response shape
   - There is no HTTP API in this repo.
   - Helper outputs are plain typed objects and discriminated unions, not classes or wrapped responses.
+
 ```ts
 return { country: result.exactMatch.country, matchType: "exact" };
 return { suggestions, exactMatch, didYouMean };
 ```
+
 - How new environment variables should be added
   - There is no existing env module.
   - If a new env var is introduced, keep it in a single server-only `lib/` helper and do not read `process.env` from client components.
+
 ```ts
 export const MY_FLAG = process.env.MY_FLAG === "1";
 export const API_URL = process.env.API_URL ?? "";
 ```
 
 ## Patterns Claude Code Must NOT Do
+
 - Do not import raw JSON directly into UI components. `lib/data/raw.ts` and `lib/data/index.ts` exist to centralize normalization and cloning.
 - Do not move guess resolution, distance math, or heat scoring into components. Those rules belong in `lib/game/` and `lib/geo/`.
 - Do not change `GAME_SETTINGS_STORAGE_KEY` casually. Doing so invalidates every saved assist/theme preference in `localStorage`.
@@ -204,6 +227,7 @@ export const API_URL = process.env.API_URL ?? "";
 - Do not force `WorldGlobe` to SSR or inline the GeoJSON fetch. The globe is client-only and the polygon loader is promise-cached.
 
 ## Load-Bearing Files — Do Not Refactor Without Full Understanding
+
 - `components/game/GameShell.tsx` - Owns the entire round lifecycle, including timers, solved-state UI, globe highlights, and replay reset behavior.
 - `lib/game/guess.ts` - Contains duplicate detection, guess resolution, record creation, and display sorting.
 - `lib/game/state.ts` - Defines the source of truth for creating and mutating round state.
@@ -216,6 +240,7 @@ export const API_URL = process.env.API_URL ?? "";
 - `data/items.json` - Tests and round selection depend on stable item IDs and origin codes.
 
 ## Confidence Notes
+
 - Build & Deploy Pipeline: High. I found all repo-local scripts and confirmed there are no Makefiles, Dockerfiles, or workflow files. The only uncertain part is the external deployment platform, which is mentioned in the README but not encoded in the repo.
 - Database & Models: High. There is no database, ORM, migration tooling, or SQL in this repository; the only data layer is local JSON plus in-memory caches.
 - State Management & Data Flow: High. The app uses React state, memoization, module caches, and `localStorage` only; there is no server state library or real-time channel to infer.

@@ -44,12 +44,15 @@ export default function GameClueStrip({
     hasNotifiedReveal.current = false;
     let frame = 0;
     const startTime = window.performance.now();
-    const revealTimer = window.setTimeout(() => {
-      setBlurActive(true);
-      setCenterSpread(true);
-      setShowName(true);
-      setCenterEnlarged(true);
-    }, REEL_SCROLL_MS + NAME_REVEAL_DELAY_MS + POST_LAND_REVEAL_MS);
+    const revealTimer = window.setTimeout(
+      () => {
+        setBlurActive(true);
+        setCenterSpread(true);
+        setShowName(true);
+        setCenterEnlarged(true);
+      },
+      REEL_SCROLL_MS + NAME_REVEAL_DELAY_MS + POST_LAND_REVEAL_MS,
+    );
 
     const tick = (now: number) => {
       const elapsed = Math.min((now - startTime) / REEL_SCROLL_MS, 1);
@@ -74,7 +77,12 @@ export default function GameClueStrip({
   }, [animate, centerIndex, startIndex]);
 
   useEffect(() => {
-    if (!onRevealComplete || !showName || !isSettled || hasNotifiedReveal.current) {
+    if (
+      !onRevealComplete ||
+      !showName ||
+      !isSettled ||
+      hasNotifiedReveal.current
+    ) {
       return;
     }
 
@@ -122,7 +130,9 @@ export default function GameClueStrip({
               const spreadWeight = Math.max(0, 1 - distance / 3);
               const spreadDirection = index < centerIndex ? -1 : 1;
               const spreadOffset =
-                centerSpread && !isCenter ? spreadDirection * spreadWeight * 32 : 0;
+                centerSpread && !isCenter
+                  ? spreadDirection * spreadWeight * 32
+                  : 0;
 
               return (
                 <div

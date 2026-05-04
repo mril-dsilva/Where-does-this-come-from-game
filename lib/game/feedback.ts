@@ -54,13 +54,14 @@ export function getRoundFeedback(
     kind: "comparison",
     latestGuess,
     closestGuess,
-    relationship:
-      latestDistance < previousBestDistance ? "warmer" : "cooler",
+    relationship: latestDistance < previousBestDistance ? "warmer" : "cooler",
     isNeighboring: latestGuess.heatLevel === "neighboring",
   };
 }
 
-export function getDuplicateGuessFeedback(country: Country): DuplicateGuessFeedback {
+export function getDuplicateGuessFeedback(
+  country: Country,
+): DuplicateGuessFeedback {
   return {
     kind: "duplicate",
     country,

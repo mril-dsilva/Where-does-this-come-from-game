@@ -2,10 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { loadCountryPolygons } from "@/lib/geo/world-polygons.ts";
-import {
-  CORRECT_COLOR,
-  HEAT_COLOR_PALETTE,
-} from "@/lib/game/heat.ts";
+import { CORRECT_COLOR, HEAT_COLOR_PALETTE } from "@/lib/game/heat.ts";
 
 type GlobeLegendProps = {
   className?: string;
@@ -113,7 +110,9 @@ export default function GlobeLegend({ className }: GlobeLegendProps) {
               fill={item.color}
             />
             <div className="space-y-1">
-              <p className="text-[0.95rem] font-medium text-white">{item.country}</p>
+              <p className="text-[0.95rem] font-medium text-white">
+                {item.country}
+              </p>
               <p className="text-xs text-white/48">{item.status}</p>
             </div>
           </div>
@@ -166,7 +165,10 @@ function CountryMapIcon({ countryCode, geometry, fill }: CountryMapIconProps) {
   );
 }
 
-function geometryToPaths(geometry: CountryGeometry, countryCode: string): string[] {
+function geometryToPaths(
+  geometry: CountryGeometry,
+  countryCode: string,
+): string[] {
   const rings = extractRings(geometry.coordinates);
   const allPoints = rings.flat();
 
@@ -180,18 +182,20 @@ function geometryToPaths(geometry: CountryGeometry, countryCode: string): string
   const targetSize = 24;
   const baseScale = Math.min(targetSize / width, targetSize / height);
   const horizontalScale = countryCode === "FI" ? baseScale * 0.82 : baseScale;
-  const verticalScale = countryCode === "FI" ? baseScale * 1.28 : baseScale * 1.12;
+  const verticalScale =
+    countryCode === "FI" ? baseScale * 1.28 : baseScale * 1.12;
   const paddingX = (28 - width * horizontalScale) / 2;
   const paddingY = (28 - height * verticalScale) / 2;
 
-  return rings.map((ring) =>
-    ring
-      .map(([longitude, latitude], index) => {
-        const x = (longitude - bounds.minX) * horizontalScale + paddingX;
-        const y = (bounds.maxY - latitude) * verticalScale + paddingY;
-        return `${index === 0 ? "M" : "L"} ${formatNumber(x)} ${formatNumber(y)}`;
-      })
-      .join(" ") + " Z",
+  return rings.map(
+    (ring) =>
+      ring
+        .map(([longitude, latitude], index) => {
+          const x = (longitude - bounds.minX) * horizontalScale + paddingX;
+          const y = (bounds.maxY - latitude) * verticalScale + paddingY;
+          return `${index === 0 ? "M" : "L"} ${formatNumber(x)} ${formatNumber(y)}`;
+        })
+        .join(" ") + " Z",
   );
 }
 

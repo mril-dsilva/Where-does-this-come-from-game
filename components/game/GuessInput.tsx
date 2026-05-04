@@ -43,7 +43,10 @@ export default function GuessInput({
     const baseCodePoint = 127397;
 
     return String.fromCodePoint(
-      ...Array.from(code, (character) => baseCodePoint + character.charCodeAt(0)),
+      ...Array.from(
+        code,
+        (character) => baseCodePoint + character.charCodeAt(0),
+      ),
     );
   }
 

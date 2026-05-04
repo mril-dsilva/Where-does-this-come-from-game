@@ -1,0 +1,8 @@
+.next/
+node_modules/
+out/
+build/
+public/geo/
+data/
+*.tsbuildinfo
+next-env.d.ts

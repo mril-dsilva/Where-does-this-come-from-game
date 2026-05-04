@@ -83,7 +83,8 @@ body {
 @keyframes confetti-fall {
   0% {
     opacity: 0;
-    transform: translate3d(0, -1rem, 0) rotate(0deg) scale(var(--confetti-scale, 1));
+    transform: translate3d(0, -1rem, 0) rotate(0deg)
+      scale(var(--confetti-scale, 1));
   }
 
   12% {
@@ -96,7 +97,8 @@ body {
 
   100% {
     opacity: 0;
-    transform: translate3d(var(--drift), calc(100vh + 12rem), 0) rotate(var(--spin)) scale(var(--confetti-scale, 1));
+    transform: translate3d(var(--drift), calc(100vh + 12rem), 0)
+      rotate(var(--spin)) scale(var(--confetti-scale, 1));
   }
 }
 

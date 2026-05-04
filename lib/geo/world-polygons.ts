@@ -1,4 +1,8 @@
-import { getCountries, getCountryByCode, getCountryByName } from "../data/index.ts";
+import {
+  getCountries,
+  getCountryByCode,
+  getCountryByName,
+} from "../data/index.ts";
 import { normalizeCountryKey } from "../data/normalize.ts";
 import type { Country } from "../../types/game.ts";
 
@@ -303,7 +307,9 @@ export function createCountryPolygons(
     .sort((left, right) => left.countryName.localeCompare(right.countryName));
 }
 
-function addFallbackCountryPolygons(polygons: CountryPolygon[]): CountryPolygon[] {
+function addFallbackCountryPolygons(
+  polygons: CountryPolygon[],
+): CountryPolygon[] {
   const byCode = new Map(
     polygons.map((polygon) => [polygon.countryCode, polygon] as const),
   );

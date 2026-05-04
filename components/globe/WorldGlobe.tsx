@@ -41,8 +41,7 @@ type WorldGlobeProps = {
 };
 
 const Globe = dynamic(
-  () =>
-    import("react-globe.gl").then((mod) => mod.default),
+  () => import("react-globe.gl").then((mod) => mod.default),
   {
     ssr: false,
     loading: () => (
@@ -83,9 +82,9 @@ export default function WorldGlobe({
 }: WorldGlobeProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const globeRef = useRef<GlobeMethods | null>(null);
-  const [polygons, setPolygons] = useState<Awaited<
-    ReturnType<typeof loadCountryPolygons>
-  >>([]);
+  const [polygons, setPolygons] = useState<
+    Awaited<ReturnType<typeof loadCountryPolygons>>
+  >([]);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [isGlobeReady, setIsGlobeReady] = useState(false);
 
@@ -222,7 +221,9 @@ export default function WorldGlobe({
       highlightByCode.get(getPolygonCountryCode(polygon) ?? "")?.color ??
       TRANSPARENT,
     polygonStrokeColor: (polygon: GlobePolygonObject) => {
-      const highlight = highlightByCode.get(getPolygonCountryCode(polygon) ?? "");
+      const highlight = highlightByCode.get(
+        getPolygonCountryCode(polygon) ?? "",
+      );
 
       if (!highlight) {
         return lightMode
@@ -245,7 +246,11 @@ export default function WorldGlobe({
   };
 
   const globeStyle: CSSProperties = {
-    background: framed ? (lightMode ? LIGHT_BACKGROUND : BASE_BACKGROUND) : globeShellBackground,
+    background: framed
+      ? lightMode
+        ? LIGHT_BACKGROUND
+        : BASE_BACKGROUND
+      : globeShellBackground,
     boxShadow:
       lightMode && lightHalo !== "none"
         ? lightHalo === "tight"

@@ -14,7 +14,8 @@ export default function OriginGuessrMark({
   onClick,
   className,
 }: OriginGuessrMarkProps) {
-  const sharedClass = `items-center justify-center font-display font-semibold text-white transition ${SIZE_STYLES[size]} ${className ?? ""}`.trim();
+  const sharedClass =
+    `items-center justify-center font-display font-semibold text-white transition ${SIZE_STYLES[size]} ${className ?? ""}`.trim();
 
   if (onClick) {
     return (

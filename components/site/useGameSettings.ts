@@ -17,7 +17,9 @@ export function useGameSettings() {
   useEffect(() => {
     try {
       setSettings(
-        readGameSettings(window.localStorage.getItem(GAME_SETTINGS_STORAGE_KEY)),
+        readGameSettings(
+          window.localStorage.getItem(GAME_SETTINGS_STORAGE_KEY),
+        ),
       );
     } finally {
       setHasLoadedSettings(true);

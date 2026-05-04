@@ -74,7 +74,9 @@ export default function SolvedPopup({
             >
               {getSolvedAttemptsLabel(guessCount)}
             </p>
-            <p className={`text-[1.08rem] leading-7 sm:text-[1.15rem] ${bodyClass}`}>
+            <p
+              className={`text-[1.08rem] leading-7 sm:text-[1.15rem] ${bodyClass}`}
+            >
               {fact}
             </p>
           </div>

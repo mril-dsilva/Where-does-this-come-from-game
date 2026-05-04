@@ -97,7 +97,10 @@ test("assist suggestions stay alphabetical and exclude guessed countries", () =>
   });
 
   assert.ok(options.length > 0);
-  assert.equal(options.some((country) => country.code === "US"), false);
+  assert.equal(
+    options.some((country) => country.code === "US"),
+    false,
+  );
   assert.equal(options[0].name.startsWith("A"), true);
 });
 
@@ -146,7 +149,7 @@ test("round feedback reports warmer or cooler and the closest guess", () => {
       state: coolerGuess.state,
       guess: "France",
       now: new Date("2026-04-06T12:03:00.000Z"),
-      }).state.guesses,
+    }).state.guesses,
   );
 
   assert.equal(warmerFeedback?.kind, "comparison");

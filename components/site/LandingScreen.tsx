@@ -22,7 +22,10 @@ export default function LandingScreen({
   onToggleLightMode,
 }: LandingScreenProps) {
   return (
-    <main id="top" className="min-h-screen overflow-x-clip px-5 py-8 sm:px-6 lg:px-8">
+    <main
+      id="top"
+      className="min-h-screen overflow-x-clip px-5 py-8 sm:px-6 lg:px-8"
+    >
       <ThemeToggleButton
         enabled={settings.lightMode}
         onToggle={onToggleLightMode}
@@ -42,7 +45,6 @@ export default function LandingScreen({
             </h1>
           </div>
         </header>
-
       </div>
 
       <section className="w-full overflow-x-clip py-1 sm:py-2">

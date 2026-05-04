@@ -43,10 +43,7 @@ export default function GuessHistory({
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 whitespace-nowrap text-center text-[0.95rem] leading-none sm:text-base">
-                  <span
-                    className="text-[1.05em]"
-                    aria-hidden="true"
-                  >
+                  <span className="text-[1.05em]" aria-hidden="true">
                     {getFlagEmoji(guess.countryCode)}
                   </span>
                   {guess.countryCode && guess.countryName ? (

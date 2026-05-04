@@ -41,4 +41,3 @@ export function isNeighboringCountryCode(
     getManualNeighborCodes(right).includes(left)
   );
 }
-

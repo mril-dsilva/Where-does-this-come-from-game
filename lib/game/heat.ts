@@ -146,7 +146,11 @@ function clamp01(value: number): number {
   return Math.min(1, Math.max(0, value));
 }
 
-function blendHexColors(leftHex: string, rightHex: string, amount: number): string {
+function blendHexColors(
+  leftHex: string,
+  rightHex: string,
+  amount: number,
+): string {
   const left = hexToRgb(leftHex);
   const right = hexToRgb(rightHex);
 
@@ -163,7 +167,9 @@ function blendHexColors(leftHex: string, rightHex: string, amount: number): stri
   return rgbToHex(mixed);
 }
 
-function hexToRgb(hex: string): { red: number; green: number; blue: number } | null {
+function hexToRgb(
+  hex: string,
+): { red: number; green: number; blue: number } | null {
   const normalized = hex.trim().replace(/^#/, "");
 
   if (normalized.length !== 6) {
@@ -181,11 +187,7 @@ function hexToRgb(hex: string): { red: number; green: number; blue: number } | n
   return { red, green, blue };
 }
 
-function rgbToHex(color: {
-  red: number;
-  green: number;
-  blue: number;
-}): string {
+function rgbToHex(color: { red: number; green: number; blue: number }): string {
   const toHex = (channel: number) => channel.toString(16).padStart(2, "0");
 
   return `#${toHex(color.red)}${toHex(color.green)}${toHex(color.blue)}`;

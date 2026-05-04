@@ -98,7 +98,8 @@ export default function SuggestPage() {
             Suggest a Clue
           </h1>
           <p className="pt-1 text-[0.95rem] leading-relaxed text-white/58">
-            Know something fascinating that traces back to a specific country? Share it!
+            Know something fascinating that traces back to a specific country?
+            Share it!
           </p>
           <p className="text-[0.95rem] leading-relaxed text-white/58">
             The best suggestions get added to the game.
@@ -107,92 +108,91 @@ export default function SuggestPage() {
 
         {/* Form — always rendered; success overlay sits on top */}
         <form onSubmit={handleSubmit} className="space-y-7" noValidate>
-            {/* Item name */}
-            <Field label="What is it?">
-              <input
-                type="text"
-                value={itemName}
-                onChange={(e) => setItemName(e.target.value)}
-                placeholder="e.g. Pizza, Bluetooth, LEGO"
-                required
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
-              />
-            </Field>
+          {/* Item name */}
+          <Field label="What is it?">
+            <input
+              type="text"
+              value={itemName}
+              onChange={(e) => setItemName(e.target.value)}
+              placeholder="e.g. Pizza, Bluetooth, LEGO"
+              required
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
+            />
+          </Field>
 
-            {/* Category */}
-            <Field label="Category">
-              <PillGroup>
-                {CATEGORIES.map((cat) => (
-                  <PillButton
-                    key={cat}
-                    active={category === cat}
-                    onClick={() => setCategory(category === cat ? "" : cat)}
-                    activeColor="green"
-                  >
-                    {cat}
-                  </PillButton>
-                ))}
-              </PillGroup>
-            </Field>
+          {/* Category */}
+          <Field label="Category">
+            <PillGroup>
+              {CATEGORIES.map((cat) => (
+                <PillButton
+                  key={cat}
+                  active={category === cat}
+                  onClick={() => setCategory(category === cat ? "" : cat)}
+                  activeColor="green"
+                >
+                  {cat}
+                </PillButton>
+              ))}
+            </PillGroup>
+          </Field>
 
-            {/* Country */}
-            <Field label="Country of origin">
-              <input
-                type="text"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                placeholder="e.g. Italy, Denmark, Japan"
-                required
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
-              />
-            </Field>
+          {/* Country */}
+          <Field label="Country of origin">
+            <input
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder="e.g. Italy, Denmark, Japan"
+              required
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
+            />
+          </Field>
 
-            {/* Fun fact */}
-            <Field
-              label="Fun fact"
-              hint="optional — but it helps a lot"
-            >
-              <textarea
-                value={funFact}
-                onChange={(e) => setFunFact(e.target.value)}
-                placeholder="e.g. Pizza originated in Naples in the 18th century and was brought to the US by Italian immigrants."
-                rows={3}
-                className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
-              />
-            </Field>
+          {/* Fun fact */}
+          <Field label="Fun fact" hint="optional — but it helps a lot">
+            <textarea
+              value={funFact}
+              onChange={(e) => setFunFact(e.target.value)}
+              placeholder="e.g. Pizza originated in Naples in the 18th century and was brought to the US by Italian immigrants."
+              rows={3}
+              className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
+            />
+          </Field>
 
-            {/* Confidence */}
-            <Field label="How sure are you?" hint="optional">
-              <PillGroup>
-                {CONFIDENCE_OPTIONS.map((opt) => (
-                  <PillButton
-                    key={opt.value}
-                    active={confidence === opt.value}
-                    onClick={() => setConfidence(confidence === opt.value ? "" : opt.value)}
-                    activeColor="green"
-                  >
-                    {opt.label}
-                  </PillButton>
-                ))}
-              </PillGroup>
-            </Field>
+          {/* Confidence */}
+          <Field label="How sure are you?" hint="optional">
+            <PillGroup>
+              {CONFIDENCE_OPTIONS.map((opt) => (
+                <PillButton
+                  key={opt.value}
+                  active={confidence === opt.value}
+                  onClick={() =>
+                    setConfidence(confidence === opt.value ? "" : opt.value)
+                  }
+                  activeColor="green"
+                >
+                  {opt.label}
+                </PillButton>
+              ))}
+            </PillGroup>
+          </Field>
 
-            {/* Error message */}
-            {status === "error" && (
-              <p className="text-sm text-red-400">
-                Something went wrong — please try again, or email us directly.
-              </p>
-            )}
+          {/* Error message */}
+          {status === "error" && (
+            <p className="text-sm text-red-400">
+              Something went wrong — please try again, or email us directly.
+            </p>
+          )}
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={!isValid || status === "submitting"}
-              className="w-full cursor-pointer rounded-2xl bg-white py-4 text-sm font-semibold text-black transition hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
-            >
-              {status === "submitting" ? "Sending…" : "Submit suggestion →"}
-            </button>
-          </form>
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={!isValid || status === "submitting"}
+            className="w-full cursor-pointer rounded-2xl bg-white py-4 text-sm font-semibold text-black transition hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+          >
+            {status === "submitting" ? "Sending…" : "Submit suggestion →"}
+          </button>
+        </form>
 
         <p className="mt-8 text-center text-xs text-white/30">
           Suggestions are reviewed manually before being added to the game.
@@ -266,8 +266,8 @@ function SuccessState({
               Thanks for the suggestion!
             </h2>
             <p className={`text-[1.05rem] leading-7 ${bodyClass}`}>
-              We&apos;ll take a look. If it makes the cut, you&apos;ll see it
-              in a future update.
+              We&apos;ll take a look. If it makes the cut, you&apos;ll see it in
+              a future update.
             </p>
           </div>
 

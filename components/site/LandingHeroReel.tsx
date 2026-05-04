@@ -99,7 +99,10 @@ export default function LandingHeroReel({
   }, [isGlobeHovered]);
 
   return (
-    <section className="w-full overflow-hidden py-4 sm:py-6" aria-label="Mystery clue reel">
+    <section
+      className="w-full overflow-hidden py-4 sm:py-6"
+      aria-label="Mystery clue reel"
+    >
       <div className="relative mx-auto h-[clamp(15rem,24vw,22rem)] w-full max-w-none">
         <div
           className="absolute inset-y-0 left-0 flex items-center justify-end gap-6 overflow-hidden pr-4 sm:gap-7 sm:pr-6 md:gap-8 md:pr-8 lg:gap-10 lg:pr-10"

@@ -59,7 +59,9 @@ export function submitGuess(params: {
     };
   }
 
-  const targetCountry = getCountryByCode(params.state.activeItem.originCountryCode);
+  const targetCountry = getCountryByCode(
+    params.state.activeItem.originCountryCode,
+  );
 
   if (!targetCountry) {
     throw new Error(
@@ -79,10 +81,7 @@ export function submitGuess(params: {
     guessIndex: params.state.guesses.length + 1,
   });
 
-  const guesses = sortGuessesByDistance([
-    ...params.state.guesses,
-    guessRecord,
-  ]);
+  const guesses = sortGuessesByDistance([...params.state.guesses, guessRecord]);
   const isComplete = evaluation.isCorrect;
 
   return {

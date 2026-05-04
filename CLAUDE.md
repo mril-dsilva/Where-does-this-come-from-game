@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.\n
+
 ## Project Overview
 
 OriginGuessr is a geography guessing game built with Next.js, TypeScript, and Tailwind CSS. Players guess the country of origin for items (foods, inventions, brands) and receive heat-based feedback on a 3D globe powered by `react-globe.gl`.
@@ -41,35 +42,39 @@ The game follows a unidirectional data flow:
 ### Key Architectural Decisions
 
 **Country Resolution with Fuzzy Matching**
+
 - `lib/data/country-match.ts` implements Levenshtein distance-based matching
 - Aliases resolve through multiple name variations (e.g., "UK", "Great Britain" → "GB")
 - Threshold: 0.8 similarity for auto-resolution, 0.75 for suggestions
 
 **Distance Calculation Strategy**
+
 - Primary: Border sample points (`data/country-border-samples.json`) for accuracy
 - Fallback: Haversine distance between centroids when border data is missing
 - Neighboring countries get a special "neighboring" heat tier regardless of centroid distance
 
 **Heat Color System**
+
 - Exponential decay based on distance: `score = exp(-distance / 2200km)`
 - 9 tiers from "far" (lightest) to "correct" (green)
 - Colors interpolated between band boundaries for smooth gradients
 
 **Globe Highlighting**
+
 - Polygon data loaded from GeoJSON in `public/geo/`
 - Each guess gets a color based on heat level and altitude based on recency
 - Latest guess gets a brighter stroke and higher altitude
 
 ### Module Boundaries
 
-| Module | Responsibility | Key Files |
-|--------|---------------|-----------|
-| `lib/data/` | Data access, normalization, matching | `index.ts`, `country-match.ts`, `raw.ts` |
-| `lib/game/` | Game state, guess evaluation, heat logic | `state.ts`, `guess.ts`, `heat.ts` |
-| `lib/geo/` | Distance calculations, polygons | `border-distance.ts`, `haversine.ts`, `world-polygons.ts` |
-| `components/game/` | Gameplay UI | `GameShell.tsx`, `GuessInput.tsx`, `WorldGlobe.tsx` |
-| `components/site/` | Landing/marketing UI | `OriginGuessrApp.tsx`, `LandingScreen.tsx` |
-| `components/globe/` | Globe visualization | `WorldGlobe.tsx`, `GlobeLegend.tsx` |
+| Module              | Responsibility                           | Key Files                                                 |
+| ------------------- | ---------------------------------------- | --------------------------------------------------------- |
+| `lib/data/`         | Data access, normalization, matching     | `index.ts`, `country-match.ts`, `raw.ts`                  |
+| `lib/game/`         | Game state, guess evaluation, heat logic | `state.ts`, `guess.ts`, `heat.ts`                         |
+| `lib/geo/`          | Distance calculations, polygons          | `border-distance.ts`, `haversine.ts`, `world-polygons.ts` |
+| `components/game/`  | Gameplay UI                              | `GameShell.tsx`, `GuessInput.tsx`, `WorldGlobe.tsx`       |
+| `components/site/`  | Landing/marketing UI                     | `OriginGuessrApp.tsx`, `LandingScreen.tsx`                |
+| `components/globe/` | Globe visualization                      | `WorldGlobe.tsx`, `GlobeLegend.tsx`                       |
 
 ### State Management
 
@@ -107,6 +112,7 @@ test("description", () => {
 ```
 
 Common test patterns in this codebase:
+
 - Country lookup validation (aliases, codes, fuzzy matching)
 - Heat color tier verification at distance boundaries
 - Game state transitions (guess → complete)

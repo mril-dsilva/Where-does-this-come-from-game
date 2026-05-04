@@ -68,22 +68,24 @@ export default function ConfettiBurst({
         <span
           key={piece.id}
           className="confetti-piece absolute rounded-sm"
-          style={{
-            left: piece.left,
-            top: piece.top,
-            width: piece.size,
-            height: `calc(${piece.size} * 1.8)`,
-            backgroundColor: piece.color,
-            animationDuration: piece.duration,
-            animationDelay: piece.delay,
-            ["--drift"]: piece.drift,
-            ["--spin"]: piece.spin,
-            ["--confetti-scale"]: piece.scale,
-          } as CSSProperties & {
-            ["--drift"]: string;
-            ["--spin"]: string;
-            ["--confetti-scale"]: string;
-          }}
+          style={
+            {
+              left: piece.left,
+              top: piece.top,
+              width: piece.size,
+              height: `calc(${piece.size} * 1.8)`,
+              backgroundColor: piece.color,
+              animationDuration: piece.duration,
+              animationDelay: piece.delay,
+              ["--drift"]: piece.drift,
+              ["--spin"]: piece.spin,
+              ["--confetti-scale"]: piece.scale,
+            } as CSSProperties & {
+              ["--drift"]: string;
+              ["--spin"]: string;
+              ["--confetti-scale"]: string;
+            }
+          }
         />
       ))}
     </div>

@@ -149,7 +149,8 @@ export default function GameShell({
       return Array.from({ length: REEL_TOTAL_COUNT }, () => "◌");
     }
 
-    const offset = hashString(`${activeItem.id}-${state.createdAt}`) % pool.length;
+    const offset =
+      hashString(`${activeItem.id}-${state.createdAt}`) % pool.length;
     const rotated = Array.from(
       { length: REEL_SIDE_COUNT * 2 },
       (_, index) => pool[(offset + index) % pool.length] ?? "◌",
@@ -219,8 +220,7 @@ export default function GameShell({
       body.style.overflow = previousBodyOverflow;
       body.style.overscrollBehavior = previousBodyOverscrollBehavior;
       documentElement.style.overflow = previousRootOverflow;
-      documentElement.style.overscrollBehavior =
-        previousRootOverscrollBehavior;
+      documentElement.style.overscrollBehavior = previousRootOverscrollBehavior;
     };
   }, [showGameplay]);
 
@@ -269,7 +269,9 @@ export default function GameShell({
 
     setState(result.state);
     setInputValue("");
-    setLatestSubmittedCountryCode(result.evaluation.resolvedCountry?.code ?? null);
+    setLatestSubmittedCountryCode(
+      result.evaluation.resolvedCountry?.code ?? null,
+    );
     setFocusedCountryCode(result.evaluation.resolvedCountry?.code ?? null);
 
     if (result.evaluation.isCorrect) {
@@ -407,7 +409,6 @@ export default function GameShell({
           onDismiss={handleDismissSolvedPopup}
         />
       ) : null}
-
     </main>
   );
 }

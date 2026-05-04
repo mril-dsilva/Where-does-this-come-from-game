@@ -49,7 +49,16 @@ test("autofill and autocorrect setting maps to the expected input attributes", (
 });
 
 test("light mode setting resolves to the correct theme mode and bootstrap script", () => {
-  assert.equal(resolveThemeMode({ assistInput: false, lightMode: false }), "dark");
-  assert.equal(resolveThemeMode({ assistInput: true, lightMode: true }), "light");
-  assert.match(buildThemeBootstrapScript(), new RegExp(GAME_SETTINGS_STORAGE_KEY));
+  assert.equal(
+    resolveThemeMode({ assistInput: false, lightMode: false }),
+    "dark",
+  );
+  assert.equal(
+    resolveThemeMode({ assistInput: true, lightMode: true }),
+    "light",
+  );
+  assert.match(
+    buildThemeBootstrapScript(),
+    new RegExp(GAME_SETTINGS_STORAGE_KEY),
+  );
 });
