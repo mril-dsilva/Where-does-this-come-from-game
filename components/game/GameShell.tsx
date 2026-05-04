@@ -44,9 +44,9 @@ const CONFETTI_DURATION_MS = 3200;
 const REEL_SIDE_COUNT = 20;
 const REEL_TOTAL_COUNT = REEL_SIDE_COUNT * 2 + 1;
 
-function createInitialState(item: GameItem): GameState {
-  return createGameState(item);
-}
+const GLOBE_ALTITUDE_CORRECT = 0.034;
+const GLOBE_ALTITUDE_LATEST = 0.022;
+const GLOBE_ALTITUDE_DEFAULT = 0.014;
 
 function hashString(value: string): number {
   let hash = 2166136261;
@@ -86,7 +86,7 @@ export default function GameShell({
   onPlayAgain,
 }: GameShellProps) {
   const [state, setState] = useState<GameState>(() =>
-    createInitialState(initialItem),
+    createGameState(initialItem),
   );
   const [inputValue, setInputValue] = useState("");
   const [showConfetti, setShowConfetti] = useState(false);
@@ -131,10 +131,10 @@ export default function GameShell({
         countryCode: guess.countryCode ?? "",
         color: guess.heatColor,
         altitude: guess.isCorrect
-          ? 0.034
+          ? GLOBE_ALTITUDE_CORRECT
           : guess.countryCode === latestSubmittedCountryCode
-            ? 0.022
-            : 0.014,
+            ? GLOBE_ALTITUDE_LATEST
+            : GLOBE_ALTITUDE_DEFAULT,
         isLatest: guess.countryCode === latestSubmittedCountryCode,
       })),
     [guesses, latestSubmittedCountryCode],
