@@ -68,12 +68,20 @@ export default function LandingScreen({
 
         <footer className="flex w-full max-w-4xl flex-col gap-3 border-t border-white/8 pt-6 text-center text-sm text-white/55 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <p className="sm:text-left">Designed by Mril.</p>
-          <Link
-            href="/suggest"
-            className="cursor-pointer font-medium text-white/48 underline decoration-white/20 underline-offset-4 transition hover:text-white/80 hover:decoration-white/40"
-          >
-            Suggest a clue →
-          </Link>
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
+            <Link
+              href="/suggest"
+              className="cursor-pointer font-medium text-white/48 underline decoration-white/20 underline-offset-4 transition hover:text-white/80 hover:decoration-white/40"
+            >
+              Suggest a clue →
+            </Link>
+            <Link
+              href="/how-i-built-this"
+              className="cursor-pointer font-medium text-white/48 underline decoration-white/20 underline-offset-4 transition hover:text-white/80 hover:decoration-white/40"
+            >
+              How I Built This
+            </Link>
+          </div>
           <p className="sm:text-right">This app is still in Beta.</p>
         </footer>
       </div>
