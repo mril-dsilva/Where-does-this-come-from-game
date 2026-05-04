@@ -73,7 +73,7 @@ export default function LandingScreen({
               href="/suggest"
               className="cursor-pointer font-medium text-white/48 underline decoration-white/20 underline-offset-4 transition hover:text-white/80 hover:decoration-white/40"
             >
-              Suggest a clue →
+              Suggest a clue
             </Link>
             <Link
               href="/how-i-built-this"
