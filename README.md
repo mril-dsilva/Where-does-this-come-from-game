@@ -1,31 +1,33 @@
-# OriginGuessr by MrillionAI
+# OriginGuessr
 
-OriginGuessr is a playful, data-driven geography game that asks players to trace everyday things back to their country of origin. It was built with AI-assisted workflows for both implementation and design iteration, which helped keep the product fast-moving, visually cohesive, and highly polished. The result is a dynamic experience that feels alive as the globe, heat map, hints, and round feedback all respond to each guess in real time.
+**OriginGuessr** is a daily geography game where you guess the country of origin for everyday things: foods, inventions, cultural icons. Each guess lands on a 3D globe with heat-based color feedback (cold to hot) guiding you closer. One item per day. Solve it in as few guesses as possible.
 
-The project is intentionally dynamic in how it evolves too. I’m currently building the next layer around a `design.md` file to unify the design system and make polished updates easier, along with an agentic research workflow that surfaces the most interesting clues and keeps the gameplay experience sharp.
+---
 
-## What It Is
+## Goals
 
-OriginGuessr is a globe-based guessing game about origin, intuition, and discovery.
+**Cultural and geographic education.** Most people can name a country on a map; fewer know that blue jeans came from the US, that chess originated in India, or that instant noodles are Japanese. OriginGuessr turns that gap into a game. Each round is a small moment of discovery about where the things around us actually come from.
 
-Each round presents an item, a clue reel, and a country input. Players guess where the item came from, and the game responds with proximity-based feedback, country highlights, and a short fact once the answer is solved. The experience is intentionally minimal, but it still feels rich because the UI, globe, and game state are all tightly connected.
+**Personal development practice.** This project was built to practice building real, polished products; not just tutorials. Along the way it touches skills that matter for any developer growing their craft:
+
+- **Next.js App Router:** server vs. client components, metadata, routing
+- **TypeScript:** strict typing, shared types across logic and UI layers
+- **React 19:** hooks, memoization, state management without a library
+- **Tailwind CSS v4:** utility-first design with CSS variables for theming
+- **3D visualization:** `react-globe.gl` and `Three.js` for interactive globe rendering
+- **Geo math:** Haversine distance, border sampling, neighboring country logic
+- **Fuzzy matching:** Levenshtein distance for typo-tolerant country resolution
+- **API integration:** connecting to external databases like Airtable to manage and serve game content dynamically
+- **Testing:** Node.js built-in test runner with pure function coverage
+- **AI-assisted development:** using AI as a real product iteration tool, not just a code generator
+
+---
 
 ## How It Works
 
-- A daily-style item is selected from local seed data.
-- The player enters a country name, code, alias, or near-match.
-- The app resolves the guess, handles duplicates, and evaluates proximity.
-- Country feedback is based on geo distance and border-aware logic.
-- The globe, heat states, and solved-state UI update immediately after each guess.
-- When the round is solved, the game reveals the answer, shows a fact, and resets cleanly for the next session.
+A game item (a food, invention, or cultural icon) is shown with an emoji reel. The player types a country name; the app resolves it with fuzzy matching, evaluates proximity using real border-aware geographic distance, and plots the result on the globe in heat colors from cold blue to hot red. Each new guess updates the globe and gives warmer/cooler feedback relative to the previous one. Guess the correct country to solve the round and unlock a fun fact about the item's origin.
 
-The game is dynamic by design:
-
-- The globe reacts to gameplay state.
-- Heat colors change based on actual country distance.
-- Assist mode adapts the input experience.
-- Light and dark mode are fully supported.
-- The whole round flow is stateful, responsive, and replayable.
+---
 
 ## Tech Stack
 
@@ -35,7 +37,7 @@ The game is dynamic by design:
 - Tailwind CSS
 - `react-globe.gl`
 - `three`
-- ESLint
+- ESLint + Prettier
 
 ### Architecture Notes
 
@@ -51,14 +53,6 @@ The codebase is split so the game stays maintainable and easy to extend:
 
 That separation keeps presentation thin and leaves a clean path for future backend integration without rewriting the core game logic.
 
-## What I Learned
-
-- How to keep UI, game logic, and geo logic separated without overengineering the project.
-- How to build a polished product experience from local seed data while keeping the system ready for future APIs or databases.
-- How to use AI workflows as a real product-development tool for rapid iteration, refinement, and design exploration.
-- How much small details matter in a game like this, especially around feedback, pacing, state transitions, and visual hierarchy.
-- How to make a game feel dynamic and modern without relying on heavy dependencies or unnecessary complexity.
-
 ## Local Setup
 
 1. Install dependencies:
@@ -71,18 +65,15 @@ That separation keeps presentation thin and leaves a clean path for future backe
    ```
 3. Open [http://localhost:3000](http://localhost:3000)
 
-## Testing
+## Scripts
 
-- `npm test`
-- `npm run lint`
-- `npm run build`
+- `npm test` — run tests
+- `npm run lint` — lint the codebase
+- `npm run typecheck` — TypeScript type check
+- `npm run format` — format all files with Prettier
+- `npm run format:check` — check formatting without writing
+- `npm run build` — production build
 
 ## Deployment
 
-This project is ready to deploy on Vercel with the default Next.js build settings.
-
-No environment variables are required for the current MVP.
-
-## Project Goal
-
-The goal of OriginGuessr is to present a portfolio-ready game that feels polished, dynamic, and thoughtfully engineered while still being easy to evolve into a richer product later.
+This project is ready to deploy on Vercel with the default Next.js build settings. No environment variables are required for the current MVP.
