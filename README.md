@@ -6,7 +6,7 @@
 
 ## Goals
 
-**Cultural and geographic education.** Most people can name a country on a map; fewer know that blue jeans came from the US, that chess originated in India, or that instant noodles are Japanese. OriginGuessr turns that gap into a game. Each round is a small moment of discovery about where the things around us actually come from.
+**Cultural and geographic education.** Most people can name a country on a map; but fewer know that Coffee originated from Ethiopia, the Ball point pen was invented in Argentina, and that South Korea gave us the MP3 Player. OriginGuessr turns that gap into a fun educational game. Each round is a small moment of discovery about where the things around us actually come from.
 
 **Personal development practice.** This project was built to practice building real, polished products; not just tutorials. Along the way it touches skills that matter for any developer growing their craft:
 
