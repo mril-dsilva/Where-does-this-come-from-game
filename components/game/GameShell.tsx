@@ -142,7 +142,7 @@ export default function GameShell({
   const reelEmojis = useMemo(() => {
     const pool = getItems()
       .filter((item) => item.id !== activeItem.id)
-      .map((item) => item.emoji)
+      .map((item) => item.emoji || "◌")
       .sort((left, right) => left.localeCompare(right));
 
     if (pool.length === 0) {
@@ -158,7 +158,7 @@ export default function GameShell({
 
     return [
       ...rotated.slice(0, REEL_SIDE_COUNT),
-      activeItem.emoji,
+      activeItem.emoji || "◌",
       ...rotated.slice(REEL_SIDE_COUNT, REEL_SIDE_COUNT * 2),
     ];
   }, [activeItem.id, activeItem.emoji, state.createdAt]);
@@ -364,6 +364,7 @@ export default function GameShell({
         <WorldGlobe
           highlights={globeHighlights}
           focusCountryCode={globeFocusCountryCode}
+          showHoverTooltips={settings.assistInput}
           lightMode={settings.lightMode}
           framed={false}
           contentScale={1.47}
