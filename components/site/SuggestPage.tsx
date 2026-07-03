@@ -30,6 +30,7 @@ export default function SuggestPage() {
 
   const [status, setStatus] = useState<FormStatus>("idle");
   const [itemName, setItemName] = useState("");
+  const [emoji, setEmoji] = useState("");
   const [category, setCategory] = useState<Category | "">("");
   const [country, setCountry] = useState("");
   const [funFact, setFunFact] = useState("");
@@ -50,6 +51,7 @@ export default function SuggestPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           item_name: itemName.trim(),
+          emoji: emoji.trim(),
           category,
           country: country.trim(),
           fun_fact: funFact.trim(),
@@ -65,6 +67,7 @@ export default function SuggestPage() {
 
   function handleReset() {
     setItemName("");
+    setEmoji("");
     setCategory("");
     setCountry("");
     setFunFact("");
@@ -116,6 +119,17 @@ export default function SuggestPage() {
               onChange={(e) => setItemName(e.target.value)}
               placeholder="e.g. Pizza, Bluetooth, LEGO"
               required
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
+            />
+          </Field>
+
+          {/* Emoji */}
+          <Field label="Emoji" hint="optional — shown in the guess reel">
+            <input
+              type="text"
+              value={emoji}
+              onChange={(e) => setEmoji(e.target.value)}
+              placeholder="e.g. 🍕"
               className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-muted/70 outline-none transition focus:border-white/26 focus:bg-white/[0.07]"
             />
           </Field>

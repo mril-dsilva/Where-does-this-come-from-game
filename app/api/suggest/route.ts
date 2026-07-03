@@ -36,10 +36,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const { item_name, category, country, fun_fact, confidence } = body as Record<
-    string,
-    string
-  >;
+  const { item_name, emoji, category, country, fun_fact, confidence } =
+    body as Record<string, string>;
 
   const airtableUrl = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`;
 
@@ -55,6 +53,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         fields: {
           item_name: String(item_name).trim(),
+          emoji: String(emoji ?? "").trim() || "(none provided)",
           category: String(category).trim(),
           country: String(country).trim(),
           fun_fact: String(fun_fact ?? "").trim() || "(none provided)",
