@@ -34,6 +34,13 @@ type WorldGlobeProps = {
   highlights?: GlobeHighlight[];
   focusCountryCode?: string | null;
   showHoverTooltips?: boolean;
+  /**
+   * When enabled (unframed mode only), zooming in widens the visible globe
+   * area from the resting circle into a full-width, soft-faded band, without
+   * changing the component's layout footprint. Height stays fixed; only the
+   * top and bottom edges bound the view.
+   */
+  zoomReveal?: boolean;
   lightMode?: boolean;
   lightGlow?: "none" | "narrow" | "soft";
   lightHalo?: "none" | "tight" | "soft";
@@ -96,6 +103,7 @@ export default function WorldGlobe({
   highlights = [],
   focusCountryCode,
   showHoverTooltips = false,
+  zoomReveal = false,
   lightMode = false,
   lightGlow = "soft",
   lightHalo = "soft",
@@ -111,11 +119,13 @@ export default function WorldGlobe({
   className,
 }: WorldGlobeProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const revealRef = useRef<HTMLDivElement | null>(null);
   const globeRef = useRef<GlobeMethods | null>(null);
   const [polygons, setPolygons] = useState<
     Awaited<ReturnType<typeof loadCountryPolygons>>
   >([]);
   const [size, setSize] = useState({ width: 0, height: 0 });
+  const [viewportLayoutWidth, setViewportLayoutWidth] = useState(0);
   const [isGlobeReady, setIsGlobeReady] = useState(false);
   const [hoverCountryName, setHoverCountryName] = useState<string | null>(null);
   const [isPointerDown, setIsPointerDown] = useState(false);
@@ -166,6 +176,31 @@ export default function WorldGlobe({
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (!zoomReveal || framed) {
+      return undefined;
+    }
+
+    const measure = () => {
+      const element = containerRef.current;
+      // window.innerWidth is in visual pixels; convert to layout pixels
+      // (the site applies `zoom: 0.8` on <body>).
+      const ratio =
+        element && element.clientWidth > 0
+          ? element.getBoundingClientRect().width / element.clientWidth
+          : 1;
+
+      setViewportLayoutWidth(Math.ceil(window.innerWidth / (ratio || 1)));
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+
+    return () => {
+      window.removeEventListener("resize", measure);
+    };
+  }, [zoomReveal, framed]);
 
   useEffect(() => {
     if (!isGlobeReady || !focusCountryCode) {
@@ -355,6 +390,80 @@ export default function WorldGlobe({
     };
   }, [showHoverTooltips, isGlobeReady, polygons]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    const reveal = revealRef.current;
+    const globe = globeRef.current;
+    const controls = globe?.controls();
+
+    if (
+      !zoomReveal ||
+      framed ||
+      !isGlobeReady ||
+      !container ||
+      !reveal ||
+      !globe ||
+      !controls ||
+      !size.width
+    ) {
+      return undefined;
+    }
+
+    const applyReveal = () => {
+      const baseWidth = size.width;
+      const distance = globe.camera().position.length();
+      const range = controls.maxDistance - controls.minDistance;
+      const rawZoom = range > 0 ? (controls.maxDistance - distance) / range : 0;
+      // The resting camera sits slightly inside maxDistance; treat that first
+      // slice as "not zoomed" so the default view keeps today's circle.
+      const zoomedIn = Math.min(1, Math.max(0, (rawZoom - 0.08) / 0.92));
+
+      // Expand all the way to the viewport edges; only top/bottom bound the view.
+      const maxWidth = Math.max(baseWidth, viewportLayoutWidth || baseWidth);
+
+      reveal.style.width = `${baseWidth + (maxWidth - baseWidth) * zoomedIn}px`;
+      // Relax the resting circle into a straight-edged band as it widens.
+      reveal.style.borderRadius = `${((1 - zoomedIn) * size.height) / 2}px`;
+
+      const sideFade = Math.round(zoomedIn * 96);
+      const verticalFade = Math.round(zoomedIn * 14);
+
+      if (sideFade > 4) {
+        // Two mask layers intersected: strong side fade + thin top/bottom fade.
+        const mask = `linear-gradient(to right, transparent 0, black ${sideFade}px, black calc(100% - ${sideFade}px), transparent 100%), linear-gradient(to bottom, transparent 0, black ${verticalFade}px, black calc(100% - ${verticalFade}px), transparent 100%)`;
+        reveal.style.maskImage = mask;
+        reveal.style.webkitMaskImage = mask;
+        reveal.style.maskComposite = "intersect";
+        reveal.style.setProperty("-webkit-mask-composite", "source-in");
+      } else {
+        reveal.style.maskImage = "";
+        reveal.style.webkitMaskImage = "";
+        reveal.style.maskComposite = "";
+        reveal.style.removeProperty("-webkit-mask-composite");
+      }
+    };
+
+    applyReveal();
+    controls.addEventListener("change", applyReveal);
+
+    return () => {
+      controls.removeEventListener("change", applyReveal);
+      reveal.style.width = "";
+      reveal.style.borderRadius = "";
+      reveal.style.maskImage = "";
+      reveal.style.webkitMaskImage = "";
+      reveal.style.maskComposite = "";
+      reveal.style.removeProperty("-webkit-mask-composite");
+    };
+  }, [
+    zoomReveal,
+    framed,
+    isGlobeReady,
+    viewportLayoutWidth,
+    size.width,
+    size.height,
+  ]);
+
   const highlightByCode = useMemo(() => {
     const map = new Map<string, GlobeHighlight>();
 
@@ -435,6 +544,45 @@ export default function WorldGlobe({
         : undefined,
   };
 
+  // Wider-than-tall canvas in zoom-reveal mode: the globe's rendered size
+  // tracks canvas *height*, so extending only the width adds horizontal
+  // field of view without changing how big the globe looks at rest.
+  const canvasWidth = framed
+    ? size.width
+    : zoomReveal
+      ? Math.max(size.width * contentScale, viewportLayoutWidth)
+      : size.width * contentScale;
+  const canvasHeight = framed ? size.height : size.height * contentScale;
+
+  const globeContent =
+    size.width > 0 && size.height > 0 ? (
+      <Globe
+        ref={globeRef}
+        width={canvasWidth}
+        height={canvasHeight}
+        onGlobeReady={() => {
+          const controls = globeRef.current?.controls();
+
+          if (controls) {
+            controls.enablePan = false;
+            controls.enableRotate = true;
+            controls.enableZoom = enableZoom;
+            controls.minDistance = 180;
+            controls.maxDistance = 360;
+            controls.autoRotate = autoRotate;
+            controls.autoRotateSpeed = autoRotateSpeed;
+          }
+
+          setIsGlobeReady(true);
+        }}
+        {...globeProps}
+      />
+    ) : (
+      <div className="flex h-full min-h-[22rem] items-center justify-center text-sm text-[var(--muted)]">
+        Loading globe…
+      </div>
+    );
+
   return (
     <div
       ref={containerRef}
@@ -443,53 +591,35 @@ export default function WorldGlobe({
           ? lightMode
             ? "aspect-square w-full overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-[#eef4fb]"
             : "aspect-square w-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#071018]"
-          : "inline-flex overflow-hidden rounded-full bg-transparent"
+          : "inline-flex bg-transparent"
       } ${className ?? ""}`.trim()}
-      style={globeStyle}
+      style={framed ? globeStyle : undefined}
       aria-label="Interactive world globe. Drag to rotate and scroll to zoom. Highlighted countries show guessed answers."
     >
-      <div
-        className="absolute"
-        style={
-          framed
-            ? { inset: 0 }
-            : {
-                width: size.width * contentScale,
-                height: size.height * contentScale,
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }
-        }
-      >
-        {size.width > 0 && size.height > 0 ? (
-          <Globe
-            ref={globeRef}
-            width={framed ? size.width : size.width * contentScale}
-            height={framed ? size.height : size.height * contentScale}
-            onGlobeReady={() => {
-              const controls = globeRef.current?.controls();
-
-              if (controls) {
-                controls.enablePan = false;
-                controls.enableRotate = true;
-                controls.enableZoom = enableZoom;
-                controls.minDistance = 180;
-                controls.maxDistance = 360;
-                controls.autoRotate = autoRotate;
-                controls.autoRotateSpeed = autoRotateSpeed;
-              }
-
-              setIsGlobeReady(true);
+      {framed ? (
+        <div className="absolute" style={{ inset: 0 }}>
+          {globeContent}
+        </div>
+      ) : (
+        <div
+          ref={revealRef}
+          className="absolute left-1/2 top-0 h-full w-full -translate-x-1/2 overflow-hidden rounded-full transition-[width,border-radius] duration-200 ease-out"
+          style={globeStyle}
+        >
+          <div
+            className="absolute"
+            style={{
+              width: canvasWidth,
+              height: canvasHeight,
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
             }}
-            {...globeProps}
-          />
-        ) : (
-          <div className="flex h-full min-h-[22rem] items-center justify-center text-sm text-[var(--muted)]">
-            Loading globe…
+          >
+            {globeContent}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {showHoverTooltips && hoverCountryName && !isPointerDown
         ? createPortal(

@@ -365,6 +365,7 @@ export default function GameShell({
           highlights={globeHighlights}
           focusCountryCode={globeFocusCountryCode}
           showHoverTooltips={settings.assistInput}
+          zoomReveal
           lightMode={settings.lightMode}
           framed={false}
           contentScale={1.47}
